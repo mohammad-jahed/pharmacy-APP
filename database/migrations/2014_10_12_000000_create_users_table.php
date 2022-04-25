@@ -13,10 +13,14 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
+        //Schema::dropIfExists('users');
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->foreignId('address_id')->default(0);
+            $table->foreignId('work_times_id')->default(0);
+            $table->string('username')->unique();
             $table->string('email')->unique();
+            $table->string('imagePath');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();

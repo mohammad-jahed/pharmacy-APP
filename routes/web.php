@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +14,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/add',function (){
+    $user = \App\Models\Medicine::query()->find(2);
+    return dd($user->alternativeMedicine);
+});
 Auth::routes();
 
 Route::group(['middleware' => ['guest']], function () {
@@ -24,19 +29,16 @@ Route::group(['middleware' => ['guest']], function () {
 });
 
 
- //==============================Translate all pages============================
+//==============================Translate all pages============================
 Route::group(
     [
-        'prefix' => LaravelLocalization::setLocale(),
+        'prefix' => (new Mcamara\LaravelLocalization\LaravelLocalization)->setLocale(),
         'middleware' => ['localeSessionRedirect', 'localizationRedirect', 'localeViewPath', 'auth']
     ], function () {
 
-     //==============================dashboard============================
+    //==============================dashboard============================
     Route::get('/dashboard', 'HomeController@index')->name('dashboard');
-    Route::get('/aaaa','HomeController@test')->name('test');
-
-
-
+    Route::get('/aaaa', 'HomeController@test')->name('test');
 
 
 });
