@@ -32,7 +32,8 @@ class RegisterRequest extends FormRequest
             'username' => ['required','unique:users', 'string', 'min:3', 'max:12'],
             'email' => ['required', 'email','unique:users'],
             'password' => ['required', 'min:8', 'max:75'],
-            'imagePath' => ['image', 'dimensions:min_width=100,min_height=100,max_width=1000,max_height=1000']
+            'imagePath' => ['image']//, 'dimensions:min_width=100,min_height=100,max_width=1000,max_height=1000']
         ];
     }
 }
+

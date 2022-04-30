@@ -19,12 +19,12 @@
                     <li>
                         <a href="javascript:void(0);" data-toggle="collapse" data-target="#Grades-menu">
                             <div class="pull-left"><i class="fas fa-school"></i><span
-                                    class="right-nav-text">sssss</span></div>
+                                    class="right-nav-text">{{trans('main_trans.pharmacyes')}}</span></div>
                             <div class="pull-right"><i class="ti-plus"></i></div>
                             <div class="clearfix"></div>
                         </a>
                         <ul id="Grades-menu" class="collapse" data-parent="#sidebarnav">
-                            <li><a href="#">dasd</a></li>
+                            <li><a href="{{route('pharmacy.index')}}">{{trans('main_trans.pharmacyes_list')}}</a></li>
 
                         </ul>
                     </li>

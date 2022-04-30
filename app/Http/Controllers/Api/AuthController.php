@@ -6,6 +6,8 @@ use App\Http\Requests\Users\RegisterRequest;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 use function auth;
 use function response;
 
@@ -40,6 +42,16 @@ class AuthController extends Controller
         $data['imagePath'] = $file_name;
         $data['password'] = Hash::make($data['password']);
         $user = User::query()->create($data);
+        $role =Role::query()->where('name','like','User')->get();
+        $user->assignRole($role);
+        $p1 =Permission::query()->where('name','like','add reservation')->get();
+        $user->givePermissionTo($p1);
+        $p2 =Permission::query()->where('name','like','delete reservation')->get();
+        $user->givePermissionTo($p2);
+        $p3 =Permission::query()->where('name','like','add prescription')->get();
+        $user->givePermissionTo($p3);
+        $p4 =Permission::query()->where('name','like','delete prescription')->get();
+        $user->givePermissionTo($p4);
         return $this->getJsonResponse($user,'User successfully registered');
     }
 

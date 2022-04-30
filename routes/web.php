@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Spatie\Permission\Models\Role;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,10 +15,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/add',function (){
-    $user = \App\Models\Medicine::query()->find(2);
-    return dd($user->alternativeMedicine);
-});
+
 Auth::routes();
 
 Route::group(['middleware' => ['guest']], function () {
@@ -40,5 +38,7 @@ Route::group(
     Route::get('/dashboard', 'HomeController@index')->name('dashboard');
     Route::get('/aaaa', 'HomeController@test')->name('test');
 
+    //================================pharmacy===================================================
 
+    Route::resource('/pharmacy' ,'Admin\pharmacyController');
 });
