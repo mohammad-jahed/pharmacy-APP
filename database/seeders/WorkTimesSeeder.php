@@ -16,18 +16,18 @@ class WorkTimesSeeder extends Seeder
      */
     public function run()
     {
-        //WorkTime::factory()->create();
-        DB::table('work_times')->insert([
-            'day'=> carbon::now()->dayOfWeek,
-            'from'=> carbon::now()->hour,
-            'to' => carbon::tomorrow()->hour
-        ]);
-
-        DB::table('work_times')->insert([
-            'day'=> carbon::now(1)->dayOfWeek,
-            'from'=> carbon::now()->hour(8),
-            'to' => carbon::yesterday()->hour(12)
-        ]);
+        WorkTime::factory()->create();
+//        DB::table('work_times')->insert([
+//            'day'=> carbon::now()->dayOfWeek,
+//            'from'=> carbon::now()->hour,
+//            'to' => carbon::tomorrow()->hour
+//        ]);
+//
+//        DB::table('work_times')->insert([
+//            'day'=> carbon::now(1)->dayOfWeek,
+//            'from'=> carbon::now()->hour(8),
+//            'to' => carbon::yesterday()->hour(12)
+//        ]);
 
     }
 }

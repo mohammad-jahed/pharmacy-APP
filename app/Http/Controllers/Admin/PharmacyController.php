@@ -23,6 +23,7 @@ class PharmacyController extends Controller
 
           $role =Role::query()->where('name','like','Pharmacy')->get();
           $pharmacies = (new \App\Models\User)->role($role)->get();
+
         return view('pages.pharmacy.pharmacy',compact('pharmacies'));
     }
 
