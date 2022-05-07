@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 use App\Models\User;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -17,13 +16,6 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-
-//        DB::table('users')->insert([
-//            'username' => 'admin33',
-//            'email' => 'admin33@gmail.com',
-//            'password' => Hash::make('00000000'),
-//            'imagePath'=>'OpI7f8njcHKJ5p4gPMEz2r8N2foufyTev5Q9elc2.jpg'
-//        ]);
 ////////////////////////////////// creating the admin ///////////////////////////////////////////////////
         $user=User::query()->create([
             'username'=> 'admin33',

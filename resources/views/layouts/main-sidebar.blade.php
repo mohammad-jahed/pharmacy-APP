@@ -46,7 +46,7 @@
                     <!-- sections-->
                     <li>
                         <a href="javascript:void(0);" data-toggle="collapse" data-target="#sections-menu">
-                            <div class="pull-left"><i class="fas fa-chalkboard"></i></i><span
+                            <div class="pull-left"><i class="fas fa-chalkboard"></i><span
                                     class="right-nav-text">{{trans('main_trans.sections')}}</span></div>
                             <div class="pull-right"><i class="ti-plus"></i></div>
                             <div class="clearfix"></div>
@@ -61,7 +61,7 @@
                     <!-- students-->
                     <li>
                         <a href="javascript:void(0);" data-toggle="collapse" data-target="#students-menu">
-                            <div class="pull-left"><i class="fas fa-user-graduate"></i></i></i><span
+                            <div class="pull-left"><i class="fas fa-user-graduate"></i><span
                                     class="right-nav-text">{{trans('main_trans.students')}}</span></div>
                             <div class="pull-right"><i class="ti-plus"></i></div>
                             <div class="clearfix"></div>
@@ -77,7 +77,7 @@
                     <!-- Teachers-->
                     <li>
                         <a href="javascript:void(0);" data-toggle="collapse" data-target="#Teachers-menu">
-                            <div class="pull-left"><i class="fas fa-chalkboard-teacher"></i></i><span
+                            <div class="pull-left"><i class="fas fa-chalkboard-teacher"></i><span
                                     class="right-nav-text">{{trans('main_trans.Teachers')}}</span></div>
                             <div class="pull-right"><i class="ti-plus"></i></div>
                             <div class="clearfix"></div>
@@ -208,7 +208,5 @@
                 </ul>
             </div>
         </div>
-
-        <!-- Left Sidebar End-->
-
-        <!--=================================
+    </div>
+</div>

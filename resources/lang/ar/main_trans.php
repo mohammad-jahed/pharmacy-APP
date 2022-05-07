@@ -4,8 +4,8 @@ return [
 
     'Dashboard'=>'الرئيسية',
     'Dashboard_page'=>'لوحة التحكم',
-    'Main_title'=>'برنامج مورا سوفت لادارة المدارس',
-    'Programname' => 'برنامج مورا سوفت لادارة المدارس',
+    'Main_title'=>'برنامج عناية بالتأكيد',
+    'Programname' => 'برنامج عناية بالتأكيد لأدارة الصيدليات',
     'change_language'=>'تغير اللغة',
     'pharmacyes'=>'الصيدليات',
     'pharmacyes_list'=>'قائمة الصيدليات',

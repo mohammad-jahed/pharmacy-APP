@@ -3,17 +3,24 @@
 namespace App\Models;
 
 
+
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
 use Spatie\Translatable\HasTranslations;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
-
+/**
+ * @method void assignRole();
+ * @method void givePermissionTo();
+ */
 class User extends Authenticatable implements JWTSubject
 {
+
+
     use Notifiable, HasTranslations, HasRoles;
 
     /**
@@ -99,7 +106,7 @@ class User extends Authenticatable implements JWTSubject
 
     protected function role(): HasOne
     {
-        return $this->hasOne(\Spatie\Permission\Models\Role::class);
+        return $this->hasOne(Role::class);
     }
 
 }
