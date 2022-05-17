@@ -23,14 +23,14 @@ class MedicineUpdateRequest extends FormRequest
      *
      * @return array
      */
-    #[ArrayShape(['shelf_id' => "array", 'company_id' => "array", 'name' => "string[]", 'quantity' => "string[]", 'pills' => "string[]", 'expiration_date' => "string[]", 'c_price' => "string[]", 'price' => "string[]"])]
+    #[ArrayShape(['shelf_name' => "string", 'company_name' => "string", 'name' => "string[]", 'quantity' => "string[]", 'pills' => "string[]", 'expiration_date' => "string[]", 'c_price' => "string[]", 'price' => "string[]"])]
     public function rules(): array
     {
         return [
             //
 
-            'shelf_id' => [Rule::exists('shelves', 'id')],
-            'company_id' => [Rule::exists('companies', 'id')],
+            'shelf_name' => ['string'],
+            'company_name' => ['string'],
             'name' => [ 'min:3', 'max:30', 'string'],
             'quantity' => ['numeric'],
             'pills' => ['numeric'],

@@ -12,6 +12,7 @@ class Address extends Model
     use HasFactory;
 
     protected $fillable = [
+        'user_id',
         'state_id',
         'city_id',
         'area_id',
@@ -31,6 +32,11 @@ class Address extends Model
     protected function area(): BelongsTo
     {
         return $this->belongsTo(Area::class);
+    }
+
+    protected function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 
 }

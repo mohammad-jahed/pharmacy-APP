@@ -16,7 +16,7 @@ class WorkTimesSeeder extends Seeder
      */
     public function run()
     {
-        WorkTime::factory()->create();
+        //WorkTime::factory()->create();
 //        DB::table('work_times')->insert([
 //            'day'=> carbon::now()->dayOfWeek,
 //            'from'=> carbon::now()->hour,

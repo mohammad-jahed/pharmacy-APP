@@ -4,18 +4,25 @@ namespace App\Models;
 
 
 
+
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
 use Spatie\Translatable\HasTranslations;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
 /**
- * @method void assignRole();
+ * @method void assignRole($role);
  * @method void givePermissionTo();
+ * @method  static Builder type($type);
+ *
+ * @property int id;
  */
 class User extends Authenticatable implements JWTSubject
 {
@@ -74,9 +81,9 @@ class User extends Authenticatable implements JWTSubject
         return [];
     }
 
-    protected function workTime(): HasOne
+    protected function workTime(): HasMany
     {
-        return $this->hasOne(WorkTime::class);
+        return $this->hasMany(WorkTime::class);
     }
 
     protected function address(): HasOne
@@ -104,9 +111,17 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(ReservationUser::class);
     }
 
-    protected function role(): HasOne
+
+    public function scopeType(Builder $query , $userType)
     {
-        return $this->hasOne(Role::class);
+        return $query->role(Role::query()->where('name', 'like', $userType)->get());
+    }
+
+    public function password(): Attribute
+    {
+        return new Attribute(
+            set: fn($password) => Hash::make($password)
+        );
     }
 
 }

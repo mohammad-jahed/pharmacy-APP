@@ -3,7 +3,9 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Users\AuthRequest;
 use App\Http\Requests\Users\RegisterRequest;
+use App\Models\Address;
 use App\Models\User;
+use App\Models\WorkTime;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Hash;
 use function auth;
@@ -38,8 +40,11 @@ class AuthController extends Controller
             $file_name = $request->file('imagePath')->hashName();
         }
         $data['imagePath'] = $file_name;
-        $data['password'] = Hash::make($data['password']);
+        //$data['password'] = Hash::make($data['password']);
         $user = User::query()->create($data);
+        $data['user_id'] = $user->id;
+        Address::query()->create($data);
+        WorkTime::query()->create($data);
         return $this->getJsonResponse($user,'User successfully registered');
     }
 

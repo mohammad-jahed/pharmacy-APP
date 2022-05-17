@@ -4,7 +4,6 @@ namespace App\Http\Requests\Users;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-use JetBrains\PhpStorm\ArrayShape;
 
 class RegisterRequest extends FormRequest
 {
@@ -23,16 +22,21 @@ class RegisterRequest extends FormRequest
      *
      * @return array
      */
-    #[ArrayShape(['address_id' => "array", 'work_times_id' => "array", 'name' => "string[]", 'username' => "string[]", 'email' => "string[]", 'password' => "string[]", 'imagePath' => "string[]"])] public function rules(): array
+    public function rules(): array
     {
         return [
             //
-            'address_id' => [Rule::exists('addresses', 'id'), 'nullable'],
-            'work_times_id' => [Rule::exists('work_times', 'id'), 'nullable'],
-            'username' => ['required','unique:users', 'string', 'min:3', 'max:12'],
-            'email' => ['required', 'email','unique:users'],
+            'state_id' => [Rule::exists('states', 'id'), 'nullable'],
+            'city_id' => [Rule::exists('cities', 'id'), 'nullable'],
+            'area_id' => [Rule::exists('areas', 'id'), 'nullable'],
+            'street' => ['string'],
+            'day' => ['numeric', 'min:0', 'max:6'],
+            'from' => ['date_format:H:i'],
+            'to' => ['date_format:H:i'],
+            'username' => ['required', 'unique:users', 'string', 'min:3', 'max:12'],
+            'email' => ['required', 'email', 'unique:users'],
             'password' => ['required', 'min:8', 'max:75'],
-            'imagePath' => ['image']//, 'dimensions:min_width=100,min_height=100,max_width=1000,max_height=1000']
+            'imagePath' => ['image', 'max:10240']
         ];
     }
 }

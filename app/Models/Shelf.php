@@ -10,7 +10,7 @@ class Shelf extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name_en', 'name_ar'];
+    protected $fillable = ['shelf_name'];
 
     protected function medicines(): HasMany
     {

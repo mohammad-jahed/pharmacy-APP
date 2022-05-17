@@ -1,5 +1,6 @@
 <?php
 
+use Database\Seeders\AreaSeeder;
 use Database\Seeders\CitySeeder;
 use Database\Seeders\PermissionSeeder;
 use Database\Seeders\RoleHasPermission;
@@ -24,7 +25,7 @@ class DatabaseSeeder extends Seeder
         $this->call(UserSeeder::class);
         $this->call(WorkTimesSeeder::class);
         $this->call(StateSeeder::class);
-        //$this->call(AreaSeeder::class);
+        $this->call(AreaSeeder::class);
         $this->call(CitySeeder::class);
 
     }

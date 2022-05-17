@@ -4,14 +4,16 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\City;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class CityController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function index()
     {
@@ -21,8 +23,8 @@ class CityController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return Response
      */
     public function store(Request $request)
     {
@@ -32,8 +34,8 @@ class CityController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\City  $city
-     * @return \Illuminate\Http\Response
+     * @param City $city
+     * @return Response
      */
     public function show(City $city)
     {
@@ -43,9 +45,9 @@ class CityController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\City  $city
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param City $city
+     * @return Response
      */
     public function update(Request $request, City $city)
     {
@@ -55,11 +57,17 @@ class CityController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\City  $city
-     * @return \Illuminate\Http\Response
+     * @param City $city
+     * @return Response
      */
     public function destroy(City $city)
     {
         //
+    }
+    public function areas(City $city): JsonResponse
+    {
+        $areas = $city->areas;
+        //dd($areas);
+        return $this->getJsonResponse($areas,'areas');
     }
 }

@@ -5,7 +5,7 @@ namespace App\Models;
 use Database\Factories\WorkTimesFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class WorkTime extends Model
 {
@@ -18,12 +18,12 @@ class WorkTime extends Model
         'to'
     ];
 
-    protected function users(): BelongsToMany
+    protected function user(): BelongsTo
     {
-        return $this->belongsToMany(User::class);
+        return $this->belongsTo(User::class);
     }
 
-    protected static function newFactory()
+    protected static function newFactory(): WorkTimesFactory
     {
         return new WorkTimesFactory();
     }

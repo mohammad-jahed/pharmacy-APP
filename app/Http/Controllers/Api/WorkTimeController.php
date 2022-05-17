@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\WorkTime;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class WorkTimeController extends Controller
@@ -61,5 +62,9 @@ class WorkTimeController extends Controller
     public function destroy(WorkTime $workTime)
     {
         //
+    }
+    public function days(){
+        $days = Carbon::getDays();
+        $this->getJsonResponse($days,'days');
     }
 }

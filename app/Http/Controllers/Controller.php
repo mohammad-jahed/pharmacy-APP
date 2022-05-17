@@ -12,11 +12,12 @@ use Illuminate\Routing\Controller as BaseController;
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
-    protected function getJsonResponse(Model $data , string $message ): JsonResponse
+
+    protected function getJsonResponse($data, string $message, $code = 200): JsonResponse
     {
         return response()->json([
-            'message'=>$message,
-            'data'=>$data
-        ]);
+            'message' => $message,
+            'data' => $data
+        ], $code);
     }
 }

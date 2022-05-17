@@ -13,6 +13,15 @@ class Area extends Model
 
     protected $fillable = ['city_id', 'name_ar', 'name_en'];
 
+    protected $appends = [
+        'name'
+    ];
+
+    public function getNameAttribute()
+    {
+        return $this->{'name_'.app()->getLocale()};
+    }
+
     protected function addresses(): HasMany
     {
         return $this->hasMany(Address::class);
@@ -20,6 +29,6 @@ class Area extends Model
 
     protected function city(): BelongsTo
     {
-        return $this->belongsTo(city::class);
+        return $this->belongsTo(City::class);
     }
 }
