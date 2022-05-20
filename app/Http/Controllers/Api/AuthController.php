@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\WorkTime;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
 use function auth;
 use function response;
 
@@ -44,7 +45,9 @@ class AuthController extends Controller
         $user = User::query()->create($data);
         $data['user_id'] = $user->id;
         Address::query()->create($data);
-        WorkTime::query()->create($data);
+        //WorkTime::query()->create($data);
+        $role = Role::query()->where('name', 'like', 'User')->get();
+        $user->assignRole($role);
         return $this->getJsonResponse($user,'User successfully registered');
     }
 

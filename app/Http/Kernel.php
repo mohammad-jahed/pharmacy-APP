@@ -5,6 +5,7 @@ namespace App\Http;
 use App\Http\Middleware\Authenticate;
 use App\Http\Middleware\CheckForMaintenanceMode;
 use App\Http\Middleware\EncryptCookies;
+use App\Http\Middleware\MustBeAdmin;
 use App\Http\Middleware\RedirectIfAuthenticated;
 use App\Http\Middleware\TrimStrings;
 use App\Http\Middleware\TrustProxies;
@@ -92,6 +93,7 @@ class Kernel extends HttpKernel
         'localizationRedirect' => LaravelLocalizationRedirectFilter::class,
         'localeSessionRedirect' => LocaleSessionRedirect::class,
         'localeCookieRedirect' => LocaleCookieRedirect::class,
-        'localeViewPath' => LaravelLocalizationViewPath::class
+        'localeViewPath' => LaravelLocalizationViewPath::class,
+        'Admin'=>MustBeAdmin::class
     ];
 }

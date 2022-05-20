@@ -15,7 +15,7 @@
                     <!-- menu title -->
                     <li class="mt-10 mb-10 text-muted pl-4 font-medium menu-title">{{trans('main_trans.Programname')}} </li>
 
-                    <!-- Grades-->
+                    <!-- pharmacies-->
                     <li>
                         <a href="javascript:void(0);" data-toggle="collapse" data-target="#Grades-menu">
                             <div class="pull-left"><i class="fas fa-school"></i><span
@@ -28,17 +28,17 @@
 
                         </ul>
                     </li>
-                    <!-- classes-->
+                    <!-- users-->
                     <li>
                         <a href="javascript:void(0);" data-toggle="collapse" data-target="#classes-menu">
                             <div class="pull-left"><i class="fa fa-building"></i><span
-                                    class="right-nav-text">{{trans('main_trans.classes')}}</span></div>
+                                    class="right-nav-text">{{trans('main_trans.users')}}</span></div>
                             <div class="pull-right"><i class="ti-plus"></i></div>
                             <div class="clearfix"></div>
                         </a>
                         <ul id="classes-menu" class="collapse" data-parent="#sidebarnav">
-                            <li> <a href="calendar.html">Events Calendar </a> </li>
-                            <li> <a href="calendar-list.html">List Calendar</a> </li>
+                            <li> <a href="{{route('users.index')}}">{{trans('user_trans.list_users')}} </a> </li>
+
                         </ul>
                     </li>
 
@@ -62,13 +62,13 @@
                     <li>
                         <a href="javascript:void(0);" data-toggle="collapse" data-target="#students-menu">
                             <div class="pull-left"><i class="fas fa-user-graduate"></i><span
-                                    class="right-nav-text">{{trans('main_trans.students')}}</span></div>
+                                    class="right-nav-text">{{trans('Sidebar_trans.states')}}</span></div>
                             <div class="pull-right"><i class="ti-plus"></i></div>
                             <div class="clearfix"></div>
                         </a>
                         <ul id="students-menu" class="collapse" data-parent="#sidebarnav">
-                            <li> <a href="calendar.html">Events Calendar </a> </li>
-                            <li> <a href="calendar-list.html">List Calendar</a> </li>
+                            <li> <a href="{{route('states.index')}}">{{trans('Sidebar_trans.state_list')}} </a> </li>
+
                         </ul>
                     </li>
 
@@ -78,13 +78,13 @@
                     <li>
                         <a href="javascript:void(0);" data-toggle="collapse" data-target="#Teachers-menu">
                             <div class="pull-left"><i class="fas fa-chalkboard-teacher"></i><span
-                                    class="right-nav-text">{{trans('main_trans.Teachers')}}</span></div>
+                                    class="right-nav-text">{{trans('Sidebar_trans.cities')}}</span></div>
                             <div class="pull-right"><i class="ti-plus"></i></div>
                             <div class="clearfix"></div>
                         </a>
                         <ul id="Teachers-menu" class="collapse" data-parent="#sidebarnav">
-                            <li> <a href="calendar.html">Events Calendar </a> </li>
-                            <li> <a href="calendar-list.html">List Calendar</a> </li>
+                            <li> <a href="{{route('cities.index')}}">{{trans('Sidebar_trans.city_list')}} </a> </li>
+
                         </ul>
                     </li>
 
@@ -93,13 +93,13 @@
                     <li>
                         <a href="javascript:void(0);" data-toggle="collapse" data-target="#Parents-menu">
                             <div class="pull-left"><i class="fas fa-user-tie"></i><span
-                                    class="right-nav-text">{{trans('main_trans.Parents')}}</span></div>
+                                    class="right-nav-text">{{trans('Sidebar_trans.areaes')}}</span></div>
                             <div class="pull-right"><i class="ti-plus"></i></div>
                             <div class="clearfix"></div>
                         </a>
                         <ul id="Parents-menu" class="collapse" data-parent="#sidebarnav">
-                            <li> <a href="calendar.html">Events Calendar </a> </li>
-                            <li> <a href="calendar-list.html">List Calendar</a> </li>
+                            <li> <a href="{{route('areaes.index')}}">{{trans('Sidebar_trans.area_list')}} </a> </li>
+
                         </ul>
                     </li>
 

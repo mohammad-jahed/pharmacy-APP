@@ -28,7 +28,7 @@ class PharmacyController extends Controller
      */
     public function index(): View|Factory|Application
     {
-        $this->authorize('view', new User());
+        $this->authorize('view',User::class);
         $states = State::all();
         $pharmacies = User::type('Pharmacy')->get();
         return view('pages.pharmacy.pharmacy', compact('pharmacies'))
@@ -54,7 +54,7 @@ class PharmacyController extends Controller
      */
     public function store(RegisterRequest $request): RedirectResponse
     {
-        $this->authorize('create', new User());
+        $this->authorize('create', User::class);
         $data = $request->validated();
         $file_name = null;
         if ($request->hasFile('imagePath')) {

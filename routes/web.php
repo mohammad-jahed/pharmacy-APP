@@ -33,7 +33,7 @@ Route::group(['middleware' => ['guest']], function () {
 Route::group(
     [
         'prefix' => (new Mcamara\LaravelLocalization\LaravelLocalization)->setLocale(),
-        'middleware' => ['localeSessionRedirect', 'localizationRedirect', 'localeViewPath', 'auth']
+        'middleware' => ['localeSessionRedirect', 'localizationRedirect', 'localeViewPath', 'auth','Admin']
     ], function () {
 
     //==============================dashboard============================
@@ -45,4 +45,13 @@ Route::group(
     Route::get('/state/{state}/cities',[StateController::class,'cities'])->name('state.cities');
     Route::get('/city/{city}/areas',[CityController::class,'areas'])->name('city.areas');
     Route::get('/days',[WorkTimeController::class,'days'])->name('days');
+
+    //=================================Users========================================================================
+        Route::resource('/users','Api\UserController');
+    //====================================states=================================================================
+        Route::resource('/states','Admin\StateController');
+    //=====================================cities======================================================================
+        Route::resource('/cities','Admin\CityController');
+    //=====================================Areaes==================================================================
+        Route::resource('/areaes','Admin\AreaController');
     });

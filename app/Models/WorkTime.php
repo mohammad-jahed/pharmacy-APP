@@ -18,6 +18,10 @@ class WorkTime extends Model
         'to'
     ];
 
+    protected $appends = [
+        'name'
+    ];
+
     protected function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
@@ -27,4 +31,11 @@ class WorkTime extends Model
     {
         return new WorkTimesFactory();
     }
+
+//    public function getDayAttribute(){
+//
+//
+//
+//
+//    }
 }

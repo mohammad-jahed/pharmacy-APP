@@ -1,17 +1,19 @@
 @extends('layouts.master')
 @section('css')
     @toastr_css
+ @endsection
+
 @section('title')
     {{ trans('pharmacy_trans.title_page') }}
 
-@stop
 @endsection
+
 @section('page-header')
     <!-- breadcrumb -->
+@endsection
 @section('PageTitle')
     {{ trans('main_trans.pharmacies') }}
 
-@stop
 <!-- breadcrumb -->
 @endsection
 @section('content')
@@ -19,7 +21,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link href="/dist/output.css" rel="stylesheet">
+{{--        <link href="/dist/output.css" rel="stylesheet">--}}
         <title></title>
     </head>
     <div class="row">
@@ -63,6 +65,8 @@
                                 <th>#</th>
                                 <th>{{ trans('pharmacy_trans.username') }}</th>
                                 <th>{{ trans('pharmacy_trans.email') }}</th>
+                                <th>{{ trans('pharmacy_trans.address') }}</th>
+                                <th>{{ trans('pharmacy_trans.work_time') }}</th>
                                 <th>{{ trans('pharmacy_trans.Processes') }}</th>
                             </tr>
                             </thead>
@@ -74,6 +78,14 @@
                                     <td>{{ $i }}</td>
                                     <td>{{ $pharmacy->username }}</td>
                                     <td>{{ $pharmacy->email }}</td>
+                                        <td>{{trans('pharmacy_trans.state')}} :  {{ $pharmacy->address->state->name }}<br>
+                                            {{trans('pharmacy_trans.city')}} :  {{$pharmacy->address->city->name}}<br>
+                                            {{trans('pharmacy_trans.area')}} :  {{$pharmacy->address->area->name}}<br>
+                                            {{trans('pharmacy_trans.street')}} :  {{$pharmacy->address->street}}
+                                        </td>
+                                        <td>{{trans('pharmacy_trans.day')}} :  {{$pharmacy->workTime->day}}<br>
+                                            {{trans('pharmacy_trans.from')}} :  {{$pharmacy->workTime->from}}<br>
+                                            {{trans('pharmacy_trans.to')}} :  {{$pharmacy->workTime->to}}</td>
                                     <td>
                                         {{--                                        <button type="button" class="btn btn-info btn-sm" data-toggle="modal"--}}
                                         {{--                                                data-target="#edit{{ $pharmacy->id }}"--}}
@@ -359,7 +371,7 @@
                                 </div>
 
                             <br><br>
-                    </div>
+
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary"
                                 data-dismiss="modal">{{ trans('pharmacy_trans.close') }}</button>
@@ -367,7 +379,7 @@
                                 class="btn btn-success">{{ trans('pharmacy_trans.submit') }}</button>
                     </div>
                     </form>
-
+                    </div>
                 </div>
             </div>
         </div>
@@ -379,4 +391,6 @@
 @section('js')
     @toastr_js
     @toastr_render
+
+    <script src="{{ URL::asset('js/app.js') }}"></script>
 @endsection

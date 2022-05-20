@@ -9,7 +9,7 @@ return [
     'change_language'=>'تغير اللغة',
     'pharmacies'=>'الصيدليات',
     'pharmacies_list'=>'قائمة الصيدليات',
-    'classes'=>'الفصول',
+    'users_list'=>'قائمة المستخدمين',
     'sections'=>'الاقسام',
     'students'=>'الطلاب',
     'Teachers'=>'المعلمين',
@@ -20,9 +20,9 @@ return [
     'library'=>'المكتبة',
     'Onlineclasses'=>'حصص اونلاين',
     'Settings'=>'الاعدادات',
-    'Users'=>'المستخدمين',
-    'Copyright' => 'جميع الحقوق محفوظة ',
-    'Name_Programer' => 'سمير جمال مورا سوفت'
+    'users'=>'المستخدمين',
+//    'Copyright' => 'جميع الحقوق محفوظة ',
+//    'Name_Programer' => 'سمير جمال مورا سوفت'
 
 
 ];

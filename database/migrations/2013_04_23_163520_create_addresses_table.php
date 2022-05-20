@@ -19,7 +19,7 @@ class CreateAddressesTable extends Migration
             $table->foreignId('state_id');
             $table->foreignId('city_id');
             $table->foreignId('area_id');
-            $table->string('street')->unique();
+            $table->string('street');
             $table->timestamps();
         });
     }

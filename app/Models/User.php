@@ -81,9 +81,9 @@ class User extends Authenticatable implements JWTSubject
         return [];
     }
 
-    protected function workTime(): HasMany
+    protected function workTime(): HasOne
     {
-        return $this->hasMany(WorkTime::class);
+        return $this->hasOne(WorkTime::class);
     }
 
     protected function address(): HasOne
