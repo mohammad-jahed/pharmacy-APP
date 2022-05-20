@@ -3,7 +3,6 @@
 namespace App\Http\Requests\Medicines;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 use JetBrains\PhpStorm\ArrayShape;
 
 class MedicineUpdateRequest extends FormRequest
@@ -28,13 +27,12 @@ class MedicineUpdateRequest extends FormRequest
     {
         return [
             //
-
-            'shelf_name' => ['string'],
-            'company_name' => ['string'],
-            'name' => [ 'min:3', 'max:30', 'string'],
+            'shelf_name' => ['string', 'min:1', 'max:255'],
+            'company_name' => ['string', 'min:3', 'max:255'],
+            'name' => ['min:3', 'max:30', 'string'],
             'quantity' => ['numeric'],
             'pills' => ['numeric'],
-            'expiration_date' => ['date_format:H:i'],
+            'expiration_date' => ['date_format:Y-m-d'],
             'c_price' => ['numeric'],
             'price' => ['numeric']
         ];

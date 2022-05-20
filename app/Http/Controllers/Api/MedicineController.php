@@ -7,7 +7,10 @@ use App\Http\Requests\Medicines\MedicineStoreRequest;
 use App\Http\Requests\Medicines\MedicineUpdateRequest;
 use App\Models\Company;
 use App\Models\Medicine;
+use App\Models\MedicineUser;
 use App\Models\Shelf;
+use App\Models\User;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 
 
@@ -22,7 +25,7 @@ class MedicineController extends Controller
     {
         //
         $medicine = Medicine::all();
-        return $this->getJsonResponse($medicine,'medicines');
+        return $this->getJsonResponse($medicine, 'medicines');
     }
 
     /**
@@ -30,15 +33,22 @@ class MedicineController extends Controller
      *
      * @param MedicineStoreRequest $request
      * @return JsonResponse
+     * @throws AuthorizationException
      */
     public function store(MedicineStoreRequest $request): JsonResponse
     {
+        $this->authorize('createMedicine',auth('api')->user());
+        //dd(auth('api')->user());
         $data = $request->validated();
         Shelf::query()->create($data);
         Company::query()->create($data);
         $medicine = Medicine::query()->create($data);
-        return $this->getJsonResponse($medicine,'Medicine Created Successfully');
+        $data['medicine_id'] = $medicine->id;
+        $data['pharmacy_id'] = auth()->user()->getAuthIdentifier();
+        MedicineUser::query()->create($data);
+        return $this->getJsonResponse($medicine, 'Medicine Created Successfully');
     }
+
     /**
      * Display the specified resource.
      *
@@ -48,7 +58,7 @@ class MedicineController extends Controller
     public function show(Medicine $medicine): JsonResponse
     {
         //
-        return $this->getJsonResponse($medicine,'Success');
+        return $this->getJsonResponse($medicine, 'Success');
     }
 
     /**
@@ -61,13 +71,14 @@ class MedicineController extends Controller
     public function update(MedicineUpdateRequest $request, Medicine $medicine): JsonResponse
     {
         //
+
         $data = $request->validated();
         $medicine->update($data);
-        $shelf = Shelf::query()->where('shelf_name',$data['shelf_name'])->get();
+        $shelf = Shelf::query()->where('shelf_name', $data['shelf_name'])->get();
         Shelf::query()->update($shelf);
-        $company = Company::query()->where('company_name',$data['company_name'])->get();
+        $company = Company::query()->where('company_name', $data['company_name'])->get();
         Company::query()->update($company);
-        return $this->getJsonResponse($medicine,'Medicine Updated Successfully');
+        return $this->getJsonResponse($medicine, 'Medicine Updated Successfully');
     }
 
     /**
@@ -80,6 +91,6 @@ class MedicineController extends Controller
     {
         //
         $medicine->delete();
-        return $this->getJsonResponse($medicine,'Medicine Deleted Successfully');
+        return $this->getJsonResponse($medicine, 'Medicine Deleted Successfully');
     }
 }

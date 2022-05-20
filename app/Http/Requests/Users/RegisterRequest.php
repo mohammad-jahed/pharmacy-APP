@@ -26,9 +26,9 @@ class RegisterRequest extends FormRequest
     {
         return [
             //
-            'state_id' => [Rule::exists('states', 'id'), 'nullable'],
-            'city_id' => [Rule::exists('cities', 'id'), 'nullable'],
-            'area_id' => [Rule::exists('areas', 'id'), 'nullable'],
+            'state_id' => [Rule::exists('states', 'id')],
+            'city_id' => [Rule::exists('cities', 'id')],
+            'area_id' => [Rule::exists('areas', 'id')],
             'street' => ['string'],
             'day' => ['numeric', 'min:0', 'max:6'],
             'from' => ['date_format:H:i'],

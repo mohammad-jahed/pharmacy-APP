@@ -34,7 +34,7 @@ class Medicine extends Model
 
     protected function pharmacy(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'user_id', 'pharmacy_id');
+        return $this->belongsTo(User::class);
     }
 
     protected function medicineUser(): HasMany
@@ -44,6 +44,11 @@ class Medicine extends Model
 
     protected function alternativeMedicine(): HasMany
     {
-        return $this->hasMany(AlternativeMedicine::class,'alternative_id');
+        return $this->hasMany(AlternativeMedicine::class, 'alternative_id');
+    }
+
+    protected function components(): HasMany
+    {
+        return $this->hasMany(Component::class);
     }
 }

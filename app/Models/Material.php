@@ -10,10 +10,11 @@ class Material extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name_en', 'name_ar'];
+    protected $fillable = ['component_id', 'name_en', 'name_ar'];
 
     protected function ComponentsMaterials(): HasMany
     {
         return $this->hasMany(ComponentMaterial::class);
     }
+
 }

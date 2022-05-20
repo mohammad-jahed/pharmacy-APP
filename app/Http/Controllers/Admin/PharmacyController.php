@@ -28,7 +28,7 @@ class PharmacyController extends Controller
      */
     public function index(): View|Factory|Application
     {
-        $this->authorize('view',User::class);
+        $this->authorize('view',new User());
         $states = State::all();
         $pharmacies = User::type('Pharmacy')->get();
         return view('pages.pharmacy.pharmacy', compact('pharmacies'))

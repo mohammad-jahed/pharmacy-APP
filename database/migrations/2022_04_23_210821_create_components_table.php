@@ -15,6 +15,7 @@ class CreateComponentsTable extends Migration
     {
         Schema::create('components', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('medicine_id');
             $table->string('name_en')->unique();
             $table->string('name_ar')->unique();
             $table->timestamps();
