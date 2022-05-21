@@ -15,12 +15,12 @@ class ReservationUser extends Model
         'user_id'
     ];
 
-    protected function reservation(): BelongsTo
+    public function reservation(): BelongsTo
     {
         return $this->belongsTo(Reservation::class);
     }
 
-    protected function user(): BelongsTo
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }

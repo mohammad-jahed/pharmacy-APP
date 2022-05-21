@@ -22,12 +22,12 @@ class Area extends Model
         return $this->{'name_'.app()->getLocale()};
     }
 
-    protected function addresses(): HasMany
+    public function addresses(): HasMany
     {
         return $this->hasMany(Address::class);
     }
 
-    protected function city(): BelongsTo
+    public function city(): BelongsTo
     {
         return $this->belongsTo(City::class);
     }

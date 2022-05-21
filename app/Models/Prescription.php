@@ -12,7 +12,7 @@ class Prescription extends Model
 
     protected $fillable = ['user_id', 'imagePath'];
 
-    protected function user(): BelongsTo
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }

@@ -9,9 +9,10 @@ use App\Models\Company;
 use App\Models\Medicine;
 use App\Models\MedicineUser;
 use App\Models\Shelf;
-use App\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
+
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Gate;
 
 
 class MedicineController extends Controller
@@ -37,14 +38,19 @@ class MedicineController extends Controller
      */
     public function store(MedicineStoreRequest $request): JsonResponse
     {
-        $this->authorize('createMedicine',auth('api')->user());
-        //dd(auth('api')->user());
+        /**
+         * @var Shelf $shelf;
+         * @var Company $company;
+         */
+        Gate::forUser(auth('api')->user())->authorize('createMedicine');
         $data = $request->validated();
-        Shelf::query()->create($data);
-        Company::query()->create($data);
+        $shelf = Shelf::query()->create($data);
+        $company = Company::query()->create($data);
+        $data['shelf_id'] = $shelf->id;
+        $data['company_id'] = $company->id;
         $medicine = Medicine::query()->create($data);
         $data['medicine_id'] = $medicine->id;
-        $data['pharmacy_id'] = auth()->user()->getAuthIdentifier();
+        $data['pharmacy_id'] = auth('api')->user()->getAuthIdentifier();
         MedicineUser::query()->create($data);
         return $this->getJsonResponse($medicine, 'Medicine Created Successfully');
     }
@@ -67,17 +73,29 @@ class MedicineController extends Controller
      * @param MedicineUpdateRequest $request
      * @param Medicine $medicine
      * @return JsonResponse
+     * @throws AuthorizationException
      */
+    //sdsdsdsdsdsdsddsdsddsdsdsdsdsd
     public function update(MedicineUpdateRequest $request, Medicine $medicine): JsonResponse
     {
         //
-
+        /**
+         * @var Medicine $newMedicine ;
+         * @var Company $company;
+         * @var Shelf $shelf;
+         */
+        Gate::forUser(auth('api')->user())->authorize('updateMedicine', $medicine);
         $data = $request->validated();
         $medicine->update($data);
-        $shelf = Shelf::query()->where('shelf_name', $data['shelf_name'])->get();
-        Shelf::query()->update($shelf);
-        $company = Company::query()->where('company_name', $data['company_name'])->get();
-        Company::query()->update($company);
+        if ($request->hasFile('shelf_name')) {
+            $shelf = Shelf::query()->update($data);
+            $data['shelf_id'] = $shelf->id;
+
+        }
+        if ($request->hasFile('company_name')) {
+            $company = Company::query()->update($data);
+            $data['company_id'] = $company->id;
+        }
         return $this->getJsonResponse($medicine, 'Medicine Updated Successfully');
     }
 

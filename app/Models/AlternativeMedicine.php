@@ -15,12 +15,12 @@ class AlternativeMedicine extends Model
         'alternative_id'
     ];
 
-    protected function medicine(): BelongsTo
+    public function medicine(): BelongsTo
     {
         return $this->belongsTo(Medicine::class);
     }
 
-    protected function alternative(): BelongsTo
+    public function alternative(): BelongsTo
     {
         return $this->belongsTo(Medicine::class, 'medicine_id', 'alternative_id');
     }

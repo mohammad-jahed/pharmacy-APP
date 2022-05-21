@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Components;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 use JetBrains\PhpStorm\ArrayShape;
 
 class ComponentUpdateRequest extends FormRequest
@@ -22,13 +23,13 @@ class ComponentUpdateRequest extends FormRequest
      *
      * @return array
      */
-    #[ArrayShape(['name_e' => "string[]", 'name_ar' => "string[]"])]
+    #[ArrayShape(['medicine_id' => "array", 'name' => "string[]"])]
     public function rules(): array
     {
         return [
             //
-            'name_e' => ['string'],
-            'name_ar' => ['string']
+            'name' => ['string', 'min:3', 'max:256']
+
         ];
     }
 }

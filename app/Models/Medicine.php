@@ -7,6 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * @property int pharmacy_id;
+ *
+ */
 class Medicine extends Model
 {
     use HasFactory;
@@ -22,32 +26,27 @@ class Medicine extends Model
         'price'
     ];
 
-    protected function company(): BelongsTo
+    public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class);
     }
 
-    protected function shelf(): BelongsTo
+    public function shelf(): BelongsTo
     {
         return $this->belongsTo(Shelf::class);
     }
 
-    protected function pharmacy(): BelongsTo
-    {
-        return $this->belongsTo(User::class);
-    }
-
-    protected function medicineUser(): HasMany
+    public function medicineUser(): HasMany
     {
         return $this->hasMany(MedicineUser::class);
     }
 
-    protected function alternativeMedicine(): HasMany
+    public function alternativeMedicine(): HasMany
     {
         return $this->hasMany(AlternativeMedicine::class, 'alternative_id');
     }
 
-    protected function components(): HasMany
+    public function components(): HasMany
     {
         return $this->hasMany(Component::class);
     }

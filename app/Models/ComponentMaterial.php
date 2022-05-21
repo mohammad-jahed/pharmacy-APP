@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class ComponentMaterial extends Model
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\Pivot;
+
+class ComponentMaterial extends Pivot
 {
     use HasFactory;
 
@@ -15,13 +17,14 @@ class ComponentMaterial extends Model
         'material_id'
     ];
 
-    protected function component(): BelongsTo
+    public function component(): BelongsTo
     {
         return $this->belongsTo(Component::class);
     }
 
-    protected function material(): BelongsTo
+    public function material(): BelongsTo
     {
         return $this->belongsTo(Material::class);
     }
+
 }

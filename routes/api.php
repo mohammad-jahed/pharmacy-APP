@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\ComponentController;
+use App\Http\Controllers\Api\MaterialController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -28,6 +30,9 @@ Route::group([
 
 ], function () {
     Route::resource('/medicines','Api\MedicineController');
+    Route::resource('/components','Api\ComponentController');
+    Route::post('/components/{component}/materials',[MaterialController::class,'store']);
+    Route::get('/components/{component}',[ComponentController::class,'materialsComponent']);
 });
 
 

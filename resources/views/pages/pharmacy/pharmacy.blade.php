@@ -1,7 +1,7 @@
 @extends('layouts.master')
 @section('css')
     @toastr_css
- @endsection
+@endsection
 
 @section('title')
     {{ trans('pharmacy_trans.title_page') }}
@@ -14,14 +14,14 @@
 @section('PageTitle')
     {{ trans('main_trans.pharmacies') }}
 
-<!-- breadcrumb -->
+    <!-- breadcrumb -->
 @endsection
 @section('content')
     <!-- row -->
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-{{--        <link href="/dist/output.css" rel="stylesheet">--}}
+        {{--        <link href="/dist/output.css" rel="stylesheet">--}}
         <title></title>
     </head>
     <div class="row">
@@ -78,14 +78,14 @@
                                     <td>{{ $i }}</td>
                                     <td>{{ $pharmacy->username }}</td>
                                     <td>{{ $pharmacy->email }}</td>
-                                        <td>{{trans('pharmacy_trans.state')}} :  {{ $pharmacy->address->state->name }}<br>
-                                            {{trans('pharmacy_trans.city')}} :  {{$pharmacy->address->city->name}}<br>
-                                            {{trans('pharmacy_trans.area')}} :  {{$pharmacy->address->area->name}}<br>
-                                            {{trans('pharmacy_trans.street')}} :  {{$pharmacy->address->street}}
-                                        </td>
-                                        <td>{{trans('pharmacy_trans.day')}} :  {{$pharmacy->workTime->day}}<br>
-                                            {{trans('pharmacy_trans.from')}} :  {{$pharmacy->workTime->from}}<br>
-                                            {{trans('pharmacy_trans.to')}} :  {{$pharmacy->workTime->to}}</td>
+                                    <td>{{trans('pharmacy_trans.state')}} : {{ $pharmacy->address->state->name }}<br>
+                                        {{trans('pharmacy_trans.city')}} : {{$pharmacy->address->city->name}}<br>
+                                        {{trans('pharmacy_trans.area')}} : {{$pharmacy->address->area->name}}<br>
+                                        {{trans('pharmacy_trans.street')}} : {{$pharmacy->address->street}}
+                                    </td>
+                                    <td>{{trans('pharmacy_trans.day')}} : {{$pharmacy->workTime->day}}<br>
+                                        {{trans('pharmacy_trans.from')}} : {{$pharmacy->workTime->from}}<br>
+                                        {{trans('pharmacy_trans.to')}} : {{$pharmacy->workTime->to}}</td>
                                     <td>
                                         {{--                                        <button type="button" class="btn btn-info btn-sm" data-toggle="modal"--}}
                                         {{--                                                data-target="#edit{{ $pharmacy->id }}"--}}
@@ -259,9 +259,9 @@
                                         <label for="Name" class="mr-sm-2">{{ trans('pharmacy_trans.state') }}:</label>
                                         <?php $i = 0; ?>
                                         <select id="state" type="number" name="state_id" class="form-control">
-                                            @foreach($states as $state)
-                                                <?php $i++; ?>
-                                                <option hidden>choose state</option>
+                                        @foreach($states as $state)
+                                            <?php $i++; ?>
+                                            <!--                                                <option hidden value="0">choose state</option>-->
                                                 <option value="{{$state->id}}">{{ $state->name  }} </option>
                                             @endforeach
                                         </select>
@@ -292,7 +292,7 @@
                                 </div>
                                 <script src="{{ asset('js/app.js') }}"></script>
                                 <script type="text/javascript">
-                                    $('#state').on('change', function (e) {
+                                    $('#state').on('change', function () {
                                         let state = this.value
                                         console.log(state);
                                         $.ajax({
@@ -312,7 +312,7 @@
 
                                         })
                                     });
-                                    $('#city').on('change', function (e) {
+                                    $('#city').on('change', function () {
                                         let city = this.value
                                         console.log(city)
                                         $.ajax({
@@ -338,47 +338,47 @@
                             </div>
                             <div>
 
-                                    <div class="row">
-                                        <div class="col">
-                                            <label for="Name" class="mr-sm-2">{{ trans('pharmacy_trans.day') }}:</label>
-                                            <select id="day" type="number" name="day" class="form-control">
-                                                <option value=0>{{trans('days_trans.saturday')}}</option>
-                                                <option value=1>{{trans('days_trans.sunday')}}</option>
-                                                <option value=2>{{trans('days_trans.monday')}}</option>
-                                                <option value=3>{{trans('days_trans.tuesday')}}</option>
-                                                <option value=4>{{trans('days_trans.wednesday')}}</option>
-                                                <option value=5>{{trans('days_trans.thursday')}}</option>
-                                                <option value=6>{{trans('days_trans.friday')}}</option>
-                                            </select>
-                                        </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <label for="Name" class="mr-sm-2">{{ trans('pharmacy_trans.day') }}:</label>
+                                        <select id="day" type="number" name="day" class="form-control">
+                                            <option value=0>{{trans('days_trans.saturday')}}</option>
+                                            <option value=1>{{trans('days_trans.sunday')}}</option>
+                                            <option value=2>{{trans('days_trans.monday')}}</option>
+                                            <option value=3>{{trans('days_trans.tuesday')}}</option>
+                                            <option value=4>{{trans('days_trans.wednesday')}}</option>
+                                            <option value=5>{{trans('days_trans.thursday')}}</option>
+                                            <option value=6>{{trans('days_trans.friday')}}</option>
+                                        </select>
                                     </div>
-
-                                    <div class="row">
-                                        <div class="col">
-                                            <label for="Name" class="mr-sm-2">{{ trans('pharmacy_trans.from') }}
-                                                :</label>
-                                            <input id="image" type="time" name="from" class="form-control">
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col">
-                                            <label for="Name" class="mr-sm-2">{{ trans('pharmacy_trans.to') }}
-                                                :</label>
-                                            <input id="image" type="time" name="to" class="form-control">
-                                        </div>
-                                    </div>
-
                                 </div>
+
+                                <div class="row">
+                                    <div class="col">
+                                        <label for="Name" class="mr-sm-2">{{ trans('pharmacy_trans.from') }}
+                                            :</label>
+                                        <input id="image" type="time" name="from" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <label for="Name" class="mr-sm-2">{{ trans('pharmacy_trans.to') }}
+                                            :</label>
+                                        <input id="image" type="time" name="to" class="form-control">
+                                    </div>
+                                </div>
+
+                            </div>
 
                             <br><br>
 
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary"
-                                data-dismiss="modal">{{ trans('pharmacy_trans.close') }}</button>
-                        <button type="submit"
-                                class="btn btn-success">{{ trans('pharmacy_trans.submit') }}</button>
-                    </div>
-                    </form>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary"
+                                        data-dismiss="modal">{{ trans('pharmacy_trans.close') }}</button>
+                                <button type="submit"
+                                        class="btn btn-success">{{ trans('pharmacy_trans.submit') }}</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -391,6 +391,5 @@
 @section('js')
     @toastr_js
     @toastr_render
-
-    <script src="{{ URL::asset('js/app.js') }}"></script>
+    <script src="{{\Illuminate\Support\Facades\URL::asset('js/app.js')}}"></script>
 @endsection

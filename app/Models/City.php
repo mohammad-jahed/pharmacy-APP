@@ -24,17 +24,17 @@ class City extends Model
         return $this->{'name_'.app()->getLocale()};
     }
 
-    protected function addresses(): HasMany
+    public function addresses(): HasMany
     {
         return $this->hasMany(Address::class);
     }
 
-    protected function state(): BelongsTo
+    public function state(): BelongsTo
     {
         return $this->belongsTo(State::class);
     }
 
-    protected function areas(): HasMany
+    public function areas(): HasMany
     {
         return $this->hasMany(Area::class);
     }

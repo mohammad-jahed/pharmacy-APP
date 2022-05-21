@@ -24,12 +24,12 @@ class State extends Model
         return $this->{'name_'.app()->getLocale()};
     }
 
-    protected function addresses(): HasMany
+    public function addresses(): HasMany
     {
         return $this->hasMany(Address::class);
     }
 
-    protected function cities(): HasMany
+    public function cities(): HasMany
     {
         return $this->hasMany(City::class);
     }

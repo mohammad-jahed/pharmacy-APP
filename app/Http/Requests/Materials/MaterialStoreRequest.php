@@ -22,12 +22,12 @@ class MaterialStoreRequest extends FormRequest
      *
      * @return array
      */
-    #[ArrayShape(['name_en' => "string[]", 'name_ar' => "string[]"])] public function rules(): array
+    #[ArrayShape(['name' => "string[]"])]
+    public function rules(): array
     {
         return [
             //
-            'name_en' => ['required', 'string', 'max:255'],
-            'name_ar' => ['required', 'string', 'max:255']
+            'name' => ['required', 'string','min:2', 'max:255'],
         ];
     }
 }

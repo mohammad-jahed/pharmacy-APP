@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Areaes\AreaStoreRequest;
-use App\Http\Requests\Areaes\AreaUpdateRequest;
+use App\Http\Requests\Areas\AreaStoreRequest;
+use App\Http\Requests\Areas\AreaUpdateRequest;
 use App\Models\Area;
 use App\Models\City;
 

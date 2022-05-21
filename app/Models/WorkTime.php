@@ -22,20 +22,14 @@ class WorkTime extends Model
         'name'
     ];
 
-    protected function user(): BelongsTo
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    protected static function newFactory(): WorkTimesFactory
+    public static function newFactory(): WorkTimesFactory
     {
         return new WorkTimesFactory();
     }
 
-//    public function getDayAttribute(){
-//
-//
-//
-//
-//    }
 }

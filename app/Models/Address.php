@@ -19,22 +19,22 @@ class Address extends Model
         'street'
     ];
 
-    protected function state(): BelongsTo
+    public function state(): BelongsTo
     {
         return $this->belongsTo(State::class);
     }
 
-    protected function city(): BelongsTo
+    public function city(): BelongsTo
     {
         return $this->belongsTo(City::class);
     }
 
-    protected function area(): BelongsTo
+    public function area(): BelongsTo
     {
         return $this->belongsTo(Area::class);
     }
 
-    protected function user(): BelongsTo
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }

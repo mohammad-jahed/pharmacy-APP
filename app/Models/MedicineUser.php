@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @property int pharmacy_id;
+ */
 class MedicineUser extends Model
 {
     use HasFactory;
@@ -15,12 +18,17 @@ class MedicineUser extends Model
         'pharmacy_id'
     ];
 
-    protected function medicine(): BelongsTo
+    public function getAttribute($key)
+    {
+        return $key;
+    }
+
+    public function medicine(): BelongsTo
     {
         return $this->belongsTo(Medicine::class);
     }
 
-    protected function pharmacy(): BelongsTo
+    public function pharmacy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id', 'pharmacy_id');
     }

@@ -16,8 +16,6 @@ class CreateUsersTable extends Migration
         //Schema::dropIfExists('users');
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('address_id')->nullable();
-            $table->foreignId('work_times_id')->nullable();
             $table->string('username')->unique();
             $table->string('email')->unique();
             $table->string('imagePath')->nullable();

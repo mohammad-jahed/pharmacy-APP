@@ -13,22 +13,22 @@ class Reservation extends Model
 
     protected $fillable = ['user_id', 'pharmacy_id', 'period'];
 
-    protected function user(): BelongsTo
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    protected function pharmacy(): BelongsTo
+    public function pharmacy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id', 'pharmacy_id');
     }
 
-    protected function reservationUser(): HasMany
+    public function reservationUser(): HasMany
     {
         return $this->hasMany(ReservationUser::class);
     }
 
-    protected function medicineReservation(): HasMany
+    public function medicineReservation(): HasMany
     {
         return $this->hasMany(MedicineReservation::class);
     }

@@ -14,12 +14,12 @@ class MedicineReservation extends Model
         'medicine_id'
     ];
 
-    protected function reservation(): BelongsTo
+    public function reservation(): BelongsTo
     {
         return $this->belongsTo(Reservation::class);
     }
 
-    protected function medicine(): BelongsTo
+    public function medicine(): BelongsTo
     {
         return $this->belongsTo(Medicine::class);
     }

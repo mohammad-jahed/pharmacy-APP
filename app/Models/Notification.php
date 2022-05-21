@@ -17,12 +17,12 @@ class Notification extends Model
         'description_ar'
     ];
 
-    protected function sender(): BelongsTo
+    public function sender(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id', 'sender_id');
     }
 
-    protected function receiver(): BelongsTo
+    public function receiver(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id', 'receiver_id');
     }

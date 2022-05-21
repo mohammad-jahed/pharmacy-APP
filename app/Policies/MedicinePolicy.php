@@ -3,6 +3,7 @@
 namespace App\Policies;
 
 use App\Models\Medicine;
+use App\Models\MedicineUser;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Auth\Access\Response;
@@ -27,13 +28,14 @@ class MedicinePolicy
      * Determine whether the user can view the model.
      *
      * @param User $user
-     * @param User $model
+     * @param Medicine $model
      * @return Response|bool
      */
-    public function view(User $user, User $model): Response|bool
+    public function view(User $user, Medicine $model): Response|bool
     {
         //
-        return ($user->id == $model->id);
+        $newUser = $model->medicineUser()->first();
+        return ($user->id == $newUser->pharmacy_id);
     }
 
     /**
@@ -42,7 +44,7 @@ class MedicinePolicy
      * @param User $user
      * @return Response|bool
      */
-    public function createMedicine(User $user): Response|bool
+    public function create(User $user): Response|bool
     {
         //
         return ($user->hasRole('Pharmacy'));
@@ -52,13 +54,17 @@ class MedicinePolicy
      * Determine whether the user can update the model.
      *
      * @param User $user
-     * @param User $model
+     * @param Medicine $model
      * @return Response|bool
      */
-    public function update(User $user, User $model): Response|bool
+    public function update(User $user, Medicine $model): Response|bool
     {
-        //
-        return ($user->id == $model->id);
+        /**
+         * @var Medicine $newModel
+         */
+        $newModel = $model->medicineUser()->first();
+        return ($user->id == $newModel->getAttributes()['pharmacy_id']);
+
     }
 
     /**

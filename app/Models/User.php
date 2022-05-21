@@ -81,32 +81,32 @@ class User extends Authenticatable implements JWTSubject
         return [];
     }
 
-    protected function workTime(): HasOne
+    public function workTime(): HasOne
     {
         return $this->hasOne(WorkTime::class);
     }
 
-    protected function address(): HasOne
+    public function address(): HasOne
     {
         return $this->hasOne(Address::class);
     }
 
-    protected function notifications(): HasMany
+    public function notifications(): HasMany
     {
         return $this->hasMany(Notification::class, 'receiver_id');
     }
 
-    protected function medicines(): HasMany
+    public function medicines(): HasMany
     {
         return $this->hasMany(Medicine::class);
     }
 
-    protected function reservations(): HasMany
+    public function reservations(): HasMany
     {
         return $this->hasMany(Reservation::class);
     }
 
-    protected function reservationUsers(): HasMany
+    public function reservationUsers(): HasMany
     {
         return $this->hasMany(ReservationUser::class);
     }
