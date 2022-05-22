@@ -29,8 +29,8 @@ Route::group([
     'middleware' => 'api',
 
 ], function () {
-    Route::resource('/medicines','Api\MedicineController');
-    Route::resource('/components','Api\ComponentController');
+    Route::apiResource('/medicines','Api\MedicineController');
+    Route::apiResource('/components','Api\ComponentController');
     Route::post('/components/{component}/materials',[MaterialController::class,'store']);
     Route::get('/components/{component}',[ComponentController::class,'materialsComponent']);
 });

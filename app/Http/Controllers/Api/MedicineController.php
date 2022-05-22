@@ -78,24 +78,17 @@ class MedicineController extends Controller
     //sdsdsdsdsdsdsddsdsddsdsdsdsdsd
     public function update(MedicineUpdateRequest $request, Medicine $medicine): JsonResponse
     {
-        //
-        /**
-         * @var Medicine $newMedicine ;
-         * @var Company $company;
-         * @var Shelf $shelf;
-         */
         Gate::forUser(auth('api')->user())->authorize('updateMedicine', $medicine);
         $data = $request->validated();
-        $medicine->update($data);
+        $data['shelf_id'] = $medicine->shelf_id;
+        $data['company_id'] = $medicine->company_id;
         if ($request->hasFile('shelf_name')) {
-            $shelf = Shelf::query()->update($data);
-            $data['shelf_id'] = $shelf->id;
-
+            Shelf::query()->update($data);
         }
         if ($request->hasFile('company_name')) {
-            $company = Company::query()->update($data);
-            $data['company_id'] = $company->id;
+            Company::query()->update($data);
         }
+        $medicine->update($data);
         return $this->getJsonResponse($medicine, 'Medicine Updated Successfully');
     }
 
@@ -108,7 +101,11 @@ class MedicineController extends Controller
     public function destroy(Medicine $medicine): JsonResponse
     {
         //
+        $shelf = Shelf::query()->findOrFail($medicine->shelf_id);
+        $company = Company::query()->findOrFail($medicine->company_id);
         $medicine->delete();
+        $shelf->delete();
+        $company->delete();
         return $this->getJsonResponse($medicine, 'Medicine Deleted Successfully');
     }
 }

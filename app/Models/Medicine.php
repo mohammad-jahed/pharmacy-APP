@@ -9,7 +9,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property int pharmacy_id;
- *
+ * @property int shelf_id;
+ * @property int company_id;
  */
 class Medicine extends Model
 {
