@@ -87,18 +87,19 @@ class MedicineController extends Controller
     {
         Gate::forUser(auth('api')->user())->authorize('updateMedicine', $medicine);
         $data = $request->validated();
-        $data['shelf_id'] = $medicine->shelf_id;
-        $data['company_id'] = $medicine->company_id;
+        if(isset($data['alternative_id'])){
+            $alternative  = Medicine::query()->findOrFail($data['alternative_id'])->first();
+            $data['alternative_id'] = $alternative->id;
+        }
+        else $data['alternative_id'] = $medicine->alternative_id;
+        $medicine->update($data);
         if (isset($data['shelf_name'])) {
             Shelf::query()->update($data);
         }
         if (isset($data['company_name'])) {
             Company::query()->update($data);
         }
-        if(isset($data['alternative_id'])) {
-            AlternativeMedicine::query()->where('alternative_id',$data['alternative_id'])->update($data);
-        }
-        $medicine->update($data);
+
         return $this->getJsonResponse($medicine, 'Medicine Updated Successfully');
     }
 

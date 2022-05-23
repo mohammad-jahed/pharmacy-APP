@@ -11,8 +11,8 @@ class AlternativeMedicine extends Model
     use HasFactory;
 
     protected $fillable = [
-        'alternative_id',
-        'medicine_id'
+        'medicine_id',
+        'alternative_id'
     ];
 
     public function alternative(): BelongsTo
