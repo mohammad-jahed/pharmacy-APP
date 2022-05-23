@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Medicines;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 use JetBrains\PhpStorm\ArrayShape;
 
 class MedicineStoreRequest extends FormRequest
@@ -22,17 +23,18 @@ class MedicineStoreRequest extends FormRequest
      *
      * @return array
      */
-    #[ArrayShape(['shelf_name' => "string", 'company_name' => "string", 'name' => "string[]", 'quantity' => "string[]", 'pills' => "string[]", 'expiration_date' => "string[]", 'c_price' => "string[]", 'price' => "string[]"])]
+    #[ArrayShape(['shelf_name' => "string", "alternative_id" => 'array', 'company_name' => "string", 'name' => "string[]", 'quantity' => "string[]", 'pills' => "string[]", 'expiration_date' => "string[]", 'c_price' => "string[]", 'price' => "string[]"])]
     public function rules(): array
     {
         return [
             //
-            'shelf_name' => ['string', 'min:3', 'max:255'],
+            'shelf_name' => ['string', 'min:2', 'max:255'],
             'company_name' => ['string', 'min:3', 'max:255'],
+            'alternative_id' => ['integer','numeric',Rule::exists('medicines', 'id')],
             'name' => ['required', 'min:3', 'max:30', 'string'],
             'quantity' => ['numeric'],
             'pills' => ['numeric'],
-            'expiration_date' => ['required','date_format:Y-m-d'],
+            'expiration_date' => ['required', 'date_format:Y-m-d'],
             'c_price' => ['numeric'],
             'price' => ['numeric']
         ];

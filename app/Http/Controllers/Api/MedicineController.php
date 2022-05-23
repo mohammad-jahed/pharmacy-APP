@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Medicines\MedicineStoreRequest;
 use App\Http\Requests\Medicines\MedicineUpdateRequest;
+use App\Models\AlternativeMedicine;
 use App\Models\Company;
 use App\Models\Medicine;
 use App\Models\MedicineUser;
@@ -41,6 +42,8 @@ class MedicineController extends Controller
         /**
          * @var Shelf $shelf;
          * @var Company $company;
+         * @var Medicine $medicine;
+         * @var Medicine $alternative;
          */
         Gate::forUser(auth('api')->user())->authorize('createMedicine');
         $data = $request->validated();
@@ -51,6 +54,11 @@ class MedicineController extends Controller
         $medicine = Medicine::query()->create($data);
         $data['medicine_id'] = $medicine->id;
         $data['pharmacy_id'] = auth('api')->user()->getAuthIdentifier();
+        if(isset($data['alternative_id'])){
+            $alternative  = Medicine::query()->findOrFail($data['alternative_id'])->first();
+            $data['alternative_id'] = $alternative->id;
+            AlternativeMedicine::query()->create($data);
+        }
         MedicineUser::query()->create($data);
         return $this->getJsonResponse($medicine, 'Medicine Created Successfully');
     }
@@ -75,18 +83,20 @@ class MedicineController extends Controller
      * @return JsonResponse
      * @throws AuthorizationException
      */
-    //sdsdsdsdsdsdsddsdsddsdsdsdsdsd
     public function update(MedicineUpdateRequest $request, Medicine $medicine): JsonResponse
     {
         Gate::forUser(auth('api')->user())->authorize('updateMedicine', $medicine);
         $data = $request->validated();
         $data['shelf_id'] = $medicine->shelf_id;
         $data['company_id'] = $medicine->company_id;
-        if ($request->hasFile('shelf_name')) {
+        if (isset($data['shelf_name'])) {
             Shelf::query()->update($data);
         }
-        if ($request->hasFile('company_name')) {
+        if (isset($data['company_name'])) {
             Company::query()->update($data);
+        }
+        if(isset($data['alternative_id'])) {
+            AlternativeMedicine::query()->where('alternative_id',$data['alternative_id'])->update($data);
         }
         $medicine->update($data);
         return $this->getJsonResponse($medicine, 'Medicine Updated Successfully');
@@ -97,15 +107,18 @@ class MedicineController extends Controller
      *
      * @param Medicine $medicine
      * @return JsonResponse
+     * @throws AuthorizationException
      */
     public function destroy(Medicine $medicine): JsonResponse
     {
         //
-        $shelf = Shelf::query()->findOrFail($medicine->shelf_id);
-        $company = Company::query()->findOrFail($medicine->company_id);
+        Gate::forUser(auth('api')->user())->authorize('deleteMedicine', $medicine);
         $medicine->delete();
-        $shelf->delete();
-        $company->delete();
         return $this->getJsonResponse($medicine, 'Medicine Deleted Successfully');
+    }
+    public function alternatives(Medicine $medicine): JsonResponse
+    {
+        $alternatives = $medicine->alternatives;
+        return $this->getJsonResponse($alternatives,'alternatives');
     }
 }

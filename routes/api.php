@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ComponentController;
 use App\Http\Controllers\Api\MaterialController;
+use App\Http\Controllers\Api\MedicineController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -33,6 +34,7 @@ Route::group([
     Route::apiResource('/components','Api\ComponentController');
     Route::post('/components/{component}/materials',[MaterialController::class,'store']);
     Route::get('/components/{component}',[ComponentController::class,'materialsComponent']);
+    Route::get('/medicines/alternative/{medicine}',[MedicineController::class,'alternatives']);
 });
 
 

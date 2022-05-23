@@ -34,6 +34,9 @@ class MedicinePolicy
     public function view(User $user, Medicine $model): Response|bool
     {
         //
+        /**
+         * @var Medicine $newUser
+         */
         $newUser = $model->medicineUser()->first();
         return ($user->id == $newUser->pharmacy_id);
     }
@@ -71,13 +74,17 @@ class MedicinePolicy
      * Determine whether the user can delete the model.
      *
      * @param User $user
-     * @param User $model
+     * @param Medicine $model
      * @return Response|bool
      */
-    public function delete(User $user, User $model): Response|bool
+    public function delete(User $user, Medicine $model): Response|bool
     {
         //
-        return ($user->id == $model->id);
+        /**
+         * @var Medicine $newModel
+         */
+        $newModel = $model->medicineUser()->first();
+        return ($user->id == $newModel->getAttributes()['pharmacy_id']);
 
     }
 

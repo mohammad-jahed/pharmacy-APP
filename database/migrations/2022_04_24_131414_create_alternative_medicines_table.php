@@ -15,8 +15,8 @@ class CreateAlternativeMedicinesTable extends Migration
     {
         Schema::create('alternative_medicines', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('medicine_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('alternative_id')->references('id')->on('medicines')->cascadeOnDelete();
+            $table->foreignId('medicine_id');
+            $table->foreignId('alternative_id')->references('id')->on('medicines');
             $table->timestamps();
         });
     }
