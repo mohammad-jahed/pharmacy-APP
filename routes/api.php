@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\PharmacyController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ComponentController;
 use App\Http\Controllers\Api\MaterialController;
@@ -30,11 +31,12 @@ Route::group([
     'middleware' => 'api',
 
 ], function () {
-    Route::apiResource('/medicines','Api\MedicineController');
-    Route::apiResource('/components','Api\ComponentController');
-    Route::post('/components/{component}/materials',[MaterialController::class,'store']);
-    Route::get('/components/{component}',[ComponentController::class,'materialsComponent']);
-    Route::get('/medicines/alternative/{medicine}',[MedicineController::class,'alternatives']);
+    Route::apiResource('/medicines', 'Api\MedicineController');
+    Route::apiResource('/components', 'Api\ComponentController');
+    Route::post('/components/{component}/materials', [MaterialController::class, 'store']);
+    Route::get('/components/{component}', [ComponentController::class, 'materialsComponent']);
+    Route::get('/medicines/alternative/{medicine}', [MedicineController::class, 'alternatives']);
+    Route::get('/medicines', [PharmacyController::class, 'medicines']);
 });
 
 

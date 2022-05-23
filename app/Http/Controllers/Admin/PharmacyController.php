@@ -6,11 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Users\PharmacyUpdateRequest;
 use App\Http\Requests\Users\RegisterRequest;
 use App\Models\Address;
-use App\Models\City;
 use App\Models\State;
 use App\Models\User;
 use App\Models\WorkTime;
-use GuzzleHttp\Psr7\Request;
+
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -20,7 +19,8 @@ use Illuminate\Http\RedirectResponse;
 
 use Spatie\Permission\Models\Role;
 
-class PharmacyController extends Controller
+class
+PharmacyController extends Controller
 {
 
     /**
@@ -28,7 +28,7 @@ class PharmacyController extends Controller
      */
     public function index(): View|Factory|Application
     {
-        $this->authorize('view',new User());
+        $this->authorize('view', new User());
         $states = State::all();
         $pharmacies = User::type('Pharmacy')->get();
         return view('pages.pharmacy.pharmacy', compact('pharmacies'))
@@ -40,11 +40,6 @@ class PharmacyController extends Controller
      *
      * @return void
      */
-    public function create()
-    {
-        //
-    }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -73,12 +68,6 @@ class PharmacyController extends Controller
         return redirect()->route('pharmacy.index');
     }
 
-    /*public function cities(Request $request)
-    {
-        $cities = City::query()->findOrFail($request->get('state_id'));
-        return view('pages.pharmacy.pharmacy',compact('cities'));
-
-    }*/
 
     /**
      * Update the specified resource in storage.
@@ -115,5 +104,12 @@ class PharmacyController extends Controller
 
         toastr()->error(trans('messages.Delete'));
         return redirect()->route('pharmacy.index', compact('pharmacies'));
+    }
+
+    public function medicines(): JsonResponse
+    {
+        $pharmacy = auth('api')->user();
+        $medicines = $pharmacy->medicines;
+        return $this->getJsonResponse($medicines, "medicines");
     }
 }

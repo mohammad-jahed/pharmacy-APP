@@ -6,6 +6,7 @@ namespace App\Models;
 
 
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Builder;
@@ -20,6 +21,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 /**
  * @method void assignRole($role);
  * @method void givePermissionTo();
+ * @property void medicines;
  * @method  static Builder type($type);
  *
  * @property int id;
@@ -96,9 +98,9 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(Notification::class, 'receiver_id');
     }
 
-    public function medicines(): HasMany
+    public function medicines(): BelongsToMany
     {
-        return $this->hasMany(Medicine::class);
+        return $this->belongsToMany(Medicine::class,'medicine_users','pharmacy_id','medicine_id')->as('medicine user');
     }
 
     public function reservations(): HasMany
@@ -112,7 +114,7 @@ class User extends Authenticatable implements JWTSubject
     }
 
 
-    public function scopeType(Builder $query , $userType)
+    public function scopeType(Builder $query , $userType): Builder
     {
         return $query->role(Role::query()->where('name', 'like', $userType)->get());
     }
