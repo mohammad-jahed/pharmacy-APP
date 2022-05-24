@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property void users;
+ * @property void user;
+ * @property void pharmacy;
  */
 class Reservation extends Model
 {

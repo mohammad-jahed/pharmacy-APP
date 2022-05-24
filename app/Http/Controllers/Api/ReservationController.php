@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Reservations\ReservationStoreRequest;
 use App\Http\Requests\Reservations\ReservationUpdateRequest;
 use App\Models\Reservation;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Gate;
 
 
 class ReservationController extends Controller
@@ -28,10 +30,12 @@ class ReservationController extends Controller
      *
      * @param ReservationStoreRequest $request
      * @return JsonResponse
+     * @throws AuthorizationException
      */
     public function store(ReservationStoreRequest $request): JsonResponse
     {
         //
+        Gate::forUser(auth('api')->user())->authorize('createReservation');
         $data = $request->validated();
         $data['user_id'] = auth('api')->user()->getAuthIdentifier();
         $reservation = Reservation::query()->create($data);
@@ -43,10 +47,13 @@ class ReservationController extends Controller
      *
      * @param Reservation $reservation
      * @return JsonResponse
+     * @throws AuthorizationException
      */
     public function show(Reservation $reservation): JsonResponse
     {
         //
+        Gate::forUser(auth('api')->user())->authorize('createReservation',$reservation);
+
         return $this->getJsonResponse($reservation,'reservation');
     }
 
@@ -56,10 +63,13 @@ class ReservationController extends Controller
      * @param ReservationUpdateRequest $request
      * @param Reservation $reservation
      * @return JsonResponse
+     * @throws AuthorizationException
      */
     public function update(ReservationUpdateRequest $request, Reservation $reservation): JsonResponse
     {
         //
+        Gate::forUser(auth('api')->user())->authorize('createReservation',$reservation);
+
         $data = $request->validated();
         $reservation->update($data);
         return $this->getJsonResponse($data,'Reservation Updated Successfully');
@@ -70,10 +80,12 @@ class ReservationController extends Controller
      *
      * @param Reservation $reservation
      * @return JsonResponse
+     * @throws AuthorizationException
      */
     public function destroy(Reservation $reservation): JsonResponse
     {
         //
+        Gate::forUser(auth('api')->user())->authorize('createReservation',$reservation);
         $reservation->delete();
         return $this->getJsonResponse($reservation,'Reservation Deleted Successfully');
     }
