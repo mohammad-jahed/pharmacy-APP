@@ -34,12 +34,12 @@ class MedicinePolicy
     {
         //
         /**
-         * @var Medicine $newUser ;
-         * @var Medicine[] $medicines ;
+         * @var User $newUser ;
+         * @var User[] $user ;
          */
-        $medicines = $model->medicineUser;
-        foreach ($medicines as $medicine) {
-            if ($user->id == $medicine->getAttributes()['pharmacy_id']) {
+        $users = $model->users;
+        foreach ($users as $newUser) {
+            if ($user->id == $newUser->id) {
                 return true;
             }
         }
@@ -70,17 +70,16 @@ class MedicinePolicy
     {
         //
         /**
-         * @var Medicine $newUser ;
-         * @var Medicine[] $medicines ;
+         * @var User $newUser ;
+         * @var User[] $user ;
          */
-        $medicines = $model->medicineUser;
-        foreach ($medicines as $medicine) {
-            if ($user->id == $medicine->getAttributes()['pharmacy_id']) {
+        $users = $model->users;
+        foreach ($users as $newUser) {
+            if ($user->id == $newUser->id) {
                 return true;
             }
         }
         return false;
-
     }
 
     /**
@@ -94,18 +93,16 @@ class MedicinePolicy
     {
         //
         /**
-         * @var Medicine $newUser ;
-         * @var Medicine[] $medicines ;
+         * @var User $newUser ;
+         * @var User[] $user ;
          */
-
-        $medicines = $model->medicineUser;
-        foreach ($medicines as $medicine) {
-            if ($user->id == $medicine->getAttributes()['pharmacy_id']) {
+        $users = $model->users;
+        foreach ($users as $newUser) {
+            if ($user->id == $newUser->id) {
                 return true;
             }
         }
         return false;
-
     }
 
     /**

@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 /**
  * @property int id;
  * @property void materials;
+ * @property void medicine;
  */
 class Component extends Model
 {
