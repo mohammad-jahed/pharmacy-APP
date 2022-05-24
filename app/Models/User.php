@@ -3,8 +3,6 @@
 namespace App\Models;
 
 
-
-
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -100,12 +98,7 @@ class User extends Authenticatable implements JWTSubject
 
     public function medicines(): BelongsToMany
     {
-        return $this->belongsToMany(Medicine::class,'medicine_users','pharmacy_id','medicine_id')->as('medicine user');
-    }
-
-    public function reservations(): HasMany
-    {
-        return $this->hasMany(Reservation::class);
+        return $this->belongsToMany(Medicine::class, 'medicine_users', 'pharmacy_id', 'medicine_id')->as('medicine user');
     }
 
     public function reservationUsers(): HasMany
@@ -114,7 +107,7 @@ class User extends Authenticatable implements JWTSubject
     }
 
 
-    public function scopeType(Builder $query , $userType): Builder
+    public function scopeType(Builder $query, $userType): Builder
     {
         return $query->role(Role::query()->where('name', 'like', $userType)->get());
     }
@@ -124,6 +117,11 @@ class User extends Authenticatable implements JWTSubject
         return new Attribute(
             set: fn($password) => Hash::make($password)
         );
+    }
+
+    public function reservations(): BelongsToMany
+    {
+        return $this->belongsToMany(Reservation::class, 'reservation_users', 'user_id', 'reservation_id')->as('reservation_user');
     }
 
 }

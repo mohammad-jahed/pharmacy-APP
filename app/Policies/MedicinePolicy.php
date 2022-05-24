@@ -3,7 +3,6 @@
 namespace App\Policies;
 
 use App\Models\Medicine;
-use App\Models\MedicineUser;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Auth\Access\Response;
@@ -35,10 +34,17 @@ class MedicinePolicy
     {
         //
         /**
-         * @var Medicine $newUser
+         * @var Medicine $newUser ;
+         * @var Medicine[] $medicines ;
          */
-        $newUser = $model->medicineUser()->first();
-        return ($user->id == $newUser->pharmacy_id);
+        $medicines = $model->medicineUser;
+        foreach ($medicines as $medicine) {
+            if ($user->id == $medicine->getAttributes()['pharmacy_id']) {
+                return true;
+            }
+        }
+        return false;
+
     }
 
     /**
@@ -62,11 +68,18 @@ class MedicinePolicy
      */
     public function update(User $user, Medicine $model): Response|bool
     {
+        //
         /**
-         * @var Medicine $newModel
+         * @var Medicine $newUser ;
+         * @var Medicine[] $medicines ;
          */
-        $newModel = $model->medicineUser()->first();
-        return ($user->id == $newModel->getAttributes()['pharmacy_id']);
+        $medicines = $model->medicineUser;
+        foreach ($medicines as $medicine) {
+            if ($user->id == $medicine->getAttributes()['pharmacy_id']) {
+                return true;
+            }
+        }
+        return false;
 
     }
 
@@ -81,10 +94,17 @@ class MedicinePolicy
     {
         //
         /**
-         * @var Medicine $newModel
+         * @var Medicine $newUser ;
+         * @var Medicine[] $medicines ;
          */
-        $newModel = $model->medicineUser()->first();
-        return ($user->id == $newModel->getAttributes()['pharmacy_id']);
+
+        $medicines = $model->medicineUser;
+        foreach ($medicines as $medicine) {
+            if ($user->id == $medicine->getAttributes()['pharmacy_id']) {
+                return true;
+            }
+        }
+        return false;
 
     }
 

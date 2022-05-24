@@ -2,6 +2,7 @@
 
 use Database\Seeders\AreaSeeder;
 use Database\Seeders\CitySeeder;
+use Database\Seeders\PeriodSeeder;
 use Database\Seeders\PermissionSeeder;
 use Database\Seeders\RoleHasPermission;
 use Database\Seeders\RoleSeeder;
@@ -27,6 +28,7 @@ class DatabaseSeeder extends Seeder
         $this->call(StateSeeder::class);
         $this->call(AreaSeeder::class);
         $this->call(CitySeeder::class);
+        $this->call(PeriodSeeder::class);
 
     }
 }

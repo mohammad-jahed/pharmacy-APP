@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Materials;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 use JetBrains\PhpStorm\ArrayShape;
 
 class MaterialUpdateRequest extends FormRequest
@@ -22,10 +23,12 @@ class MaterialUpdateRequest extends FormRequest
      *
      * @return array
      */
-    #[ArrayShape(['name' => "string[]"])] public function rules(): array
+    #[ArrayShape(['name' => "string[]", "component_id" => "array"])] public function rules(): array
     {
         return [
             //
-            'name' => ['required', 'string','min:2', 'max:255'],];
+            'name' => ['string', 'min:2', 'max:255'],
+            'component_id' => [Rule::exists('components', 'id')]
+        ];
     }
 }

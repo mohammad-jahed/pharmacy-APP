@@ -22,10 +22,12 @@ class MedicineController extends Controller
      * Display a listing of the resource.
      *
      * @return JsonResponse
+     * @throws AuthorizationException
      */
     public function index(): JsonResponse
     {
         //
+        Gate::forUser(auth('api')->user())->authorize('viewMedicine');
         $medicine = Medicine::all();
         return $this->getJsonResponse($medicine, 'medicines');
     }
@@ -40,10 +42,10 @@ class MedicineController extends Controller
     public function store(MedicineStoreRequest $request): JsonResponse
     {
         /**
-         * @var Shelf $shelf;
-         * @var Company $company;
-         * @var Medicine $medicine;
-         * @var Medicine $alternative;
+         * @var Shelf $shelf ;
+         * @var Company $company ;
+         * @var Medicine $medicine ;
+         * @var Medicine $alternative ;
          */
         Gate::forUser(auth('api')->user())->authorize('createMedicine');
         $data = $request->validated();
@@ -54,8 +56,8 @@ class MedicineController extends Controller
         $medicine = Medicine::query()->create($data);
         $data['medicine_id'] = $medicine->id;
         $data['pharmacy_id'] = auth('api')->user()->getAuthIdentifier();
-        if(isset($data['alternative_id'])){
-            $alternative  = Medicine::query()->findOrFail($data['alternative_id'])->first();
+        if (isset($data['alternative_id'])) {
+            $alternative = Medicine::query()->findOrFail($data['alternative_id'])->first();
             $data['alternative_id'] = $alternative->id;
             AlternativeMedicine::query()->create($data);
         }
@@ -68,10 +70,12 @@ class MedicineController extends Controller
      *
      * @param Medicine $medicine
      * @return JsonResponse
+     * @throws AuthorizationException
      */
     public function show(Medicine $medicine): JsonResponse
     {
         //
+        Gate::forUser(auth('api')->user())->authorize('showMedicine',$medicine);
         return $this->getJsonResponse($medicine, 'Success');
     }
 
@@ -87,11 +91,10 @@ class MedicineController extends Controller
     {
         Gate::forUser(auth('api')->user())->authorize('updateMedicine', $medicine);
         $data = $request->validated();
-        if(isset($data['alternative_id'])){
-            $alternative  = Medicine::query()->findOrFail($data['alternative_id'])->first();
+        if (isset($data['alternative_id'])) {
+            $alternative = Medicine::query()->findOrFail($data['alternative_id'])->first();
             $data['alternative_id'] = $alternative->id;
-        }
-        else $data['alternative_id'] = $medicine->alternative_id;
+        } else $data['alternative_id'] = $medicine->alternative_id;
         $medicine->update($data);
         if (isset($data['shelf_name'])) {
             Shelf::query()->update($data);
@@ -117,9 +120,17 @@ class MedicineController extends Controller
         $medicine->delete();
         return $this->getJsonResponse($medicine, 'Medicine Deleted Successfully');
     }
+
     public function alternatives(Medicine $medicine): JsonResponse
     {
         $alternatives = $medicine->alternatives;
-        return $this->getJsonResponse($alternatives,'alternatives');
+        return $this->getJsonResponse($alternatives, 'alternatives');
+    }
+
+    public function pharmacies(Medicine $medicine): JsonResponse
+    {
+
+        $pharmacies = $medicine->users;
+        return $this->getJsonResponse($pharmacies, 'pharmacies');
     }
 }

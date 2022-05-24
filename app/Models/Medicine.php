@@ -15,6 +15,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int alternative_id;
  * @property int id;
  * @property void alternatives;
+ * @property void users;
+ * @property void medicineUser;
  */
 class Medicine extends Model
 {

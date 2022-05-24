@@ -33,7 +33,6 @@ class ComponentController extends Controller
     {
         //
         $data = $request->validated();
-        $data['medicine_id'] = auth('api')->user()->getAuthIdentifier();
         $component = Component::query()->create($data);
         return $this->getJsonResponse($component, 'Component Created Successfully');
     }
@@ -67,8 +66,8 @@ class ComponentController extends Controller
     {
         //
         $data = $request->validated();
-        $new = $component->update($data);
-        return $this->getJsonResponse($new, 'Component Updated Successfully');
+        $component->update($data);
+        return $this->getJsonResponse($component, 'Component Updated Successfully');
     }
 
     /**

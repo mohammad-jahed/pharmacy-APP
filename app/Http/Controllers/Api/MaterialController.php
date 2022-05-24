@@ -9,7 +9,6 @@ use App\Models\Component;
 use App\Models\ComponentMaterial;
 use App\Models\Material;
 use Illuminate\Http\JsonResponse;
-use Lcobucci\JWT\Token\Builder;
 
 
 class MaterialController extends Controller
@@ -30,16 +29,14 @@ class MaterialController extends Controller
      * Store a newly created resource in storage.
      *
      * @param MaterialStoreRequest $request
-     * @param Component $component
      * @return JsonResponse
      */
-    public function store(MaterialStoreRequest $request, Component $component): JsonResponse
+    public function store(MaterialStoreRequest $request): JsonResponse
     {
         //
         $data = $request->validated();
         $material = Material::query()->create($data);
         $data['material_id'] = $material->id;
-        $data['component_id'] = $component->id;
         ComponentMaterial::query()->create($data);
         return $this->getJsonResponse($material, 'Material Created Successfully');
 
@@ -68,18 +65,18 @@ class MaterialController extends Controller
      *
      * @param MaterialUpdateRequest $request
      * @param Material $material
-     * @param Component $component
      * @return JsonResponse
      */
-    public function update(MaterialUpdateRequest $request, Material $material, Component $component): JsonResponse
+    public function update(MaterialUpdateRequest $request, Material $material): JsonResponse
     {
         //
         $data = $request->validated();
-        $new = $material->update($data);
-        $data['material_id'] = $material->id;
-        $data['component_id'] = $component->id;
-        ComponentMaterial::query()->update($data);
-        return $this->getJsonResponse($new, 'Material Updated Successfully');
+        $material->update($data);
+        if(asset($data['component_id'])){
+            $data['material_id'] = $material->id;
+            ComponentMaterial::query()->update($data);
+        }
+        return $this->getJsonResponse($material, 'Material Updated Successfully');
     }
 
     /**

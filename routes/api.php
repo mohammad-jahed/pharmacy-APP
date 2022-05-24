@@ -3,7 +3,6 @@
 use App\Http\Controllers\Admin\PharmacyController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ComponentController;
-use App\Http\Controllers\Api\MaterialController;
 use App\Http\Controllers\Api\MedicineController;
 use Illuminate\Support\Facades\Route;
 
@@ -33,10 +32,13 @@ Route::group([
 ], function () {
     Route::apiResource('/medicines', 'Api\MedicineController');
     Route::apiResource('/components', 'Api\ComponentController');
-    Route::post('/components/{component}/materials', [MaterialController::class, 'store']);
-    Route::get('/components/{component}', [ComponentController::class, 'materialsComponent']);
+    Route::apiResource('/periods', 'Api\PeriodController');
+    Route::apiResource('/reservations', 'Api\ReservationController');
+    Route::apiResource('/materials', 'Api\MaterialController');
+    Route::get('/components/{component}/materials', [ComponentController::class, 'materialsComponent']);
     Route::get('/medicines/alternative/{medicine}', [MedicineController::class, 'alternatives']);
-    Route::get('/medicines', [PharmacyController::class, 'medicines']);
+    Route::get('/{user}/medicines', [PharmacyController::class, 'medicines']);
+    Route::get('/medicines/{medicine}/pharmacies', [MedicineController::class, 'pharmacies']);
 });
 
 

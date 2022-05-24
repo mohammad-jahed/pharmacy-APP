@@ -23,14 +23,14 @@ class ReservationUpdateRequest extends FormRequest
      *
      * @return array
      */
-    #[ArrayShape(['user_id' => "array", 'pharmacy_id' => "array", 'period' => "string[]"])]
+    #[ArrayShape(['user_id' => "array", 'pharmacy_id' => "array", 'period_id' => "array"])]
     public function rules(): array
     {
         return [
             //
-            'user_id' => [Rule::exists('users', 'id')],
+            //'user_id' => [Rule::exists('users', 'id')],
             'pharmacy_id' => [Rule::exists('users', 'id')],
-            'period' => ['string']
+            'period_id' => [Rule::exists('periods', 'id')]
         ];
     }
 }

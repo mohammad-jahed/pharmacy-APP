@@ -28,7 +28,8 @@ class ComponentStoreRequest extends FormRequest
     {
         return [
             //
-            'name'=>['required','string','min:3','max:256']
+            'name' => ['required', 'string', 'min:3', 'max:256'],
+            'medicine_id' => ['required', Rule::exists('medicines', 'id')]
         ];
     }
 }

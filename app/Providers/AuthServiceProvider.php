@@ -31,10 +31,12 @@ class AuthServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerPolicies();
+        //Medicines
         Gate::define('createMedicine',[MedicinePolicy::class,'create']);
         Gate::define('updateMedicine',[MedicinePolicy::class,'update']);
         Gate::define('deleteMedicine',[MedicinePolicy::class,'delete']);
-
+        Gate::define('viewMedicine',[MedicinePolicy::class,'viewAny']);
+        Gate::define('showMedicine',[MedicinePolicy::class,'view']);
         //
     }
 }

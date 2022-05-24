@@ -106,10 +106,10 @@ PharmacyController extends Controller
         return redirect()->route('pharmacy.index', compact('pharmacies'));
     }
 
-    public function medicines(): JsonResponse
+    public function medicines(User $user): JsonResponse
     {
-        $pharmacy = auth('api')->user();
-        $medicines = $pharmacy->medicines;
+
+        $medicines = $user->medicines;
         return $this->getJsonResponse($medicines, "medicines");
     }
 }

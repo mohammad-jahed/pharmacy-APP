@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Http\Requests\Reservations;
+namespace App\Http\Requests\Periods;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 use JetBrains\PhpStorm\ArrayShape;
 
-class ReservationStoreRequest extends FormRequest
+class PeriodStoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,14 +22,13 @@ class ReservationStoreRequest extends FormRequest
      *
      * @return array
      */
-    #[ArrayShape(['user_id' => "array", 'pharmacy_id' => "array", 'period_id' => "array"])]
+    #[ArrayShape(['name_en' => "string[]", 'name_ar' => "string[]"])]
     public function rules(): array
     {
         return [
             //
-            //'user_id' => [Rule::exists('users', 'id')],
-            'pharmacy_id' => ['required', Rule::exists('users', 'id')],
-            'period_id' => ['required', Rule::exists('periods', 'id')]
+            'name_en' => ['required','string', 'min:3', 'max:256'],
+            'name_ar' => ['required','string', 'min:3', 'max:256']
         ];
     }
 }

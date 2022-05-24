@@ -28,8 +28,8 @@ class ComponentUpdateRequest extends FormRequest
     {
         return [
             //
-            'name' => ['string', 'min:3', 'max:256']
-
+            'name' => ['string', 'min:3', 'max:256'],
+            'medicine_id' => [Rule::exists('medicines', 'id')]
         ];
     }
 }
