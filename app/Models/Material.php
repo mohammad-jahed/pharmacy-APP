@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 /**
  * @property int id;
  * @property void components;
+ * @property void componentMaterials;
  */
 class Material extends Model
 {
@@ -17,7 +18,7 @@ class Material extends Model
 
     protected $fillable = ['name'];
 
-    public function componentsMaterials(): HasMany
+    public function componentMaterials(): HasMany
     {
         return $this->hasMany(ComponentMaterial::class);
     }

@@ -7,7 +7,9 @@ use App\Http\Requests\Periods\PeriodStoreRequest;
 use App\Http\Requests\Periods\PeriodUpdateRequest;
 use App\Models\Period;
 use App\Models\Reservation;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Gate;
 
 class PeriodController extends Controller
 {
@@ -15,10 +17,12 @@ class PeriodController extends Controller
      * Display a listing of the resource.
      *
      * @return JsonResponse
+     * @throws AuthorizationException
      */
     public function index(): JsonResponse
     {
         //
+        Gate::forUser(auth('api')->user())->authorize('indexPeriod');
         $periods = Period::all();
         return $this->getJsonResponse($periods,'periods');
     }
@@ -28,10 +32,12 @@ class PeriodController extends Controller
      *
      * @param PeriodStoreRequest $request
      * @return JsonResponse
+     * @throws AuthorizationException
      */
     public function store(PeriodStoreRequest $request): JsonResponse
     {
         //
+        Gate::forUser(auth('api')->user())->authorize('createPeriod');
         $data = $request->validated();
         $period = Period::query()->create($data);
         return $this->getJsonResponse($period,'Period Created Successfully');
@@ -42,10 +48,12 @@ class PeriodController extends Controller
      *
      * @param Period $period
      * @return JsonResponse
+     * @throws AuthorizationException
      */
     public function show(Period $period): JsonResponse
     {
         //
+        Gate::forUser(auth('api')->user())->authorize('showPeriod',$period);
         return $this->getJsonResponse($period,'period');
     }
 
@@ -55,10 +63,12 @@ class PeriodController extends Controller
      * @param PeriodUpdateRequest $request
      * @param Period $period
      * @return JsonResponse
+     * @throws AuthorizationException
      */
     public function update(PeriodUpdateRequest $request, Period $period): JsonResponse
     {
         //
+        Gate::forUser(auth('api')->user())->authorize('updatePeriod',$period);
         $data = $request->validated();
         $period->update($data);
         return $this->getJsonResponse($data,'Period Updated Successfully');
@@ -69,10 +79,13 @@ class PeriodController extends Controller
      *
      * @param Period $period
      * @return JsonResponse
+     * @throws AuthorizationException
      */
     public function destroy(Period $period): JsonResponse
     {
         //
+        Gate::forUser(auth('api')->user())->authorize('deletePeriod',$period);
+
         $period->delete();
         return $this->getJsonResponse($period,'Period Deleted Successfully');
     }

@@ -6,11 +6,13 @@ use App\Models\Component;
 use App\Models\Material;
 use App\Models\Medicine;
 
+use App\Models\Period;
 use App\Models\Reservation;
 use App\Models\User;
 use App\Policies\ComponentPolicy;
 use App\Policies\MaterialPolicy;
 use App\Policies\MedicinePolicy;
+use App\Policies\PeriodPolicy;
 use App\Policies\PharmacyPolicy;
 use App\Policies\ReservationPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
@@ -29,7 +31,8 @@ class AuthServiceProvider extends ServiceProvider
         Medicine::class => MedicinePolicy::class,
         Component::class => ComponentPolicy::class,
         Material::class => MaterialPolicy::class,
-        Reservation::class => ReservationPolicy::class
+        Reservation::class => ReservationPolicy::class,
+        Period::class => PeriodPolicy::class
     ];
 
     /**
@@ -61,6 +64,13 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('createReservation', [MaterialPolicy::class, 'create']);
         Gate::define('updateReservation', [MaterialPolicy::class, 'update']);
         Gate::define('deleteReservation', [MaterialPolicy::class, 'delete']);
+        //Periods
+        Gate::define('indexPeriod', [MaterialPolicy::class, 'viewAny']);
+        Gate::define('showPeriod', [MaterialPolicy::class, 'view']);
+        Gate::define('createPeriod', [MaterialPolicy::class, 'create']);
+        Gate::define('updatePeriod', [MaterialPolicy::class, 'update']);
+        Gate::define('deletePeriod', [MaterialPolicy::class, 'delete']);
+
 
     }
 }
