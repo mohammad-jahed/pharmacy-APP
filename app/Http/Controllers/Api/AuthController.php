@@ -6,8 +6,10 @@ use App\Http\Requests\Users\RegisterRequest;
 use App\Models\Address;
 use App\Models\User;
 use App\Models\WorkTime;
+use App\Notifications\UserNotification;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Notification;
 use Spatie\Permission\Models\Role;
 use function auth;
 use function response;
@@ -41,13 +43,28 @@ class AuthController extends Controller
             $file_name = $request->file('imagePath')->hashName();
         }
         $data['imagePath'] = $file_name;
-        //$data['password'] = Hash::make($data['password']);
         $user = User::query()->create($data);
+
+        $admin = User::type('Admin')->first();
+        $userData = [
+            'body' => 'You have a new user registered.',
+            'thanks' => 'Thank you',
+            'userText' => $user->username,
+            'userUrl' => url('/'),
+            'user_id' => $user->id
+        ];
+        Notification::send($admin, new UserNotification($userData));
+
         $data['user_id'] = $user->id;
-        Address::query()->create($data);
-        //WorkTime::query()->create($data);
+        if(isset($data['state_id'])){
+            Address::query()->create($data);
+        }
+        if(isset($data['day'])){
+            WorkTime::query()->create($data);
+        }
         $role = Role::query()->where('name', 'like', 'User')->get();
         $user->assignRole($role);
+        event(new Registered($user));
         return $this->getJsonResponse($user,'User successfully registered');
     }
 

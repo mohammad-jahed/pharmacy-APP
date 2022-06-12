@@ -17,15 +17,16 @@ use Spatie\Translatable\HasTranslations;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
 /**
- * @method void assignRole($role);
- * @method void givePermissionTo();
+ * @property int id;
  * @property void medicines;
  * @property void address;
  * @property void userReservations;
  * @property void pharmacyReservations;
- * @method  static Builder type($type);
- *
- * @property int id;
+ * @property void notifications;
+ * @property string username;
+ * @method void assignRole($role);
+ * @method void givePermissionTo();
+ * @method static Builder type($type);
  */
 class User extends Authenticatable implements JWTSubject
 {
@@ -40,7 +41,7 @@ class User extends Authenticatable implements JWTSubject
      */
     //protected $table = 'user';
     protected $fillable = [
-        'name', 'email', 'password', 'username', 'imagePath'
+        'email', 'password', 'username', 'imagePath'
     ];
 
 
@@ -54,6 +55,9 @@ class User extends Authenticatable implements JWTSubject
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+
+
 
     /**
      * The attributes that should be cast to native types.
@@ -94,10 +98,6 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasOne(Address::class);
     }
 
-    public function notifications(): HasMany
-    {
-        return $this->hasMany(Notification::class, 'receiver_id');
-    }
 
     public function medicines(): BelongsToMany
     {

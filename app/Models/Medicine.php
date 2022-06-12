@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Date;
+
 /**
  * @property int pharmacy_id;
  * @property int shelf_id;
@@ -18,10 +21,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string name;
  * @property void medicineUser;
  * @property void materials;
+ * @property Date $expiration_date;
  */
 class Medicine extends Model
 {
-    use HasFactory;
+    use HasFactory, Notifiable;
 
     protected $fillable = [
         'name',
@@ -56,11 +60,13 @@ class Medicine extends Model
         return $this->hasMany(AlternativeMedicine::class);
     }
 
-    public function materials() : BelongsToMany{
-        return $this->belongsToMany(Material::class,'material_medicines','medicine_id','material_id')->as('material_medicine');
+    public function materials(): BelongsToMany
+    {
+        return $this->belongsToMany(Material::class, 'material_medicines', 'medicine_id', 'material_id')->as('material_medicine');
     }
 
-    public function materialMedicine():HasMany{
+    public function materialMedicine(): HasMany
+    {
         return $this->hasMany(MaterialMedicine::class);
     }
 
@@ -72,7 +78,7 @@ class Medicine extends Model
 
     public function users(): BelongsToMany
     {
-        return $this->belongsToMany(User::class,'medicine_users','medicine_id','pharmacy_id')->as('medicine user');
+        return $this->belongsToMany(User::class, 'medicine_users', 'medicine_id', 'pharmacy_id')->as('medicine user');
     }
 
     public function reservations(): HasMany

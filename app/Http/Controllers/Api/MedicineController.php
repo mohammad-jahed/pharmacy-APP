@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\Medicine\ExpirationDateEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Medicines\AlternativeRequest;
 use App\Http\Requests\Medicines\MedicineStoreRequest;
@@ -13,10 +14,13 @@ use App\Models\MaterialMedicine;
 use App\Models\Medicine;
 use App\Models\MedicineUser;
 use App\Models\Shelf;
+use App\Notifications\MedicineNotification;
 use Illuminate\Auth\Access\AuthorizationException;
 
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Notification;
 
 class MedicineController extends Controller
 {
@@ -193,6 +197,33 @@ class MedicineController extends Controller
         } else {
             return $this->getJsonResponse($response3, "Alternatives with full components");
         }
+    }
+
+    public function expiredMedicines()
+    {
+        /**
+         * @var Medicine[] $medicines ;
+         * @var Medicine $medicine ;
+         * @var array $response
+         */
+        $user = auth('api')->user();
+        $medicines = $user->medicines;
+        foreach ($medicines as $medicine) {
+            if ($medicine->expiration_date > Date::now()) {
+                $response[] = $medicine;
+                $medicineData = [
+                    'body' => 'A new Medicine is expired',
+                    'thanks' => 'Thank you',
+                    'medicineText' => $medicine->name,
+                    'medicineUrl' => url('/'),
+                    'medicine_id' => $medicine->id
+                ];
+                Notification::send($user, new MedicineNotification($medicineData));
+                event(new ExpirationDateEvent($medicine));
+            }
+        }
+
+        return $this->getJsonResponse($response, 'Expired Medicines');
     }
 
 }

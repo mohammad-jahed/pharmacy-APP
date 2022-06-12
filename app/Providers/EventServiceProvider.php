@@ -2,10 +2,13 @@
 
 namespace App\Providers;
 
+use App\Listeners\Medicine\ExpirationDateListener;
+use App\Listeners\Prescription\PrescriptionCreateListener;
+use App\Listeners\User\UserRegisteredListener;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
-use Illuminate\Support\Facades\Event;
+
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -17,6 +20,9 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         Registered::class => [
             SendEmailVerificationNotification::class,
+            UserRegisteredListener::class,
+            PrescriptionCreateListener::class,
+            ExpirationDateListener::class,
         ],
     ];
 

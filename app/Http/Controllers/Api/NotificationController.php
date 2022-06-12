@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Notification;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class NotificationController extends Controller
@@ -61,5 +62,18 @@ class NotificationController extends Controller
     public function destroy(Notification $notification)
     {
         //
+    }
+
+    public function sendPrescriptionNotification(){
+        $admin = User::type('Admin')->first();
+
+        $prescriptionData = [
+            'name' => 'BOGO',
+            'body' => 'You received a new prescription.',
+            'thanks' => 'Thank you',
+            'prescriptionText' => 'Check out the prescr',
+            'prescriptionUrl' => url('/'),
+            'prescription_id' => 007
+        ];
     }
 }

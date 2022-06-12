@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\CityController;
+use App\Http\Controllers\Api\PrescriptionController;
 use App\Http\Controllers\Api\StateController;
 use App\Http\Controllers\Api\WorkTimeController;
 use Illuminate\Support\Facades\Auth;
@@ -45,13 +46,14 @@ Route::group(
     Route::get('/state/{state}/cities',[StateController::class,'cities'])->name('state.cities');
     Route::get('/city/{city}/areas',[CityController::class,'areas'])->name('city.areas');
     Route::get('/days',[WorkTimeController::class,'days'])->name('days');
-
+    Route::get('/prescriptions',[PrescriptionController::class,'index']);
     //=================================Users========================================================================
         Route::resource('/users','Api\UserController');
     //====================================states=================================================================
         Route::resource('/states','Admin\StateController');
     //=====================================cities======================================================================
         Route::resource('/cities','Admin\CityController');
-    //=====================================Areaes==================================================================
+    //=====================================Areas==================================================================
         Route::resource('/areaes','Admin\AreaController');
+
     });

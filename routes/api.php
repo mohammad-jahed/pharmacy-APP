@@ -31,18 +31,19 @@ Route::group([
     'middleware' => 'api',
 
 ], function () {
-    Route::apiResource('/medicines','Api\MedicineController');
+    Route::apiResource('/medicines', 'Api\MedicineController');
     Route::apiResource('/periods', 'Api\PeriodController');
     Route::apiResource('/reservations', 'Api\ReservationController');
     Route::apiResource('/materials', 'Api\MaterialController');
-    Route::get('/medicines/alternative/{medicine}', [MedicineController::class, 'alternatives']);
+    Route::apiResource('/prescriptions', 'Api\PrescriptionController');
     Route::get('/{user}/medicines', [PharmacyController::class, 'medicines']);
-    Route::get('/medicines/{medicine}/materials',[MedicineController::class,'materials']);
+    Route::get('/medicines/alternative/{medicine}', [MedicineController::class, 'alternatives']);
+    Route::get('/medicines/{medicine}/materials', [MedicineController::class, 'materials']);
     Route::get('/medicines/{medicine}/pharmacies', [MedicineController::class, 'pharmacies']);
-    Route::get('/materials/{material}/medicines',[MaterialController::class,'medicines']);
-    Route::post('/medicines/alternatives',[MedicineController::class,'alternatives']);
-    Route::get('/users/reservations',[ ReservationController::class,'userReservations']);
-    Route::get('/pharmacies/reservations',[ ReservationController::class,'pharmacyReservations']);
+    Route::post('/medicines/alternatives', [MedicineController::class, 'alternatives']);
+    Route::get('/materials/{material}/medicines', [MaterialController::class, 'medicines']);
+    Route::get('/users/reservations', [ReservationController::class, 'userReservations']);
+    Route::get('/pharmacies/reservations', [ReservationController::class, 'pharmacyReservations']);
 });
 
 
