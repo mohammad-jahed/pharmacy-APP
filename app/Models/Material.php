@@ -9,23 +9,25 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property int id;
- * @property void components;
+ * @property void medicines;
  * @property void componentMaterials;
+ * @property string material_name;
+ *
  */
 class Material extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name'];
+    protected $fillable = ['material_name'];
 
-    public function componentMaterials(): HasMany
+    public function materialMedicine(): HasMany
     {
-        return $this->hasMany(ComponentMaterial::class);
+        return $this->hasMany(MaterialMedicine::class);
     }
 
-    public function components(): BelongsToMany
+    public function medicines(): BelongsToMany
     {
-        return $this->belongsToMany(Component::class);
+        return $this->belongsToMany(Medicine::class, 'material_medicines', 'medicine_id', 'material_id')->as('material_medicine');
     }
 
 

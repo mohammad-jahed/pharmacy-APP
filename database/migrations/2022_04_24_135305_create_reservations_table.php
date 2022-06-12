@@ -17,6 +17,7 @@ class CreateReservationsTable extends Migration
             $table->id();
             $table->foreignId('user_id');
             $table->foreignId('pharmacy_id')->references('id')->on('users');
+            $table->foreignId('medicine_id');
             $table->foreignId('period_id');
             $table->timestamps();
         });

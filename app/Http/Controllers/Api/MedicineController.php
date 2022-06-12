@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Medicines\AlternativeRequest;
 use App\Http\Requests\Medicines\MedicineStoreRequest;
 use App\Http\Requests\Medicines\MedicineUpdateRequest;
 use App\Models\AlternativeMedicine;
 use App\Models\Company;
+use App\Models\Material;
+use App\Models\MaterialMedicine;
 use App\Models\Medicine;
 use App\Models\MedicineUser;
 use App\Models\Shelf;
@@ -14,7 +17,6 @@ use Illuminate\Auth\Access\AuthorizationException;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Gate;
-
 
 class MedicineController extends Controller
 {
@@ -44,17 +46,30 @@ class MedicineController extends Controller
         /**
          * @var Shelf $shelf ;
          * @var Company $company ;
+         * @var Material $material ;
          * @var Medicine $medicine ;
          * @var Medicine $alternative ;
          */
         Gate::forUser(auth('api')->user())->authorize('createMedicine');
         $data = $request->validated();
-        $shelf = Shelf::query()->create($data);
-        $company = Company::query()->create($data);
+        if (isset($data['shelf_name'])) {
+            $shelf = Shelf::query()->create($data);
+
+        }
+        if (isset($data['company_name'])) {
+            $company = Company::query()->create($data);
+
+        }
         $data['shelf_id'] = $shelf->id;
         $data['company_id'] = $company->id;
-        $medicine = Medicine::query()->create($data);
+        $medicine = Medicine::query()->where('name', $data['name'])->first();
+        if ($medicine == null) {
+            $medicine = Medicine::query()->create($data);
+        }
         $data['medicine_id'] = $medicine->id;
+        if (isset($data['material_id'])) {
+            MaterialMedicine::query()->create($data);
+        }
         $data['pharmacy_id'] = auth('api')->user()->getAuthIdentifier();
         if (isset($data['alternative_id'])) {
             $alternative = Medicine::query()->findOrFail($data['alternative_id'])->first();
@@ -75,7 +90,7 @@ class MedicineController extends Controller
     public function show(Medicine $medicine): JsonResponse
     {
         //
-        Gate::forUser(auth('api')->user())->authorize('showMedicine',$medicine);
+        Gate::forUser(auth('api')->user())->authorize('showMedicine', $medicine);
         return $this->getJsonResponse($medicine, 'Success');
     }
 
@@ -121,11 +136,6 @@ class MedicineController extends Controller
         return $this->getJsonResponse($medicine, 'Medicine Deleted Successfully');
     }
 
-    public function alternatives(Medicine $medicine): JsonResponse
-    {
-        $alternatives = $medicine->alternatives;
-        return $this->getJsonResponse($alternatives, 'alternatives');
-    }
 
     public function pharmacies(Medicine $medicine): JsonResponse
     {
@@ -133,4 +143,56 @@ class MedicineController extends Controller
         $pharmacies = $medicine->users;
         return $this->getJsonResponse($pharmacies, 'pharmacies');
     }
+
+    public function materials(Medicine $medicine): JsonResponse
+    {
+
+        $materials = $medicine->materials;
+        return $this->getJsonResponse($materials, 'materials');
+
+    }
+
+    public function alternatives(AlternativeRequest $request, int $count = 0, array $response2 = null, array $response3 = null)
+    {
+        /**
+         * @var Material[] $materials
+         * @var Material $material
+         * @var Medicine[] $alternatives ;
+         * @var Medicine $medicine ;
+         * @var Medicine $alternative ;
+         * @var Material[] $alternativeMaterials ;
+         * @var Material $alternativeMaterial ;
+         */
+        $data = $request->validated();
+        $medicine = Medicine::query()->findOrFail($data['medicine_id']);
+        $materials = $medicine->materials;
+        foreach ($materials as $material) {
+            $alternatives = $material->medicines;
+            if ($data['number'] == 1) {
+                return $this->getJsonResponse($alternatives, "Alternatives With One Component");
+            }
+            foreach ($alternatives as $alternative) {
+                $alternativeMaterials = $alternative->materials;
+                foreach ($alternativeMaterials as $alternativeMaterial) {
+                    if ($material->is($alternativeMaterial)) {
+                        $count++;
+                    }
+                }
+                if ($count == 2) {
+                    $response2 [] = $alternative;
+                }
+                if ($count == count($materials)) {
+                    $response3 [] = $alternative;
+                }
+                break;
+            }
+        }
+
+        if ($data['number'] == 2) {
+            return $this->getJsonResponse($response2, "Alternatives with two components");
+        } else {
+            return $this->getJsonResponse($response3, "Alternatives with full components");
+        }
+    }
+
 }

@@ -2,8 +2,9 @@
 
 use App\Http\Controllers\Admin\PharmacyController;
 use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\Api\ComponentController;
+use App\Http\Controllers\Api\MaterialController;
 use App\Http\Controllers\Api\MedicineController;
+use App\Http\Controllers\Api\ReservationController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -30,15 +31,18 @@ Route::group([
     'middleware' => 'api',
 
 ], function () {
-    Route::apiResource('/medicines', 'Api\MedicineController');
-    Route::apiResource('/components', 'Api\ComponentController');
+    Route::apiResource('/medicines','Api\MedicineController');
     Route::apiResource('/periods', 'Api\PeriodController');
     Route::apiResource('/reservations', 'Api\ReservationController');
     Route::apiResource('/materials', 'Api\MaterialController');
-    Route::get('/components/{component}/materials', [ComponentController::class, 'materialsComponent']);
     Route::get('/medicines/alternative/{medicine}', [MedicineController::class, 'alternatives']);
     Route::get('/{user}/medicines', [PharmacyController::class, 'medicines']);
+    Route::get('/medicines/{medicine}/materials',[MedicineController::class,'materials']);
     Route::get('/medicines/{medicine}/pharmacies', [MedicineController::class, 'pharmacies']);
+    Route::get('/materials/{material}/medicines',[MaterialController::class,'medicines']);
+    Route::post('/medicines/alternatives',[MedicineController::class,'alternatives']);
+    Route::get('/users/reservations',[ ReservationController::class,'userReservations']);
+    Route::get('/pharmacies/reservations',[ ReservationController::class,'pharmacyReservations']);
 });
 
 

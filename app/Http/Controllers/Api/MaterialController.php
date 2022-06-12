@@ -5,8 +5,9 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Materials\MaterialStoreRequest;
 use App\Http\Requests\Materials\MaterialUpdateRequest;
-use App\Models\ComponentMaterial;
 use App\Models\Material;
+use App\Models\Medicine;
+use App\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
 
 use Illuminate\Http\JsonResponse;
@@ -19,12 +20,26 @@ class MaterialController extends Controller
      * Display a listing of the resource.
      *
      * @return JsonResponse
+     * @throws AuthorizationException
      */
     public function index(): JsonResponse
     {
         //
-        $materials = Material::all();
-        return $this->getJsonResponse($materials, 'Materials');
+        /**
+         * @var Medicine[] $medicines;
+         * @var Medicine $medicine;
+         * @var array $materials;
+         * @var User $user;
+         */
+        $user = auth('api')->user();
+        Gate::forUser(auth('api')->user())->authorize('viewMaterials');
+        $medicines = $user->medicines;
+        foreach ($medicines as $medicine){
+            $materials[] = $medicine->materials;
+        }
+
+
+        return $this->getJsonResponse(array_unique($materials), 'Materials');
     }
 
     /**
@@ -41,8 +56,6 @@ class MaterialController extends Controller
 
         $data = $request->validated();
         $material = Material::query()->create($data);
-        $data['material_id'] = $material->id;
-        ComponentMaterial::query()->create($data);
         return $this->getJsonResponse($material, 'Material Created Successfully');
 
     }
@@ -57,7 +70,7 @@ class MaterialController extends Controller
     public function show(Material $material): JsonResponse
     {
         //
-        Gate::forUser(auth('api')->user())->authorize('showMaterial',$material);
+        Gate::forUser(auth('api')->user())->authorize('showMaterial', $material);
         return $this->getJsonResponse($material, 'material');
     }
 
@@ -78,14 +91,10 @@ class MaterialController extends Controller
     public function update(MaterialUpdateRequest $request, Material $material): JsonResponse
     {
         //
-        Gate::forUser(auth('api')->user())->authorize('updateMaterial',$material);
+        Gate::forUser(auth('api')->user())->authorize('updateMaterial', $material);
 
         $data = $request->validated();
         $material->update($data);
-        if(asset($data['component_id'])){
-            $data['material_id'] = $material->id;
-            ComponentMaterial::query()->update($data);
-        }
         return $this->getJsonResponse($material, 'Material Updated Successfully');
     }
 
@@ -99,8 +108,16 @@ class MaterialController extends Controller
     public function destroy(Material $material): JsonResponse
     {
         //
-        Gate::forUser(auth('api')->user())->authorize('deleteMaterial',$material);
+        Gate::forUser(auth('api')->user())->authorize('deleteMaterial', $material);
         $material->delete();
         return response()->json(['message' => 'Material Deleted Successfully']);
     }
+
+    public function medicines(Material $material)
+    {
+
+        $medicines = $material->medicines;
+        return $this->getJsonResponse($medicines, "Medicines");
+    }
+
 }

@@ -15,8 +15,9 @@ class CreateMedicinesTable extends Migration
     {
         Schema::create('medicines', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('shelf_id');
-            $table->foreignId('company_id');
+            $table->foreignId('shelf_id')->nullable();
+            $table->foreignId('company_id')->nullable();
+            $table->foreignId('material_id')->nullable();
             $table->integer('alternative_id')->nullable();
             $table->string('name');
             $table->integer('quantity');

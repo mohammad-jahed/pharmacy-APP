@@ -23,12 +23,11 @@ class MaterialUpdateRequest extends FormRequest
      *
      * @return array
      */
-    #[ArrayShape(['name' => "string[]", "component_id" => "array"])] public function rules(): array
+    #[ArrayShape(['material_name' => "string[]"])] public function rules(): array
     {
         return [
             //
-            'name' => ['string', 'min:2', 'max:255'],
-            'component_id' => [Rule::exists('components', 'id')]
+            'material_name' => ['string', 'min:2', 'max:255'],
         ];
     }
 }

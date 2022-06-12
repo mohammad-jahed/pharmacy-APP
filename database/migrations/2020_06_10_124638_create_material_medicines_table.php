@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class ComponentMaterial extends Migration
+class CreateMaterialMedicinesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,10 @@ class ComponentMaterial extends Migration
      */
     public function up()
     {
-        //
-        Schema::create('component_material', function (Blueprint $table) {
+        Schema::create('material_medicines', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('component_id');
             $table->foreignId('material_id');
+            $table->foreignId('medicine_id');
             $table->timestamps();
         });
     }
@@ -29,7 +28,6 @@ class ComponentMaterial extends Migration
      */
     public function down()
     {
-        //
-        Schema::dropIfExists('component_material');
+        Schema::dropIfExists('material_medicines');
     }
 }

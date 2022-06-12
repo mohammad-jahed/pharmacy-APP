@@ -17,11 +17,38 @@ class ReservationController extends Controller
      * Display a listing of the resource.
      *
      * @return JsonResponse
+     * @throws AuthorizationException
      */
     public function index(): JsonResponse
     {
         //
+        Gate::forUser(auth('api')->user())->authorize('viewReservations');
         $reservations = Reservation::all();
+        return $this->getJsonResponse($reservations,'reservations');
+    }
+
+
+    /**
+     * @throws AuthorizationException
+     */
+    public function userReservations(): JsonResponse
+    {
+        //
+        $user = auth('api')->user();
+        Gate::forUser($user)->authorize('viewUserReservations');
+        $reservations = $user->userReservations;
+        return $this->getJsonResponse($reservations,'reservations');
+    }
+
+    /**
+     * @throws AuthorizationException
+     */
+    public function pharmacyReservations(): JsonResponse
+    {
+        //
+        $user = auth('api')->user();
+        Gate::forUser($user)->authorize('viewPharmacyReservations');
+        $reservations = $user->pharmacyReservations;
         return $this->getJsonResponse($reservations,'reservations');
     }
 

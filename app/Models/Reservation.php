@@ -17,7 +17,7 @@ class Reservation extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'pharmacy_id', 'period_id'];
+    protected $fillable = ['user_id', 'pharmacy_id', 'medicine_id', 'period_id'];
 
     public function user(): BelongsTo
     {
@@ -27,6 +27,11 @@ class Reservation extends Model
     public function period(): BelongsTo
     {
         return $this->belongsTo(Period::class);
+    }
+
+    public function medicine(): BelongsTo
+    {
+        return $this->belongsTo(Medicine::class);
     }
 
     public function pharmacy(): BelongsTo

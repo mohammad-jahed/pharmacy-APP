@@ -9,34 +9,34 @@
 @stop
 @endsection
 @section('page-header')
-<!-- breadcrumb -->
+    <!-- breadcrumb -->
 @section('PageTitle')
     {{ trans('main_trans.users') }}
 @stop
 <!-- breadcrumb -->
 @endsection
 @section('content')
-<!-- row -->
-<div class="row">
+    <!-- row -->
+    <div class="row">
 
-    @if ($errors->any())
-        <div class="error">{{ $errors->first('Name') }}</div>
-    @endif
+        @if ($errors->any())
+            <div class="error">{{ $errors->first('Name') }}</div>
+        @endif
 
 
-    <div class="col-xl-12 mb-30">
-        <div class="card card-statistics h-100">
-            <div class="card-body">
+        <div class="col-xl-12 mb-30">
+            <div class="card card-statistics h-100">
+                <div class="card-body">
 
-                @if ($errors->any())
-                    <div class="alert alert-danger">
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
 
 
                     <div class="table-responsive">
@@ -60,10 +60,13 @@
                                     <td>{{ $i }}</td>
                                     <td>{{ $user->username }}</td>
                                     <td>{{ $user->email }}</td>
-                                    <td>{{trans('user_trans.state')}} :  {{ $user->address->state->name }}<br>
-                                        {{trans('user_trans.city')}} :  {{$user->address->city->name}}<br>
-                                        {{trans('user_trans.area')}} :  {{$user->address->area->name}}<br>
-                                        {{trans('user_trans.street')}} :  {{$user->address->street}}
+                                    <td>
+                                        @if($user->address->state!=null)
+                                            {{trans('user_trans.state')}} :  {{ $user->address->state->name }}<br>
+                                            {{trans('user_trans.city')}} :  {{$user->address->city->name}}<br>
+                                            {{trans('user_trans.area')}} :  {{$user->address->area->name}}<br>
+                                            {{trans('user_trans.street')}} :  {{$user->address->street}}
+                                        @endif
                                     </td>
 
                                     <td>
@@ -118,13 +121,13 @@
                             @endforeach
                         </table>
                     </div>
+                </div>
             </div>
         </div>
+
+
     </div>
-
-
-</div>
-<!-- row closed -->
+    <!-- row closed -->
 @endsection
 @section('js')
     @toastr_js

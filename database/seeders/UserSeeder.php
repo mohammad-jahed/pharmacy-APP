@@ -25,14 +25,6 @@ class UserSeeder extends Seeder
         /////////////////////assign role to the Admin/////////////////////////////////
         $role = Role::query()->where('name', 'like', 'Admin')->get();
         $user->assignRole($role);
-        //Pharmacy
-        $pharmacy = User::query()->create([
-            'username' => 'nawar33',
-            'email' => 'nawar33@gmail.com',
-            'password' => '00000000'
-        ]);
-        $role = Role::query()->where('name', 'like', 'Pharmacy')->get();
-        $pharmacy->assignRole($role);
 
     }
 }

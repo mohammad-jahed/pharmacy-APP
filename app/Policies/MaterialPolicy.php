@@ -2,7 +2,6 @@
 
 namespace App\Policies;
 
-use App\Models\Component;
 use App\Models\Material;
 use App\Models\Medicine;
 use App\Models\User;
@@ -21,9 +20,7 @@ class MaterialPolicy
      */
     public function viewAny(User $user): Response|bool
     {
-        //
         return ($user->hasRole('Pharmacy'));
-
     }
 
     /**
@@ -37,15 +34,13 @@ class MaterialPolicy
     {
         //
         /**
-         * @var Component[] $components;
-         * @var Component $component;
+         * @var Medicine[] $medicines;
          * @var Medicine $medicine;
          * @var User[] $users;
          * @var User $newUser;
          */
-        $components = $material->components;
-        foreach ($components as $component){
-            $medicine = $component->medicine;
+        $medicines = $material->medicines;
+        foreach ($medicines as $medicine){
             $users = $medicine->users;
             foreach ($users as $newUser){
                 if($user->id == $newUser->id){
@@ -80,15 +75,13 @@ class MaterialPolicy
     {
         //
         /**
-         * @var Component[] $components;
-         * @var Component $component;
+         * @var Medicine[] $medicines;
          * @var Medicine $medicine;
          * @var User[] $users;
          * @var User $newUser;
          */
-        $components = $material->components;
-        foreach ($components as $component){
-            $medicine = $component->medicine;
+        $medicines = $material->medicines;
+        foreach ($medicines as $medicine){
             $users = $medicine->users;
             foreach ($users as $newUser){
                 if($user->id == $newUser->id){
@@ -111,15 +104,13 @@ class MaterialPolicy
     {
         //
         /**
-         * @var Component[] $components;
-         * @var Component $component;
+         * @var Medicine[] $medicines;
          * @var Medicine $medicine;
          * @var User[] $users;
          * @var User $newUser;
          */
-        $components = $material->components;
-        foreach ($components as $component){
-            $medicine = $component->medicine;
+        $medicines = $material->medicines;
+        foreach ($medicines as $medicine){
             $users = $medicine->users;
             foreach ($users as $newUser){
                 if($user->id == $newUser->id){

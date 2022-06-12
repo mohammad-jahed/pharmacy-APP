@@ -6,7 +6,8 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use JetBrains\PhpStorm\ArrayShape;
 
-class MedicineStoreRequest extends FormRequest
+class
+MedicineStoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,14 +24,15 @@ class MedicineStoreRequest extends FormRequest
      *
      * @return array
      */
-    #[ArrayShape(['shelf_name' => "string", "alternative_id" => 'array', 'company_name' => "string", 'name' => "string[]", 'quantity' => "string[]", 'pills' => "string[]", 'expiration_date' => "string[]", 'c_price' => "string[]", 'price' => "string[]"])]
+    #[ArrayShape(['shelf_name' => "array", 'material_id' => "array", "alternative_id" => 'array', 'company_name' => "string", 'name' => "string[]", 'quantity' => "string[]", 'pills' => "string[]", 'expiration_date' => "string[]", 'c_price' => "string[]", 'price' => "string[]"])]
     public function rules(): array
     {
         return [
             //
             'shelf_name' => ['string', 'min:2', 'max:255'],
             'company_name' => ['string', 'min:3', 'max:255'],
-            'alternative_id' => ['integer','numeric',Rule::exists('medicines', 'id')],
+            'material_id' => [Rule::exists('materials','id')],
+            'alternative_id' => [Rule::exists('medicines', 'id')],
             'name' => ['required', 'min:3', 'max:30', 'string'],
             'quantity' => ['numeric'],
             'pills' => ['numeric'],

@@ -1,15 +1,12 @@
 <?php
 
 namespace App\Providers;
-
-use App\Models\Component;
 use App\Models\Material;
 use App\Models\Medicine;
 
 use App\Models\Period;
 use App\Models\Reservation;
 use App\Models\User;
-use App\Policies\ComponentPolicy;
 use App\Policies\MaterialPolicy;
 use App\Policies\MedicinePolicy;
 use App\Policies\PeriodPolicy;
@@ -29,7 +26,6 @@ class AuthServiceProvider extends ServiceProvider
         // 'App\Model' => 'App\Policies\ModelPolicy',
         User::class => PharmacyPolicy::class,
         Medicine::class => MedicinePolicy::class,
-        Component::class => ComponentPolicy::class,
         Material::class => MaterialPolicy::class,
         Reservation::class => ReservationPolicy::class,
         Period::class => PeriodPolicy::class
@@ -49,27 +45,27 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('deleteMedicine', [MedicinePolicy::class, 'delete']);
         Gate::define('viewMedicine', [MedicinePolicy::class, 'viewAny']);
         Gate::define('showMedicine', [MedicinePolicy::class, 'view']);
-        //Components
-        Gate::define('showComponent', [ComponentPolicy::class, 'view']);
-        Gate::define('createComponent', [ComponentPolicy::class, 'create']);
-        Gate::define('updateComponent', [ComponentPolicy::class, 'update']);
-        Gate::define('deleteComponent', [ComponentPolicy::class, 'delete']);
         //Materials
         Gate::define('showMaterial', [MaterialPolicy::class, 'view']);
         Gate::define('createMaterial', [MaterialPolicy::class, 'create']);
         Gate::define('updateMaterial', [MaterialPolicy::class, 'update']);
         Gate::define('deleteMaterial', [MaterialPolicy::class, 'delete']);
+        Gate::define('viewMaterials',[MaterialPolicy::class,'viewAny']);
         //Reservations
-        Gate::define('showReservation', [MaterialPolicy::class, 'view']);
-        Gate::define('createReservation', [MaterialPolicy::class, 'create']);
-        Gate::define('updateReservation', [MaterialPolicy::class, 'update']);
-        Gate::define('deleteReservation', [MaterialPolicy::class, 'delete']);
+
+        Gate::define('showReservation', [ReservationPolicy::class, 'view']);
+        Gate::define('viewReservations', [ReservationPolicy::class, 'index']);
+        Gate::define('viewPharmacyReservations', [ReservationPolicy::class, 'viewAnyPharmacy']);
+        Gate::define('viewUserReservations', [ReservationPolicy::class, 'viewAnyUser']);
+        Gate::define('createReservation', [ReservationPolicy::class, 'create']);
+        Gate::define('updateReservation', [ReservationPolicy::class, 'update']);
+        Gate::define('deleteReservation', [ReservationPolicy::class, 'delete']);
         //Periods
-        Gate::define('indexPeriod', [MaterialPolicy::class, 'viewAny']);
-        Gate::define('showPeriod', [MaterialPolicy::class, 'view']);
-        Gate::define('createPeriod', [MaterialPolicy::class, 'create']);
-        Gate::define('updatePeriod', [MaterialPolicy::class, 'update']);
-        Gate::define('deletePeriod', [MaterialPolicy::class, 'delete']);
+        Gate::define('indexPeriod', [PeriodPolicy::class, 'viewAny']);
+        Gate::define('showPeriod', [PeriodPolicy::class, 'view']);
+        Gate::define('createPeriod', [PeriodPolicy::class, 'create']);
+        Gate::define('updatePeriod', [PeriodPolicy::class, 'update']);
+        Gate::define('deletePeriod', [PeriodPolicy::class, 'delete']);
 
 
     }

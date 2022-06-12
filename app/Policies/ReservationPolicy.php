@@ -17,11 +17,23 @@ class ReservationPolicy
      * @param User $user
      * @return Response|bool
      */
-    public function viewAny(User $user): Response|bool
+    public function index(User $user): Response|bool
     {
         //
         return $user->hasRole('Admin');
     }
+
+    public function viewAnyPharmacy(User $user): bool
+    {
+        return $user->hasRole('Pharmacy');
+    }
+
+
+    public function viewAnyUser(User $user): bool
+    {
+        return $user->hasRole('User');
+    }
+
 
     /**
      * Determine whether the user can view the model.
@@ -34,8 +46,8 @@ class ReservationPolicy
     {
         //
         /**
-         * @var User $pharmacy;
-         * @var User $user1;
+         * @var User $pharmacy ;
+         * @var User $user1 ;
          */
         $pharmacy = $reservation->pharmacy;
         $user1 = $reservation->user;
@@ -65,8 +77,8 @@ class ReservationPolicy
     {
         //
         /**
-         * @var User $pharmacy;
-         * @var User $user1;
+         * @var User $pharmacy ;
+         * @var User $user1 ;
          */
         $pharmacy = $reservation->pharmacy;
         $user1 = $reservation->user;
@@ -84,35 +96,12 @@ class ReservationPolicy
     {
         //
         /**
-         * @var User $pharmacy;
-         * @var User $user1;
+         * @var User $pharmacy ;
+         * @var User $user1 ;
          */
         $pharmacy = $reservation->pharmacy;
         $user1 = $reservation->user;
         return $user->id == $pharmacy->id || $user->id == $user1->id;
     }
 
-    /**
-     * Determine whether the user can restore the model.
-     *
-     * @param User $user
-     * @param Reservation $reservation
-     * @return Response|bool
-     */
-    public function restore(User $user, Reservation $reservation)
-    {
-        //
-    }
-
-    /**
-     * Determine whether the user can permanently delete the model.
-     *
-     * @param User $user
-     * @param Reservation $reservation
-     * @return Response|bool
-     */
-    public function forceDelete(User $user, Reservation $reservation)
-    {
-        //
-    }
 }

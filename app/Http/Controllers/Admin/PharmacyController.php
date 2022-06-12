@@ -31,6 +31,7 @@ PharmacyController extends Controller
         $this->authorize('view', new User());
         $states = State::all();
         $pharmacies = User::type('Pharmacy')->get();
+
         return view('pages.pharmacy.pharmacy', compact('pharmacies'))
             ->with('states', $states);
     }

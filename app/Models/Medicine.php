@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-
 /**
  * @property int pharmacy_id;
  * @property int shelf_id;
@@ -16,7 +15,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int id;
  * @property void alternatives;
  * @property void users;
+ * @property string name;
  * @property void medicineUser;
+ * @property void materials;
  */
 class Medicine extends Model
 {
@@ -27,6 +28,7 @@ class Medicine extends Model
         'shelf_id',
         'company_id',
         'alternative_id',
+        'material_id',
         'quantity',
         'pills',
         'expiration_date',
@@ -54,10 +56,14 @@ class Medicine extends Model
         return $this->hasMany(AlternativeMedicine::class);
     }
 
-    public function components(): HasMany
-    {
-        return $this->hasMany(Component::class);
+    public function materials() : BelongsToMany{
+        return $this->belongsToMany(Material::class,'material_medicines','medicine_id','material_id')->as('material_medicine');
     }
+
+    public function materialMedicine():HasMany{
+        return $this->hasMany(MaterialMedicine::class);
+    }
+
 
     public function alternatives(): BelongsToMany
     {
@@ -68,4 +74,11 @@ class Medicine extends Model
     {
         return $this->belongsToMany(User::class,'medicine_users','medicine_id','pharmacy_id')->as('medicine user');
     }
+
+    public function reservations(): HasMany
+    {
+        return $this->hasMany(Reservation::class);
+    }
+
+
 }

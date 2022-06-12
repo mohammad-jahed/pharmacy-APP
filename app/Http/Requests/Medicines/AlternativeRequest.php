@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Requests\Components;
+namespace App\Http\Requests\Medicines;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use JetBrains\PhpStorm\ArrayShape;
 
-class ComponentStoreRequest extends FormRequest
+class AlternativeRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,13 +23,13 @@ class ComponentStoreRequest extends FormRequest
      *
      * @return array
      */
-    #[ArrayShape(['medicine_id' => "array", 'name' => "string[]"])]
+    #[ArrayShape(['medicine_id' => "array", 'number' => "string[]"])]
     public function rules(): array
     {
         return [
             //
-            'name' => ['required', 'string', 'min:3', 'max:256'],
-            'medicine_id' => ['required', Rule::exists('medicines', 'id')]
+            'medicine_id'=>['required',Rule::exists('medicines','id')],
+            'number'=>['required','integer','digits_between:1,3']
         ];
     }
 }

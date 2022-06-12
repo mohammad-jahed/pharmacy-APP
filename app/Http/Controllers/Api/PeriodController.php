@@ -85,7 +85,6 @@ class PeriodController extends Controller
     {
         //
         Gate::forUser(auth('api')->user())->authorize('deletePeriod',$period);
-
         $period->delete();
         return $this->getJsonResponse($period,'Period Deleted Successfully');
     }

@@ -20,6 +20,9 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @method void assignRole($role);
  * @method void givePermissionTo();
  * @property void medicines;
+ * @property void address;
+ * @property void userReservations;
+ * @property void pharmacyReservations;
  * @method  static Builder type($type);
  *
  * @property int id;
@@ -119,9 +122,14 @@ class User extends Authenticatable implements JWTSubject
         );
     }
 
-    public function reservations(): BelongsToMany
+    public function pharmacyReservations(): HasMany
     {
-        return $this->belongsToMany(Reservation::class, 'reservation_users', 'user_id', 'reservation_id')->as('reservation_user');
+        return $this->hasMany(Reservation::class,'pharmacy_id');
+    }
+
+    public function userReservations(): HasMany
+    {
+        return $this->hasMany(Reservation::class,'user_id');
     }
 
 }
