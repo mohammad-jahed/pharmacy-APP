@@ -156,7 +156,7 @@ class MedicineController extends Controller
 
     }
 
-    public function alternatives(AlternativeRequest $request, int $count = 0, array $response2 = null, array $response3 = null)
+    public function alternatives(AlternativeRequest $request, int $count = 0, array $response2 = null, array $response3 = null): JsonResponse
     {
         /**
          * @var Material[] $materials
@@ -199,7 +199,7 @@ class MedicineController extends Controller
         }
     }
 
-    public function expiredMedicines()
+    public function expiredMedicines(): JsonResponse
     {
         /**
          * @var Medicine[] $medicines ;
@@ -209,7 +209,7 @@ class MedicineController extends Controller
         $user = auth('api')->user();
         $medicines = $user->medicines;
         foreach ($medicines as $medicine) {
-            if ($medicine->expiration_date > Date::now()) {
+            if ($medicine->expiration_date < Date::now()) {
                 $response[] = $medicine;
                 $medicineData = [
                     'body' => 'A new Medicine is expired',

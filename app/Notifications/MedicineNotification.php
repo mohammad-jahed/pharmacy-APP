@@ -3,9 +3,9 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use JetBrains\PhpStorm\ArrayShape;
 
 class MedicineNotification extends Notification
 {
@@ -28,23 +28,23 @@ class MedicineNotification extends Notification
      * @param  mixed  $notifiable
      * @return array
      */
-    public function via($notifiable)
+    public function via(mixed $notifiable): array
     {
-        return ['mail'];
+        return ['database'];
     }
 
     /**
      * Get the mail representation of the notification.
      *
      * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
+     * @return MailMessage
      */
-    public function toMail($notifiable)
+    public function toMail(mixed $notifiable): MailMessage
     {
         return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+                    ->line($this->medicineData['body'])
+                    ->action($this->medicineData['medicineText'], $this->medicineData['medicineUrl'])
+                    ->line($this->medicineData['thanks']);
     }
 
     /**
@@ -53,10 +53,12 @@ class MedicineNotification extends Notification
      * @param  mixed  $notifiable
      * @return array
      */
-    public function toArray($notifiable)
+    #[ArrayShape(['medicine_id' => "mixed"])]
+    public function toArray(mixed $notifiable): array
     {
         return [
             //
+            'medicine_id'=>$this->medicineData['medicine_id']
         ];
     }
 }
