@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\WorkTime;
 use App\Notifications\UserNotification;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Notification;
 use Spatie\Permission\Models\Role;
@@ -36,6 +37,9 @@ class AuthController extends Controller
 
     public function register(RegisterRequest $request): JsonResponse
     {
+        /**
+         * @var Authenticatable $user;
+         */
         $data = $request->validated();
         $file_name = null;
         if($request->hasFile('imagePath')){
@@ -54,7 +58,7 @@ class AuthController extends Controller
             'user_id' => $user->id
         ];
         Notification::send($admin, new UserNotification($userData));
-
+        event(new Registered($user));
         $data['user_id'] = $user->id;
         if(isset($data['state_id'])){
             Address::query()->create($data);
@@ -64,7 +68,7 @@ class AuthController extends Controller
         }
         $role = Role::query()->where('name', 'like', 'User')->get();
         $user->assignRole($role);
-        event(new Registered($user));
+
         return $this->getJsonResponse($user,'User successfully registered');
     }
 

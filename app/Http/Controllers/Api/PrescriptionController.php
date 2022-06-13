@@ -37,7 +37,7 @@ class PrescriptionController extends Controller
      * @param PrescriptionStoreRequest $request
      * @return JsonResponse
      */
-    public function store(PrescriptionStoreRequest $request)
+    public function store(PrescriptionStoreRequest $request): JsonResponse
     {
         //
         /**

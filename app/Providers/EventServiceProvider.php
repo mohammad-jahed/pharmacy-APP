@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Events\Medicine\ExpirationDateEvent;
+use App\Events\Prescription\PrescriptionCreateEvent;
 use App\Listeners\Medicine\ExpirationDateListener;
 use App\Listeners\Prescription\PrescriptionCreateListener;
 use App\Listeners\User\UserRegisteredListener;
@@ -21,9 +23,13 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
             UserRegisteredListener::class,
-            PrescriptionCreateListener::class,
-            ExpirationDateListener::class,
         ],
+        PrescriptionCreateEvent::class =>[
+            PrescriptionCreateListener::class,
+        ],
+        ExpirationDateEvent::class =>[
+            ExpirationDateListener::class,
+        ]
     ];
 
     /**

@@ -18,7 +18,7 @@ class PrescriptionCreateEvent
      *
      * @return void
      */
-    public function __construct($prescription)
+    public function __construct(Prescription $prescription)
     {
         //
         $this->prescription = $prescription;

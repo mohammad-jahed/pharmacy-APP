@@ -32,7 +32,7 @@ class UserRegisteredListener
             'body' => 'You have a new user registered.',
             'thanks' => 'Thank you',
             'userText' => $event->user->username,
-            'userUrl' => url('/users'),
+            'userUrl' => url('/'),
             'user_id' => $event->user->id
         ];
 
