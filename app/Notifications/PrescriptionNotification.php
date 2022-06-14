@@ -60,7 +60,10 @@ class PrescriptionNotification extends Notification
     {
         return [
             //
-            'prescription' => $this->prescriptionData
+            //'prescription' => $this->prescriptionData,
+            'title'=>'You received a new prescription.',
+            'prescription_id'=>$this->prescriptionData['prescription_id'],
+            'subject'=>$this->prescriptionData['prescriptionText'],
         ];
     }
 }

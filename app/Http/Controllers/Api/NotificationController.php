@@ -16,7 +16,11 @@ class NotificationController extends Controller
      */
     public function index()
     {
-        //
+        auth()->user()->unreadnotifications->markAsRead();
+
+        return view('pages.Notifications.notifications',[
+            'notifications' => auth()->user()->notifications()->paginate(5)
+        ]);
     }
 
     /**
@@ -38,7 +42,12 @@ class NotificationController extends Controller
      */
     public function show(Notification $notification)
     {
-        //
+        $not1=$notification;
+        //$d=auth()->user()->notifications;
+
+        //dd($not1);
+        return view('pages.Notifications.notification',compact('not1'));
+
     }
 
     /**
@@ -59,9 +68,10 @@ class NotificationController extends Controller
      * @param  \App\Models\Notification  $notification
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Notification $notification)
+    public function destroy($id)//Notification $notification)
     {
-        //
+        auth()->user()->unreadnotifications->where($id)
+            ->markAsRead();
     }
 
     public function sendPrescriptionNotification(){
@@ -75,5 +85,10 @@ class NotificationController extends Controller
             'prescriptionUrl' => url('/'),
             'prescription_id' => 007
         ];
+    }
+
+    public function markAllAsRead(){
+        auth()->user()->unreadNotifications->markAsRead();
+        return redirect()->back();
     }
 }

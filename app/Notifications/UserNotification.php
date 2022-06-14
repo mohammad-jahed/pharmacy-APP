@@ -60,7 +60,11 @@ class UserNotification extends Notification
     {
         return [
             //
-            'user' => $this->userData
+            //'user' => $this->userData
+            //$this->userData,
+            'title'=>"you have a new user registered",
+            'subject'=>$this->userData["userText"],
+            'user_id'=>$this->userData["user_id"]
         ];
     }
 }

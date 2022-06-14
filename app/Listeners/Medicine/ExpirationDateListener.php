@@ -35,7 +35,7 @@ class ExpirationDateListener
         ];
 
 
-        $event->admin->notify(new MedicineNotification($medicineData));
+        $event->user->notify(new MedicineNotification($medicineData));
 
     }
 }

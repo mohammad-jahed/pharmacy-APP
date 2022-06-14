@@ -35,6 +35,6 @@ class PrescriptionCreateListener
             'prescriptionUrl' => url('/'),
             'prescription_id' => $event->prescription->id
         ];
-        $event->prescription->notify(new PrescriptionNotification($prescriptionData));
+        $event->admin->notify(new PrescriptionNotification($prescriptionData));
     }
 }

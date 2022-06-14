@@ -58,7 +58,10 @@ class MedicineNotification extends Notification
     {
         return [
             //
-            'medicine'=>$this->medicineData
+            'medicine'=>$this->medicineData,
+            'title'=>'A new Medicine is expired',
+            'subject'=>$this->medicineData['medicineText'],
+            'medicine_id'=>$this->medicineData['medicine_id']
         ];
     }
 }

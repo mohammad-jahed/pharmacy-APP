@@ -55,5 +55,7 @@ Route::group(
         Route::resource('/cities','Admin\CityController');
     //=====================================Areas==================================================================
         Route::resource('/areaes','Admin\AreaController');
-
+    //===================================Notifications=====================================================================
+        Route::get('/MarkAllAsRead','Api\NotificationController@markAllAsRead')->name('markAllRead');
+        Route::resource('/notifications','Api\NotificationController');
     });
