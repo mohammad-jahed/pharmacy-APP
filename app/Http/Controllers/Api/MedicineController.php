@@ -14,6 +14,7 @@ use App\Models\MaterialMedicine;
 use App\Models\Medicine;
 use App\Models\MedicineUser;
 use App\Models\Shelf;
+use App\Models\User;
 use App\Notifications\MedicineNotification;
 use Illuminate\Auth\Access\AuthorizationException;
 
@@ -204,6 +205,7 @@ class MedicineController extends Controller
         /**
          * @var Medicine[] $medicines ;
          * @var Medicine $medicine ;
+         * @var User $user;
          * @var array $response
          */
         $user = auth('api')->user();
@@ -211,15 +213,7 @@ class MedicineController extends Controller
         foreach ($medicines as $medicine) {
             if ($medicine->expiration_date < Date::now()) {
                 $response[] = $medicine;
-                $medicineData = [
-                    'body' => 'A new Medicine is expired',
-                    'thanks' => 'Thank you',
-                    'medicineText' => $medicine->name,
-                    'medicineUrl' => url('/'),
-                    'medicine_id' => $medicine->id
-                ];
-                Notification::send($user, new MedicineNotification($medicineData));
-                event(new ExpirationDateEvent($medicine));
+                event(new ExpirationDateEvent($user,$medicine));
             }
         }
 

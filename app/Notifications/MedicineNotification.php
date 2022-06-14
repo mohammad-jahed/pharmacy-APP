@@ -53,12 +53,12 @@ class MedicineNotification extends Notification
      * @param  mixed  $notifiable
      * @return array
      */
-    #[ArrayShape(['medicine_id' => "mixed"])]
+    #[ArrayShape(['medicine' => "mixed"])]
     public function toArray(mixed $notifiable): array
     {
         return [
             //
-            'medicine_id'=>$this->medicineData['medicine_id']
+            'medicine'=>$this->medicineData
         ];
     }
 }

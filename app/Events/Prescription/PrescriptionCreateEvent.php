@@ -3,6 +3,7 @@
 namespace App\Events\Prescription;
 
 use App\Models\Prescription;
+use App\Models\User;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PrivateChannel;
@@ -13,15 +14,17 @@ class PrescriptionCreateEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
     public Prescription $prescription;
+    public User $admin;
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(Prescription $prescription)
+    public function __construct(User $admin,Prescription $prescription)
     {
         //
         $this->prescription = $prescription;
+        $this->admin = $admin;
     }
 
     /**

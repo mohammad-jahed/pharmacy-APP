@@ -33,6 +33,9 @@ class ExpirationDateListener
             'medicineUrl' => url('/'),
             'medicine_id' => $event->medicine->id
         ];
-        $event->medicine->notify(new MedicineNotification($medicineData));
+
+
+        $event->admin->notify(new MedicineNotification($medicineData));
+
     }
 }

@@ -30,7 +30,7 @@ class PrescriptionNotification extends Notification
      * @param mixed $notifiable
      * @return array
      */
-    public function via($notifiable): array
+    public function via(mixed $notifiable): array
     {
         return ['database'];
     }
@@ -41,7 +41,7 @@ class PrescriptionNotification extends Notification
      * @param mixed $notifiable
      * @return MailMessage
      */
-    public function toMail($notifiable): MailMessage
+    public function toMail(mixed $notifiable): MailMessage
     {
         return (new MailMessage)
             ->line($this->prescriptionData['body'])
@@ -55,12 +55,12 @@ class PrescriptionNotification extends Notification
      * @param mixed $notifiable
      * @return array
      */
-    #[ArrayShape(['prescription_id' => "mixed"])]
+    #[ArrayShape(['prescription' => "mixed"])]
     public function toArray(mixed $notifiable): array
     {
         return [
             //
-            'prescription_id' => $this->prescriptionData['prescription_id']
+            'prescription' => $this->prescriptionData
         ];
     }
 }

@@ -8,12 +8,10 @@ use App\Http\Requests\Prescriptions\PrescriptionStoreRequest;
 use App\Http\Requests\Prescriptions\PrescriptionUpdateRequest;
 use App\Models\Prescription;
 use App\Models\User;
-use App\Notifications\PrescriptionNotification;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Notification;
 
 class PrescriptionController extends Controller
 {
@@ -22,12 +20,10 @@ class PrescriptionController extends Controller
      *
      * @return Application|Factory|View
      */
-    public function index()
+    public function index(): View|Factory|Application
     {
         //
         $prescriptions = Prescription::all();
-        $admin = User::type('Admin')->first();
-        dd($admin->notifications);
         return view('pages.Notifications.prescription',compact('prescriptions'));
     }
 
@@ -42,6 +38,7 @@ class PrescriptionController extends Controller
         //
         /**
          * @var Prescription $prescription;
+         * @var User $admin;
          */
 
         $data = $request->validated();
@@ -51,15 +48,7 @@ class PrescriptionController extends Controller
         $data['user_id'] = auth('api')->user()->getAuthIdentifier();
         $prescription = Prescription::query()->create($data);
         $admin = User::type('Admin')->first();
-        $prescriptionData = [
-            'body' => 'You received a new prescription.',
-            'thanks' => 'Thank you',
-            'prescriptionText' => $prescription->imagePath,
-            'prescriptionUrl' => url('/'),
-            'prescription_id' => $prescription->id
-        ];
-        Notification::send($admin, new PrescriptionNotification($prescriptionData));
-        event(new PrescriptionCreateEvent($prescription));
+        event(new PrescriptionCreateEvent($admin,$prescription));
         return $this->getJsonResponse($prescription,'Prescription Created Successfully');
 
     }
@@ -70,7 +59,7 @@ class PrescriptionController extends Controller
      * @param Prescription $prescription
      * @return JsonResponse
      */
-    public function show(Prescription $prescription)
+    public function show(Prescription $prescription): JsonResponse
     {
         //
         return $this->getJsonResponse($prescription,'prescription');
@@ -83,7 +72,7 @@ class PrescriptionController extends Controller
      * @param Prescription $prescription
      * @return JsonResponse
      */
-    public function update(PrescriptionUpdateRequest $request, Prescription $prescription)
+    public function update(PrescriptionUpdateRequest $request, Prescription $prescription): JsonResponse
     {
         //
         $data = $request->validated();
@@ -98,7 +87,7 @@ class PrescriptionController extends Controller
      * @param Prescription $prescription
      * @return JsonResponse
      */
-    public function destroy(Prescription $prescription)
+    public function destroy(Prescription $prescription): JsonResponse
     {
         //
         $prescription->delete();

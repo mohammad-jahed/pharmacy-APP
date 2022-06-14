@@ -3,7 +3,6 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use JetBrains\PhpStorm\ArrayShape;
@@ -56,12 +55,12 @@ class UserNotification extends Notification
      * @param mixed $notifiable
      * @return array
      */
-    #[ArrayShape(['user_id' => "mixed"])]
+    #[ArrayShape(['user' => "mixed"])]
     public function toArray(mixed $notifiable): array
     {
         return [
             //
-            'user_id' => $this->userData['user_id']
+            'user' => $this->userData
         ];
     }
 }

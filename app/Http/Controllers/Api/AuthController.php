@@ -6,11 +6,9 @@ use App\Http\Requests\Users\RegisterRequest;
 use App\Models\Address;
 use App\Models\User;
 use App\Models\WorkTime;
-use App\Notifications\UserNotification;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Notification;
 use Spatie\Permission\Models\Role;
 use function auth;
 use function response;
@@ -39,6 +37,7 @@ class AuthController extends Controller
     {
         /**
          * @var Authenticatable $user;
+         * @var User $admin;
          */
         $data = $request->validated();
         $file_name = null;
@@ -50,15 +49,7 @@ class AuthController extends Controller
         $user = User::query()->create($data);
 
         $admin = User::type('Admin')->first();
-        $userData = [
-            'body' => 'You have a new user registered.',
-            'thanks' => 'Thank you',
-            'userText' => $user->username,
-            'userUrl' => url('/'),
-            'user_id' => $user->id
-        ];
-        Notification::send($admin, new UserNotification($userData));
-        event(new Registered($user));
+        event(new Registered($admin,$user));
         $data['user_id'] = $user->id;
         if(isset($data['state_id'])){
             Address::query()->create($data);

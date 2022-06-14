@@ -36,7 +36,7 @@ class UserRegisteredListener
             'user_id' => $event->user->id
         ];
 
-        $event->user->notify(new UserNotification($userData));
+        $event->admin->notify(new UserNotification($userData));
 
     }
 }
