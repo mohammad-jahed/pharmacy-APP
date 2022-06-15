@@ -53,13 +53,12 @@ class MedicineNotification extends Notification
      * @param  mixed  $notifiable
      * @return array
      */
-    #[ArrayShape(['medicine' => "mixed"])]
+    #[ArrayShape(['medicine' => "array", 'title' => "string", 'subject' => "mixed", 'medicine_id' => "mixed"])]
     public function toArray(mixed $notifiable): array
     {
         return [
             //
-            'medicine'=>$this->medicineData,
-            'title'=>'A new Medicine is expired',
+            'title'=>$this->medicineData['body'],
             'subject'=>$this->medicineData['medicineText'],
             'medicine_id'=>$this->medicineData['medicine_id']
         ];

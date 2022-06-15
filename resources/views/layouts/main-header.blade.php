@@ -59,30 +59,34 @@ header start-->
             <a class="nav-link top-nav" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
                aria-expanded="false">
                 <i class="ti-bell"></i>
-                <span class="badge badge-danger notification-status"> <span class="badge badge-pill badge-warning">{{auth()->user()->unreadnotifications->count()}}</span>
+                <span class="badge badge-danger notification-status"> <span
+                        class="badge badge-pill badge-warning">{{auth()->user()->unreadNotifications->count()}}</span>
  </span>
             </a>
             <div class="dropdown-menu dropdown-menu-right dropdown-big dropdown-notifications">
                 <div class="dropdown-header notifications">
                     <strong>{{trans('Sidebar_trans.Notifications')}}</strong>
-                    <span class="badge badge-pill badge-warning">{{auth()->user()->unreadnotifications->count()}}</span>
+                    <span class="badge badge-pill badge-warning">{{auth()->user()->unreadNotifications->count()}}</span>
 
                 </div>
                 <div class="dropdown-divider"></div>
                 <ul>
-                @if(auth()->user()->unreadnotifications->count())
-                 <li ><a class="float-left" href="{{route('markAllRead')}}"  style="color: #2fa360">Mark All As Read</a>
+                    @if(auth()->user()->unreadNotifications->count())
+                        <li><a class="float-left" href="{{route('markAllRead')}}" style="color: #2fa360">Mark All As
+                                Read</a>
 
-                @endif
-                    <a class="float-right" href="{{route('notifications.index')}}"style="color: #1a69a4" > View All Notifications</a></li>
+                            @endif
+                            <a class="float-right" href="{{route('notifications.index')}}" style="color: #1a69a4"> View
+                                All Notifications</a></li>
                 </ul>
-                    @foreach(Auth()->user()->unreadnotifications as $not)
-                <a href="#" class="dropdown-item" style="background: lightgray">{{$not->data["title"]}}<small
-                        class="float-right text-muted time">{{$not->created_at}}</small> </a>
+                @foreach(Auth()->user()->unreadNotifications as $not)
+
+                    <a href="#" class="dropdown-item" style="background: lightgray">{{$not->data["title"]}}<small
+                            class="float-right text-muted time">{{$not->created_at}}</small> </a>
 
                 @endforeach
-                @foreach(Auth()->user()->readnotifications as $not)
-                    <a href="#" class="dropdown-item" >{{$not->data["title"]}}<small
+                @foreach(Auth()->user()->readNotifications as $not)
+                    <a href="#" class="dropdown-item">{{$not->data["title"]}}<small
                             class="float-right text-muted time">{{$not->created_at}}</small> </a>
                 @endforeach
             </div>

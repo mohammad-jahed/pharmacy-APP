@@ -30,7 +30,6 @@ class PrescriptionCreateListener
 
         $prescriptionData = [
             'body' => 'You received a new prescription.',
-            'thanks' => 'Thank you',
             'prescriptionText' => $event->prescription->imagePath,
             'prescriptionUrl' => url('/'),
             'prescription_id' => $event->prescription->id

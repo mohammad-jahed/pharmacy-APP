@@ -5,20 +5,24 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Notification;
 use App\Models\User;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class NotificationController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Application|Factory|View
      */
-    public function index()
+    public function index(): Application|Factory|View
     {
-        auth()->user()->unreadnotifications->markAsRead();
+        auth()->user()->unreadNotifications->markAsRead();
 
-        return view('pages.Notifications.notifications',[
+        return view('pages.Notifications.notifications', [
             'notifications' => auth()->user()->notifications()->paginate(5)
         ]);
     }
@@ -26,8 +30,8 @@ class NotificationController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return Response
      */
     public function store(Request $request)
     {
@@ -37,25 +41,25 @@ class NotificationController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Notification  $notification
-     * @return \Illuminate\Http\Response
+     * @param Notification $notification
+     * @return Application|Factory|View
      */
-    public function show(Notification $notification)
+    public function show(Notification $notification): View|Factory|Application
     {
-        $not1=$notification;
+        $not1 = $notification;
         //$d=auth()->user()->notifications;
 
         //dd($not1);
-        return view('pages.Notifications.notification',compact('not1'));
+        return view('pages.Notifications.notification', compact('not1'));
 
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Notification  $notification
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param Notification $notification
+     * @return Response
      */
     public function update(Request $request, Notification $notification)
     {
@@ -65,16 +69,17 @@ class NotificationController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Notification  $notification
-     * @return \Illuminate\Http\Response
+     * @param $id
+     * @return Response
      */
-    public function destroy($id)//Notification $notification)
+    /*public function destroy($id): Response//Notification $notification)
     {
-        auth()->user()->unreadnotifications->where($id)
+        auth()->user()->unreadNotifications->where($id)
             ->markAsRead();
-    }
+    }*/
 
-    public function sendPrescriptionNotification(){
+    public function sendPrescriptionNotification()
+    {
         $admin = User::type('Admin')->first();
 
         $prescriptionData = [
@@ -87,7 +92,8 @@ class NotificationController extends Controller
         ];
     }
 
-    public function markAllAsRead(){
+    public function markAllAsRead()
+    {
         auth()->user()->unreadNotifications->markAsRead();
         return redirect()->back();
     }
