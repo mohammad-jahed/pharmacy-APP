@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Events\Medicine\ExpirationDateEvent;
+use App\Events\Medicine\QuantityEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Medicines\AlternativeRequest;
 use App\Http\Requests\Medicines\MedicineStoreRequest;
@@ -15,13 +15,11 @@ use App\Models\Medicine;
 use App\Models\MedicineUser;
 use App\Models\Shelf;
 use App\Models\User;
-use App\Notifications\MedicineNotification;
 use Illuminate\Auth\Access\AuthorizationException;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Notification;
 
 class MedicineController extends Controller
 {
@@ -76,6 +74,7 @@ class MedicineController extends Controller
             MaterialMedicine::query()->create($data);
         }
         $data['pharmacy_id'] = auth('api')->user()->getAuthIdentifier();
+        $user = auth('api')->user();
         if (isset($data['alternative_id'])) {
             $alternative = Medicine::query()->findOrFail($data['alternative_id'])->first();
             $data['alternative_id'] = $alternative->id;
@@ -211,13 +210,33 @@ class MedicineController extends Controller
         $user = auth('api')->user();
         $medicines = $user->medicines;
         foreach ($medicines as $medicine) {
+
             if ($medicine->expiration_date < Date::now()) {
                 $response[] = $medicine;
-                event(new ExpirationDateEvent($user,$medicine));
             }
         }
 
         return $this->getJsonResponse($response, 'Expired Medicines');
+    }
+
+    public function displayedMedicines(): JsonResponse
+    {
+        /**
+         * @var Medicine[] $medicines ;
+         * @var Medicine $medicine ;
+         * @var User $user;
+         * @var array $response
+         */
+        $user = auth('api')->user();
+        $medicines = $user->medicines;
+        foreach ($medicines as $medicine) {
+
+            if ($medicine->quantity <= 5) {
+                $response[] = $medicine;
+            }
+        }
+        return $this->getJsonResponse($response,'run out medicines');
+
     }
 
 }

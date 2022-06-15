@@ -41,10 +41,12 @@ Route::group([
     Route::get('/medicines/{medicine}/materials', [MedicineController::class, 'materials']);
     Route::get('/medicines/{medicine}/pharmacies', [MedicineController::class, 'pharmacies']);
     Route::get('/expired',[MedicineController::class,'expiredMedicines']);
+    Route::get('/displayed',[MedicineController::class,'displayedMedicines']);
     Route::post('/medicines/alternatives', [MedicineController::class, 'alternatives']);
     Route::get('/materials/{material}/medicines', [MaterialController::class, 'medicines']);
     Route::get('/users/reservations', [ReservationController::class, 'userReservations']);
     Route::get('/pharmacies/reservations', [ReservationController::class, 'pharmacyReservations']);
+
 });
 
 

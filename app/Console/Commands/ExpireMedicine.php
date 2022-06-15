@@ -3,24 +3,26 @@
 namespace App\Console\Commands;
 
 use App\Events\Medicine\ExpirationDateEvent;
+use App\Models\Medicine;
+use App\Models\User;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Date;
 
-class ExpirMedicine extends Command
+class ExpireMedicine extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'expir:medicine';
+    protected $signature = 'expire:medicine';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Command to check the expir medicine and notify the pharmacy';
+    protected $description = 'Command to check the expire medicine and notify the pharmacy';
 
     /**
      * Create a new command instance.
@@ -39,11 +41,15 @@ class ExpirMedicine extends Command
      */
     public function handle()
     {
+        /**
+         * @var User $user;
+         * @var Medicine[] $medicines;
+         * @var Medicine $medicine;
+         */
         $user = auth('api')->user();
         $medicines = $user->medicines;
         foreach ($medicines as $medicine) {
-            if ($medicine->expiration_date < Date::now()) {
-                //$response[] = $medicine;
+            if ( Date::now() - $medicine->expiration_date <= 30  ) {
                 event(new ExpirationDateEvent($user, $medicine));
             }
         }

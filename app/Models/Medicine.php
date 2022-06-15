@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Date;
  * @property string name;
  * @property void medicineUser;
  * @property void materials;
+ * @property int quantity;
  * @property Date $expiration_date;
  */
 class Medicine extends Model

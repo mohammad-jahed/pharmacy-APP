@@ -57,13 +57,8 @@ class MedicineNotification extends Notification
     public function toArray(mixed $notifiable): array
     {
         return [
-            //
-<<<<<<< HEAD
-            //'medicine'=>$this->medicineData,
-            'title'=>'A new Medicine is expired',
-=======
+
             'title'=>$this->medicineData['body'],
->>>>>>> 86a532fd6e5ba3d2207cd4257e8c7002cc93b8bb
             'subject'=>$this->medicineData['medicineText'],
             'medicine_id'=>$this->medicineData['medicine_id']
         ];
