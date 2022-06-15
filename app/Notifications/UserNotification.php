@@ -55,14 +55,12 @@ class UserNotification extends Notification
      * @param mixed $notifiable
      * @return array
      */
-    #[ArrayShape(['user' => "mixed"])]
+    #[ArrayShape(['title' => "mixed", 'subject' => "mixed", 'user_id' => "mixed"])]
     public function toArray(mixed $notifiable): array
     {
         return [
             //
-            //'user' => $this->userData
-            //$this->userData,
-            'title'=>"you have a new user registered",
+            'title'=>$this->userData['body'],
             'subject'=>$this->userData["userText"],
             'user_id'=>$this->userData["user_id"]
         ];

@@ -27,6 +27,8 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @method void assignRole($role);
  * @method void givePermissionTo();
  * @method static Builder type($type);
+ * @property void unreadNotifications;
+ * @property void readNotifications;
  */
 class User extends Authenticatable implements JWTSubject
 {

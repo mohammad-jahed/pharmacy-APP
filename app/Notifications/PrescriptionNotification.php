@@ -55,13 +55,12 @@ class PrescriptionNotification extends Notification
      * @param mixed $notifiable
      * @return array
      */
-    #[ArrayShape(['prescription' => "mixed"])]
+    #[ArrayShape(['title' => "mixed", 'prescription_id' => "mixed", 'subject' => "mixed"])]
     public function toArray(mixed $notifiable): array
     {
         return [
             //
-            //'prescription' => $this->prescriptionData,
-            'title'=>'You received a new prescription.',
+            'title'=>$this->prescriptionData['body'],
             'prescription_id'=>$this->prescriptionData['prescription_id'],
             'subject'=>$this->prescriptionData['prescriptionText'],
         ];

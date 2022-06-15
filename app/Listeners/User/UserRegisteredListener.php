@@ -30,7 +30,6 @@ class UserRegisteredListener
         //
         $userData = [
             'body' => 'You have a new user registered.',
-            'thanks' => 'Thank you',
             'userText' => $event->user->username,
             'userUrl' => url('/'),
             'user_id' => $event->user->id
