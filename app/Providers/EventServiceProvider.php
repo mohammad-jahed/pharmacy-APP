@@ -3,8 +3,10 @@
 namespace App\Providers;
 
 use App\Events\Medicine\ExpirationDateEvent;
+use App\Events\Medicine\QuantityEvent;
 use App\Events\Prescription\PrescriptionCreateEvent;
 use App\Listeners\Medicine\ExpirationDateListener;
+use App\Listeners\Medicine\QuantityListener;
 use App\Listeners\Prescription\PrescriptionCreateListener;
 use App\Listeners\User\UserRegisteredListener;
 use Illuminate\Auth\Events\Registered;
@@ -29,6 +31,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         ExpirationDateEvent::class =>[
             ExpirationDateListener::class,
+        ],
+        QuantityEvent::class =>[
+            QuantityListener::class,
         ]
     ];
 

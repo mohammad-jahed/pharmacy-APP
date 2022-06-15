@@ -3,14 +3,15 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use JetBrains\PhpStorm\ArrayShape;
 
-class MedicineNotification extends Notification
+class QuantityNotification extends Notification
 {
     use Queueable;
     private array $medicineData ;
+
     /**
      * Create a new notification instance.
      *
@@ -18,7 +19,6 @@ class MedicineNotification extends Notification
      */
     public function __construct(array $medicineData)
     {
-        //
         $this->medicineData = $medicineData;
     }
 
@@ -28,7 +28,7 @@ class MedicineNotification extends Notification
      * @param  mixed  $notifiable
      * @return array
      */
-    public function via(mixed $notifiable): array
+    public function via($notifiable)
     {
         return ['database'];
     }
@@ -37,14 +37,14 @@ class MedicineNotification extends Notification
      * Get the mail representation of the notification.
      *
      * @param  mixed  $notifiable
-     * @return MailMessage
+     * @return \Illuminate\Notifications\Messages\MailMessage
      */
-    public function toMail(mixed $notifiable): MailMessage
+    public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->line($this->medicineData['body'])
-                    ->action($this->medicineData['medicineText'], $this->medicineData['medicineUrl'])
-                    ->line($this->medicineData['thanks']);
+                    ->line('The introduction to the notification.')
+                    ->action('Notification Action', url('/'))
+                    ->line('Thank you for using our application!');
     }
 
     /**
@@ -53,14 +53,13 @@ class MedicineNotification extends Notification
      * @param  mixed  $notifiable
      * @return array
      */
-    #[ArrayShape(['medicine' => "mixed"])]
-    public function toArray(mixed $notifiable): array
+    public function toArray($notifiable)
     {
         return [
-            //
             //'medicine'=>$this->medicineData,
-            'title'=>'A new Medicine is expired',
+            'title'=>$this->medicineData['body'],
             'subject'=>$this->medicineData['medicineText'],
+            'medicineQuantity'=>$this->medicineData['medicineQuantity'],
             'medicine_id'=>$this->medicineData['medicine_id']
         ];
     }
