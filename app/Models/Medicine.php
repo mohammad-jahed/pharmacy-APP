@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Date;
  * @property string name;
  * @property void medicineUser;
  * @property void materials;
+ * @property void shelves;
  * @property int quantity;
  * @property Date $expiration_date;
  */
@@ -29,27 +30,34 @@ class Medicine extends Model
     use HasFactory, Notifiable;
 
     protected $fillable = [
-        'name',
-        'shelf_id',
+        'name_en',
+        'name_ar',
         'company_id',
-        'alternative_id',
-        'material_id',
         'quantity',
         'pills',
         'expiration_date',
         'c_price',
         'price'
     ];
+    protected $casts = [
+        'material_ids' => 'array',
+        'alternative_ids' => 'array',
+        'shelf_ids' => 'array'
+    ];
+    protected $appends = [
+        'name'
+    ];
+
+    public function getNameAttribute()
+    {
+        return $this->{'name_' . app()->getLocale()};
+    }
 
     public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class);
     }
 
-    public function shelf(): BelongsTo
-    {
-        return $this->belongsTo(Shelf::class);
-    }
 
     public function medicineUser(): HasMany
     {
@@ -64,6 +72,11 @@ class Medicine extends Model
     public function materials(): BelongsToMany
     {
         return $this->belongsToMany(Material::class, 'material_medicines', 'medicine_id', 'material_id')->as('material_medicine');
+    }
+
+    public function shelves(): BelongsToMany
+    {
+        return $this->belongsToMany(Shelf::class, 'medicine_shelves', 'medicine_id', 'shelf_id')->as('medicine_shelf');
     }
 
     public function materialMedicine(): HasMany

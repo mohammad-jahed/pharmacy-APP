@@ -56,6 +56,7 @@ class PharmacyPolicy
     public function update(User $user, User $model): Response|bool
     {
         //
+
         return ($user->id == $model->id);
     }
 
@@ -74,6 +75,12 @@ class PharmacyPolicy
         return ($user->id == $model->id);
 
     }
+
+    public function nearestPharmacies(User $user): bool
+    {
+        return $user->hasRole('User');
+    }
+
 
 
 }

@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\MaterialController;
 use App\Http\Controllers\Api\MedicineController;
 use App\Http\Controllers\Api\ReservationController;
+use App\Http\Controllers\Api\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -36,16 +37,20 @@ Route::group([
     Route::apiResource('/reservations', 'Api\ReservationController');
     Route::apiResource('/materials', 'Api\MaterialController');
     Route::apiResource('/prescriptions', 'Api\PrescriptionController');
-    Route::get('/{user}/medicines', [PharmacyController::class, 'medicines']);
+    Route::get('/users/medicines', [PharmacyController::class, 'medicines']);
     Route::get('/medicines/alternative/{medicine}', [MedicineController::class, 'alternatives']);
     Route::get('/medicines/{medicine}/materials', [MedicineController::class, 'materials']);
     Route::get('/medicines/{medicine}/pharmacies', [MedicineController::class, 'pharmacies']);
+    Route::get('/medicines/{medicine}/shelves', [MedicineController::class, 'shelves']);
+    Route::put('/users/{user}',[UserController::class,'update']);
     Route::get('/expired',[MedicineController::class,'expiredMedicines']);
     Route::get('/displayed',[MedicineController::class,'displayedMedicines']);
     Route::post('/medicines/alternatives', [MedicineController::class, 'alternatives']);
     Route::get('/materials/{material}/medicines', [MaterialController::class, 'medicines']);
     Route::get('/users/reservations', [ReservationController::class, 'userReservations']);
     Route::get('/pharmacies/reservations', [ReservationController::class, 'pharmacyReservations']);
+    Route::post('/pharmacies/nearest', [UserController::class, 'theNearestPharmacies']);
+
 
 });
 

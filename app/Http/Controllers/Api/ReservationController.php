@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Reservations\ReservationStoreRequest;
 use App\Http\Requests\Reservations\ReservationUpdateRequest;
+use App\Models\Material;
 use App\Models\Reservation;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
@@ -22,7 +23,7 @@ class ReservationController extends Controller
     public function index(): JsonResponse
     {
         //
-        Gate::forUser(auth('api')->user())->authorize('viewReservations');
+        $this->authorize('index',Reservation::class);
         $reservations = Reservation::all();
         return $this->getJsonResponse($reservations,'reservations');
     }
@@ -35,7 +36,7 @@ class ReservationController extends Controller
     {
         //
         $user = auth('api')->user();
-        Gate::forUser($user)->authorize('viewUserReservations');
+        $this->authorize('viewAnyUser',Reservation::class);
         $reservations = $user->userReservations;
         return $this->getJsonResponse($reservations,'reservations');
     }
@@ -47,7 +48,8 @@ class ReservationController extends Controller
     {
         //
         $user = auth('api')->user();
-        Gate::forUser($user)->authorize('viewPharmacyReservations');
+        $this->authorize('viewAnyPharmacy',Reservation::class);
+
         $reservations = $user->pharmacyReservations;
         return $this->getJsonResponse($reservations,'reservations');
     }
@@ -62,7 +64,7 @@ class ReservationController extends Controller
     public function store(ReservationStoreRequest $request): JsonResponse
     {
         //
-        Gate::forUser(auth('api')->user())->authorize('createReservation');
+        $this->authorize('create',Reservation::class);
         $data = $request->validated();
         $data['user_id'] = auth('api')->user()->getAuthIdentifier();
         $reservation = Reservation::query()->create($data);
@@ -79,8 +81,7 @@ class ReservationController extends Controller
     public function show(Reservation $reservation): JsonResponse
     {
         //
-        Gate::forUser(auth('api')->user())->authorize('createReservation',$reservation);
-
+        $this->authorize('view',$reservation);
         return $this->getJsonResponse($reservation,'reservation');
     }
 
@@ -95,8 +96,7 @@ class ReservationController extends Controller
     public function update(ReservationUpdateRequest $request, Reservation $reservation): JsonResponse
     {
         //
-        Gate::forUser(auth('api')->user())->authorize('createReservation',$reservation);
-
+        $this->authorize('update',$reservation);
         $data = $request->validated();
         $reservation->update($data);
         return $this->getJsonResponse($data,'Reservation Updated Successfully');
@@ -112,7 +112,7 @@ class ReservationController extends Controller
     public function destroy(Reservation $reservation): JsonResponse
     {
         //
-        Gate::forUser(auth('api')->user())->authorize('createReservation',$reservation);
+        $this->authorize('delete',$reservation);
         $reservation->delete();
         return $this->getJsonResponse($reservation,'Reservation Deleted Successfully');
     }

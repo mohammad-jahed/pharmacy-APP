@@ -58,4 +58,6 @@ Route::group(
     //===================================Notifications=====================================================================
         Route::get('/MarkAllAsRead','Api\NotificationController@markAllAsRead')->name('markAllRead');
         Route::resource('/notifications','Api\NotificationController');
+    //===================================Maps==========================================================================
+        Route::resource('/maps','Admin\GoogleMapsController');
     });

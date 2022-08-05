@@ -10,6 +10,7 @@ return [
     'pharmacies'=>'الصيدليات',
     'pharmacies_list'=>'قائمة الصيدليات',
     'users_list'=>'قائمة المستخدمين',
+    'maps'=>'الخرائط',
     'sections'=>'الاقسام',
     'students'=>'الطلاب',
     'Teachers'=>'المعلمين',

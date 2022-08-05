@@ -47,15 +47,38 @@ class MedicinePolicy
 
     }
 
+    public function materials(User $user, Medicine $model): Response|bool
+    {
+        /**
+         * @var User[] $users
+         */
+        $users = $model->users;
+        foreach ($users as $user1){
+            return ($user->id == $user1->id) && ($user1->hasRole('Pharmacy'));
+        }
+        return false;
+    }
+
+    public function shelves(User $user, Medicine $model): Response|bool
+    {
+        /**
+         * @var User[] $users
+         */
+        $users = $model->users;
+        foreach ($users as $user1){
+            return ($user->id == $user1->id) && ($user1->hasRole('Pharmacy'));
+        }
+        return false;
+    }
+
     /**
      * Determine whether the user can create models.
      *
-     * @param User $user
+     * @param User|null $user
      * @return Response|bool
      */
-    public function create(User $user): Response|bool
+    public function create(?User $user): Response|bool
     {
-        //
         return ($user->hasRole('Pharmacy'));
     }
 

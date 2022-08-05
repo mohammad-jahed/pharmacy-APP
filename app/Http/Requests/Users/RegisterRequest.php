@@ -26,17 +26,17 @@ class RegisterRequest extends FormRequest
     {
         return [
             //
-            'state_id' => [Rule::exists('states', 'id')],
-            'city_id' => [Rule::exists('cities', 'id')],
-            'area_id' => [Rule::exists('areas', 'id')],
-            'street' => ['string'],
-            'day' => ['numeric', 'min:0', 'max:6'],
-            'from' => ['date_format:H:i'],
-            'to' => ['date_format:H:i'],
-            'username' => ['required', 'unique:users', 'string', 'min:3', 'max:12'],
-            'email' => ['required', 'email', 'unique:users'],
-            'password' => ['required', 'min:8', 'max:75'],
-            'imagePath' => ['image', 'max:10240']
+            'state_id' => ['bail', 'min:1', Rule::exists('states', 'id')],
+            'city_id' => ['bail', 'min:1', Rule::exists('cities', 'id')],
+            'area_id' => ['bail', 'min:1', Rule::exists('areas', 'id')],
+            'street' => ['sometimes', 'bail', 'min:3', 'max:255', 'string'],
+            'day' => ['sometimes', 'bail', 'numeric', 'min:0', 'max:6'],
+            'from' => ['sometimes', 'bail', 'date_format:H:i'],
+            'to' => ['sometimes','bail','date_format:H:i'],
+            'username' => ['bail','required','unique:users,username', 'string', 'min:3', 'max:12'],
+            'email' => ['bail','required', 'email', 'unique:users'],
+            'password' => ['bail','required', 'min:8', 'max:75'],
+            'imagePath' => ['bail','image', 'max:10240']
         ];
     }
 }

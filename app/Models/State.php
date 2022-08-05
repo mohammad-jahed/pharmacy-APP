@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property City cities;
+ * @property int id;
+ *
  */
 class State extends Model
 {

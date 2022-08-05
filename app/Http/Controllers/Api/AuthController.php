@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Http\Controllers\Api;
+
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Users\AuthRequest;
 use App\Http\Requests\Users\RegisterRequest;
@@ -20,14 +22,15 @@ class AuthController extends Controller
      *
      * @return void
      */
-    public function __construct() {
+    public function __construct()
+    {
         $this->middleware('auth:api', ['except' => ['login', 'register']]);
     }
 
     public function login(AuthRequest $request): JsonResponse
     {
         $data = $request->validated();
-        if (! $token = auth('api')->attempt($data)) {
+        if (!$token = auth('api')->attempt($data)) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
         return $this->createNewToken($token);
@@ -36,8 +39,8 @@ class AuthController extends Controller
     public function register(RegisterRequest $request): JsonResponse
     {
         /**
-         * @var Authenticatable $user;
-         * @var User $admin;
+         * @var Authenticatable $user ;
+         * @var User $admin ;
          */
         $data = $request->validated();
         $file_name = null;
@@ -49,7 +52,7 @@ class AuthController extends Controller
         $user = User::query()->create($data);
 
         $admin = User::type('Admin')->first();
-        event(new Registered($admin,$user));
+        event(new Registered($user,$admin));
         $data['user_id'] = $user->id;
         if(isset($data['state_id'])){
             Address::query()->create($data);
@@ -73,6 +76,7 @@ class AuthController extends Controller
         auth('api')->logout();
         return response()->json(['message' => 'User successfully signed out']);
     }
+
     /**
      * Refresh a token.
      *
@@ -82,6 +86,7 @@ class AuthController extends Controller
     {
         return $this->createNewToken(auth('api')->refresh());
     }
+
     /**
      * Get the authenticated User.
      *
@@ -91,6 +96,7 @@ class AuthController extends Controller
     {
         return response()->json(auth('api')->user());
     }
+
     /**
      * Get the token array structure.
      *

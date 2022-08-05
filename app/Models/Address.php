@@ -6,7 +6,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-
+/**
+ * @property State state;
+ * @property int id;
+ */
 class Address extends Model
 {
     use HasFactory;

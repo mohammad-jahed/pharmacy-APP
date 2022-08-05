@@ -2,6 +2,7 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\ApiGuardMiddleware;
 use App\Http\Middleware\Authenticate;
 use App\Http\Middleware\CheckForMaintenanceMode;
 use App\Http\Middleware\EncryptCookies;
@@ -66,6 +67,7 @@ class Kernel extends HttpKernel
         ),
 
         'api' => [
+            ApiGuardMiddleware::class,
             'throttle:60,1',
             SubstituteBindings::class,
         ],

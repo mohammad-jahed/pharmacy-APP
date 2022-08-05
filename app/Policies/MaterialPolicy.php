@@ -120,4 +120,23 @@ class MaterialPolicy
         }
         return false;
     }
+
+    public function medicines(User $user , Material $material): bool
+    {
+        $medicines = $material->medicines;
+        /**
+         * @var Medicine $medicine;
+         */
+        foreach ($medicines as $medicine){
+
+            $users = $medicine->users;
+            /**
+             * @var User $user1;
+             */
+            foreach ($users as $user1){
+                return($user->hasRole('Pharmacy') && $user1->id == $user->id);
+            }
+        }
+        return false;
+    }
 }

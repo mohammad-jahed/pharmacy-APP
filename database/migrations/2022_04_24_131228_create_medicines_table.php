@@ -19,7 +19,8 @@ class CreateMedicinesTable extends Migration
             $table->foreignId('company_id')->nullable();
             $table->foreignId('material_id')->nullable();
             $table->integer('alternative_id')->nullable();
-            $table->string('name');
+            $table->string('name_en');
+            $table->string('name_ar');
             $table->integer('quantity');
             $table->integer('pills');
             $table->date('expiration_date');

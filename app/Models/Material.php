@@ -27,7 +27,7 @@ class Material extends Model
 
     public function medicines(): BelongsToMany
     {
-        return $this->belongsToMany(Medicine::class, 'material_medicines', 'medicine_id', 'material_id')->as('material_medicine');
+        return $this->belongsToMany(Medicine::class, 'material_medicines', 'material_id', 'medicine_id')->as('material_medicine');
     }
 
 

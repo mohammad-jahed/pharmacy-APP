@@ -2,24 +2,18 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Events\Medicine\QuantityEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Medicines\AlternativeRequest;
 use App\Http\Requests\Medicines\MedicineStoreRequest;
 use App\Http\Requests\Medicines\MedicineUpdateRequest;
-use App\Models\AlternativeMedicine;
 use App\Models\Company;
 use App\Models\Material;
-use App\Models\MaterialMedicine;
 use App\Models\Medicine;
-use App\Models\MedicineUser;
 use App\Models\Shelf;
 use App\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
-
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Date;
-use Illuminate\Support\Facades\Gate;
 
 class MedicineController extends Controller
 {
@@ -32,7 +26,7 @@ class MedicineController extends Controller
     public function index(): JsonResponse
     {
         //
-        Gate::forUser(auth('api')->user())->authorize('viewMedicine');
+        $this->authorize('viewAny',Medicine::class);
         $medicine = Medicine::all();
         return $this->getJsonResponse($medicine, 'medicines');
     }
@@ -47,40 +41,30 @@ class MedicineController extends Controller
     public function store(MedicineStoreRequest $request): JsonResponse
     {
         /**
-         * @var Shelf $shelf ;
-         * @var Company $company ;
-         * @var Material $material ;
-         * @var Medicine $medicine ;
-         * @var Medicine $alternative ;
+         * @var Medicine $medicine;
          */
-        Gate::forUser(auth('api')->user())->authorize('createMedicine');
+        $this->authorize('create', Medicine::class);
         $data = $request->validated();
-        if (isset($data['shelf_name'])) {
-            $shelf = Shelf::query()->create($data);
 
-        }
         if (isset($data['company_name'])) {
-            $company = Company::query()->create($data);
+            $company = Company::firstOrCreate(['company_name' => $data['company_name']]);
+            $data['company_id'] = $company->id;
+        }
 
+        $medicine = Medicine::query()->create($data);
+        if (isset($data['shelf_names'])) {
+            foreach ($data['shelf_names'] as $shelf_name){
+                $shelf = Shelf::firstOrCreate(['shelf_name'=>$shelf_name]);
+                $medicine->shelves()->attach($shelf->id);
+
+            }
         }
-        $data['shelf_id'] = $shelf->id;
-        $data['company_id'] = $company->id;
-        $medicine = Medicine::query()->where('name', $data['name'])->first();
-        if ($medicine == null) {
-            $medicine = Medicine::query()->create($data);
+
+        $medicine->materials()->attach($data['material_ids']);
+        $medicine->users()->attach(auth()->id());
+        if (isset($data['alternative_ids'])) {
+            $medicine->alternatives()->attach($data['alternative_ids']);
         }
-        $data['medicine_id'] = $medicine->id;
-        if (isset($data['material_id'])) {
-            MaterialMedicine::query()->create($data);
-        }
-        $data['pharmacy_id'] = auth('api')->user()->getAuthIdentifier();
-        $user = auth('api')->user();
-        if (isset($data['alternative_id'])) {
-            $alternative = Medicine::query()->findOrFail($data['alternative_id'])->first();
-            $data['alternative_id'] = $alternative->id;
-            AlternativeMedicine::query()->create($data);
-        }
-        MedicineUser::query()->create($data);
         return $this->getJsonResponse($medicine, 'Medicine Created Successfully');
     }
 
@@ -94,7 +78,8 @@ class MedicineController extends Controller
     public function show(Medicine $medicine): JsonResponse
     {
         //
-        Gate::forUser(auth('api')->user())->authorize('showMedicine', $medicine);
+        $this->authorize('view',$medicine);
+        //Gate::forUser(auth('api')->user())->authorize('showMedicine', $medicine);
         return $this->getJsonResponse($medicine, 'Success');
     }
 
@@ -108,19 +93,24 @@ class MedicineController extends Controller
      */
     public function update(MedicineUpdateRequest $request, Medicine $medicine): JsonResponse
     {
-        Gate::forUser(auth('api')->user())->authorize('updateMedicine', $medicine);
+        $this->authorize('update',$medicine);
         $data = $request->validated();
-        if (isset($data['alternative_id'])) {
-            $alternative = Medicine::query()->findOrFail($data['alternative_id'])->first();
-            $data['alternative_id'] = $alternative->id;
-        } else $data['alternative_id'] = $medicine->alternative_id;
+
+
+
+        if (isset($data['alternative_ids'])) {
+            $medicine->alternatives()->sync($data['alternative_ids']);
+        }
+        if (isset($data['shelf_names'])) {
+            foreach ($data['shelf_names'] as $shelf_name){
+                $shelf = Shelf::firstOrCreate(['shelf_name'=>$shelf_name]);
+                $medicine->shelves()->attach($shelf->id);
+            }
+        }
+        if(isset($data['material_ids'])){
+            $medicine->materials()->sync($data['material_ids']);
+        }
         $medicine->update($data);
-        if (isset($data['shelf_name'])) {
-            Shelf::query()->update($data);
-        }
-        if (isset($data['company_name'])) {
-            Company::query()->update($data);
-        }
 
         return $this->getJsonResponse($medicine, 'Medicine Updated Successfully');
     }
@@ -135,24 +125,41 @@ class MedicineController extends Controller
     public function destroy(Medicine $medicine): JsonResponse
     {
         //
-        Gate::forUser(auth('api')->user())->authorize('deleteMedicine', $medicine);
+        $this->authorize('delete',$medicine);
+        //Gate::forUser(auth('api')->user())->authorize('deleteMedicine', $medicine);
         $medicine->delete();
         return $this->getJsonResponse($medicine, 'Medicine Deleted Successfully');
     }
 
 
+    /**
+     * @throws AuthorizationException
+     */
     public function pharmacies(Medicine $medicine): JsonResponse
     {
-
+        $this->authorize('materials',$medicine);
         $pharmacies = $medicine->users;
         return $this->getJsonResponse($pharmacies, 'pharmacies');
     }
 
+    /**
+     * @throws AuthorizationException
+     */
     public function materials(Medicine $medicine): JsonResponse
     {
-
+        $this->authorize('materials',$medicine);
         $materials = $medicine->materials;
         return $this->getJsonResponse($materials, 'materials');
+
+    }
+
+    /**
+     * @throws AuthorizationException
+     */
+    public function shelves(Medicine $medicine):JsonResponse{
+        $this->authorize('shelves',$medicine);
+        $shelves = $medicine->shelves;
+        return $this->getJsonResponse($shelves, 'shelves');
 
     }
 

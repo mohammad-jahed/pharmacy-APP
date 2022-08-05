@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property int id;
+ * @method static self firstOrCreate(array $array)
  */
 class Company extends Model
 {

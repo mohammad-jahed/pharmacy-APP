@@ -4,7 +4,6 @@ namespace App\Http\Requests\Medicines;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-use JetBrains\PhpStorm\ArrayShape;
 
 class
 MedicineStoreRequest extends FormRequest
@@ -24,21 +23,24 @@ MedicineStoreRequest extends FormRequest
      *
      * @return array
      */
-    #[ArrayShape(['shelf_name' => "array", 'material_id' => "array", "alternative_id" => 'array', 'company_name' => "string", 'name' => "string[]", 'quantity' => "string[]", 'pills' => "string[]", 'expiration_date' => "string[]", 'c_price' => "string[]", 'price' => "string[]"])]
     public function rules(): array
     {
         return [
             //
-            'shelf_name' => ['string', 'min:2', 'max:255'],
+            'shelf_names' => ['sometimes', 'array'],
+            'shelf_names.*' => ['bail', 'string', 'min:2', 'max:255'],
             'company_name' => ['string', 'min:3', 'max:255'],
-            'material_id' => [Rule::exists('materials','id')],
-            'alternative_id' => [Rule::exists('medicines', 'id')],
-            'name' => ['required', 'min:3', 'max:30', 'string'],
+            'material_ids' => ['required', 'array'],
+            'material_ids.*' => ['bail', 'min:1', Rule::exists('materials', 'id')],
+            'alternative_ids' => 'sometimes|array',
+            'alternative_ids.*' => ['bail', 'min:1', 'integer', Rule::exists('medicines', 'id')],
+            'name_en' => ['required', 'min:3', 'max:30', 'string'],
+            'name_ar' => ['required', 'min:3', 'max:30', 'string'],
             'quantity' => ['numeric'],
             'pills' => ['numeric'],
             'expiration_date' => ['required', 'date_format:Y-m-d'],
             'c_price' => ['numeric'],
-            'price' => ['numeric']
+            'price' => ['numeric', 'min:0']
         ];
     }
 }
