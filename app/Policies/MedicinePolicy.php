@@ -53,7 +53,7 @@ class MedicinePolicy
          * @var User[] $users
          */
         $users = $model->users;
-        foreach ($users as $user1){
+        foreach ($users as $user1) {
             return ($user->id == $user1->id) && ($user1->hasRole('Pharmacy'));
         }
         return false;
@@ -65,7 +65,7 @@ class MedicinePolicy
          * @var User[] $users
          */
         $users = $model->users;
-        foreach ($users as $user1){
+        foreach ($users as $user1) {
             return ($user->id == $user1->id) && ($user1->hasRole('Pharmacy'));
         }
         return false;
@@ -128,29 +128,9 @@ class MedicinePolicy
         return false;
     }
 
-    /**
-     * Determine whether the user can restore the model.
-     *
-     * @param User $user
-     * @param Medicine $medicine
-     * @return Response|bool
-     */
-    /*
-    public function restore(User $user, Medicine $medicine)
+    public function alternatives(User $user): bool
     {
-        //
-    }*/
+        return $user->hasRole('Pharmacy');
+    }
 
-    /**
-     * Determine whether the user can permanently delete the model.
-     *
-     * @param User $user
-     * @param Medicine $medicine
-     * @return Response|bool
-     */
-    /*
-    public function forceDelete(User $user, Medicine $medicine)
-    {
-        //
-    }*/
 }

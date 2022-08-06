@@ -12,6 +12,7 @@ use App\Models\Medicine;
 use App\Models\Shelf;
 use App\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Date;
 
@@ -26,7 +27,7 @@ class MedicineController extends Controller
     public function index(): JsonResponse
     {
         //
-        $this->authorize('viewAny',Medicine::class);
+        $this->authorize('viewAny', Medicine::class);
         $medicine = Medicine::all();
         return $this->getJsonResponse($medicine, 'medicines');
     }
@@ -41,7 +42,7 @@ class MedicineController extends Controller
     public function store(MedicineStoreRequest $request): JsonResponse
     {
         /**
-         * @var Medicine $medicine;
+         * @var Medicine $medicine ;
          */
         $this->authorize('create', Medicine::class);
         $data = $request->validated();
@@ -52,11 +53,11 @@ class MedicineController extends Controller
         }
 
         $medicine = Medicine::query()->create($data);
-        if (isset($data['shelf_names'])) {
-            foreach ($data['shelf_names'] as $shelf_name){
-                $shelf = Shelf::firstOrCreate(['shelf_name'=>$shelf_name]);
-                $medicine->shelves()->attach($shelf->id);
 
+        if (isset($data['shelf_names'])) {
+            foreach ($data['shelf_names'] as $shelf_name) {
+                $shelf = Shelf::firstOrCreate(['shelf_name' => $shelf_name]);
+                $medicine->shelves()->attach($shelf->id);
             }
         }
 
@@ -78,7 +79,7 @@ class MedicineController extends Controller
     public function show(Medicine $medicine): JsonResponse
     {
         //
-        $this->authorize('view',$medicine);
+        $this->authorize('view', $medicine);
         //Gate::forUser(auth('api')->user())->authorize('showMedicine', $medicine);
         return $this->getJsonResponse($medicine, 'Success');
     }
@@ -93,21 +94,20 @@ class MedicineController extends Controller
      */
     public function update(MedicineUpdateRequest $request, Medicine $medicine): JsonResponse
     {
-        $this->authorize('update',$medicine);
+        $this->authorize('update', $medicine);
         $data = $request->validated();
-
 
 
         if (isset($data['alternative_ids'])) {
             $medicine->alternatives()->sync($data['alternative_ids']);
         }
         if (isset($data['shelf_names'])) {
-            foreach ($data['shelf_names'] as $shelf_name){
-                $shelf = Shelf::firstOrCreate(['shelf_name'=>$shelf_name]);
+            foreach ($data['shelf_names'] as $shelf_name) {
+                $shelf = Shelf::firstOrCreate(['shelf_name' => $shelf_name]);
                 $medicine->shelves()->attach($shelf->id);
             }
         }
-        if(isset($data['material_ids'])){
+        if (isset($data['material_ids'])) {
             $medicine->materials()->sync($data['material_ids']);
         }
         $medicine->update($data);
@@ -125,7 +125,7 @@ class MedicineController extends Controller
     public function destroy(Medicine $medicine): JsonResponse
     {
         //
-        $this->authorize('delete',$medicine);
+        $this->authorize('delete', $medicine);
         //Gate::forUser(auth('api')->user())->authorize('deleteMedicine', $medicine);
         $medicine->delete();
         return $this->getJsonResponse($medicine, 'Medicine Deleted Successfully');
@@ -137,7 +137,7 @@ class MedicineController extends Controller
      */
     public function pharmacies(Medicine $medicine): JsonResponse
     {
-        $this->authorize('materials',$medicine);
+        $this->authorize('materials', $medicine);
         $pharmacies = $medicine->users;
         return $this->getJsonResponse($pharmacies, 'pharmacies');
     }
@@ -147,7 +147,7 @@ class MedicineController extends Controller
      */
     public function materials(Medicine $medicine): JsonResponse
     {
-        $this->authorize('materials',$medicine);
+        $this->authorize('materials', $medicine);
         $materials = $medicine->materials;
         return $this->getJsonResponse($materials, 'materials');
 
@@ -156,62 +156,59 @@ class MedicineController extends Controller
     /**
      * @throws AuthorizationException
      */
-    public function shelves(Medicine $medicine):JsonResponse{
-        $this->authorize('shelves',$medicine);
+    public function shelves(Medicine $medicine): JsonResponse
+    {
+        $this->authorize('shelves', $medicine);
         $shelves = $medicine->shelves;
         return $this->getJsonResponse($shelves, 'shelves');
 
     }
 
-    public function alternatives(AlternativeRequest $request, int $count = 0, array $response2 = null, array $response3 = null): JsonResponse
+    /**
+     * @throws AuthorizationException
+     */
+    public function alternatives(AlternativeRequest $request): JsonResponse
     {
-        /**
-         * @var Material[] $materials
-         * @var Material $material
-         * @var Medicine[] $alternatives ;
-         * @var Medicine $medicine ;
-         * @var Medicine $alternative ;
-         * @var Material[] $alternativeMaterials ;
-         * @var Material $alternativeMaterial ;
-         */
+        //medicine->materials->medicines
+        //select * form $medicines inner join $materials where
+        $this->authorize('alternatives', Medicine::class);
         $data = $request->validated();
-        $medicine = Medicine::query()->findOrFail($data['medicine_id']);
+        /**
+         * @var Medicine $medicine ;
+         * @var array $alternatives;
+         */
+        $medicine = Medicine::query()->where('id', $data['medicine_id'])->first();
+        //dd($medicine[0]->material_ids);
         $materials = $medicine->materials;
         foreach ($materials as $material) {
-            $alternatives = $material->medicines;
-            if ($data['number'] == 1) {
-                return $this->getJsonResponse($alternatives, "Alternatives With One Component");
-            }
-            foreach ($alternatives as $alternative) {
-                $alternativeMaterials = $alternative->materials;
-                foreach ($alternativeMaterials as $alternativeMaterial) {
-                    if ($material->is($alternativeMaterial)) {
-                        $count++;
-                    }
-                }
-                if ($count == 2) {
-                    $response2 [] = $alternative;
-                }
-                if ($count == count($materials)) {
-                    $response3 [] = $alternative;
-                }
-                break;
-            }
+            $material_ids[] = $material->id;
+        }
+        if ($data['number'] == 1) {
+
+            $alternatives = Medicine::query()->whereHas('materials',
+                function (Builder $builder1) use ($material_ids) {
+                    $builder1->where('material_id','=', $material_ids);
+                })->get();
+            dd($alternatives);
+        }
+        else if($data['number'] == 2){
+
+        }
+        else{
+
         }
 
-        if ($data['number'] == 2) {
-            return $this->getJsonResponse($response2, "Alternatives with two components");
-        } else {
-            return $this->getJsonResponse($response3, "Alternatives with full components");
-        }
+        return self::getJsonResponse($alternatives,"alternatives");
+
     }
 
-    public function expiredMedicines(): JsonResponse
+    public
+    function expiredMedicines(): JsonResponse
     {
         /**
          * @var Medicine[] $medicines ;
          * @var Medicine $medicine ;
-         * @var User $user;
+         * @var User $user ;
          * @var array $response
          */
         $user = auth('api')->user();
@@ -226,12 +223,13 @@ class MedicineController extends Controller
         return $this->getJsonResponse($response, 'Expired Medicines');
     }
 
-    public function displayedMedicines(): JsonResponse
+    public
+    function displayedMedicines(): JsonResponse
     {
         /**
          * @var Medicine[] $medicines ;
          * @var Medicine $medicine ;
-         * @var User $user;
+         * @var User $user ;
          * @var array $response
          */
         $user = auth('api')->user();
@@ -242,7 +240,7 @@ class MedicineController extends Controller
                 $response[] = $medicine;
             }
         }
-        return $this->getJsonResponse($response,'run out medicines');
+        return $this->getJsonResponse($response, 'run out medicines');
 
     }
 

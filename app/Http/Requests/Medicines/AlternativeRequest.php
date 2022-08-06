@@ -28,8 +28,8 @@ class AlternativeRequest extends FormRequest
     {
         return [
             //
-            'medicine_id'=>['required',Rule::exists('medicines','id')],
-            'number'=>['required','integer','digits_between:1,3']
+            'medicine_id' => ['required', 'bail', 'min:1', Rule::exists('medicines', 'id')],
+            'number' => ['required', 'bail', 'integer', 'digits_between:1,3']
         ];
     }
 }
