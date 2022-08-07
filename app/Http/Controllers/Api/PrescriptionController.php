@@ -3,14 +3,18 @@
 namespace App\Http\Controllers\Api;
 
 use App\Events\Prescription\PrescriptionCreateEvent;
+use App\Events\Prescription\UserPrescriptionEvent;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\NearestPharmaciesRequest;
 use App\Http\Requests\Prescriptions\PrescriptionStoreRequest;
 use App\Http\Requests\Prescriptions\PrescriptionUpdateRequest;
+use App\Models\Medicine;
 use App\Models\Prescription;
 use App\Models\User;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 
 class PrescriptionController extends Controller
@@ -24,7 +28,8 @@ class PrescriptionController extends Controller
     {
         //
         $prescriptions = Prescription::all();
-        return view('pages.Notifications.prescription',compact('prescriptions'));
+        $medicines=Medicine::all();
+        return view('pages.Prescriptions.prescriptions_list',compact('prescriptions','medicines'));
     }
 
     /**
@@ -93,4 +98,37 @@ class PrescriptionController extends Controller
         $prescription->delete();
         return $this->getJsonResponse($prescription,'Prescription deleted successfully');
     }
+
+
+        public function userPrescriptionnotify(NearestPharmaciesRequest $request): \Illuminate\Http\RedirectResponse
+        {
+            /**
+             * @var array $result;
+             */
+            //$this->authorize('nearestPharmacies', User::class);
+            $data = $request->validated();
+            foreach ($data['medicines'] as $medicineData) {
+                $pharmacies = User::query()->whereHas('medicines', function (Builder $builder) use ($medicineData, $data) {
+                    $builder->where('name_' . app()->getLocale(), 'like', "%$medicineData%")->whereHas('users', function (Builder $builder) use ($data) {
+                        $builder->whereHas('address', function (Builder $builder) use ($data) {
+                            $builder->where('area_id', $data['area_id']);
+                        });
+                    });
+                })->get();
+
+                $response = [
+                    'medicine' => $medicineData,
+                    'The Nearest Pharmacies' => $pharmacies
+                ];
+                $result[] = $response;
+            }
+            $user=User::find($request->user_id);
+            event(new UserPrescriptionEvent($user,$result));
+           $prescription= Prescription::find($request->prescription_id);
+            $prescription->delete();
+            return redirect()->back();
+//            return self::getJsonResponse($result, "the nearest pharmacies");
+        }
+
+
 }

@@ -5,9 +5,11 @@ namespace App\Providers;
 use App\Events\Medicine\ExpirationDateEvent;
 use App\Events\Medicine\QuantityEvent;
 use App\Events\Prescription\PrescriptionCreateEvent;
+use App\Events\Prescription\UserPrescriptionEvent;
 use App\Listeners\Medicine\ExpirationDateListener;
 use App\Listeners\Medicine\QuantityListener;
 use App\Listeners\Prescription\PrescriptionCreateListener;
+use App\Listeners\Prescription\UserPrescriptionListener;
 use App\Listeners\User\UserRegisteredListener;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -34,6 +36,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         QuantityEvent::class =>[
             QuantityListener::class,
+        ],
+        UserPrescriptionEvent::class=>[
+            UserPrescriptionListener::class
         ]
     ];
 

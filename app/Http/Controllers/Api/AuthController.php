@@ -52,7 +52,7 @@ class AuthController extends Controller
         $user = User::query()->create($data);
 
         $admin = User::type('Admin')->first();
-        event(new Registered($user,$admin));
+        event(new Registered($admin,$user));
         $data['user_id'] = $user->id;
         if(isset($data['state_id'])){
             Address::query()->create($data);

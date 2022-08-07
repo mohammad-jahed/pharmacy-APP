@@ -46,7 +46,7 @@ Route::group(
     Route::get('/state/{state}/cities',[StateController::class,'cities'])->name('state.cities');
     Route::get('/city/{city}/areas',[CityController::class,'areas'])->name('city.areas');
     Route::get('/days',[WorkTimeController::class,'days'])->name('days');
-    Route::get('/prescriptions',[PrescriptionController::class,'index']);
+    Route::get('/prescriptions',[PrescriptionController::class,'index'])->name('prescriptions');
     //=================================Users========================================================================
         Route::resource('/users','Api\UserController');
     //====================================states=================================================================
@@ -60,4 +60,6 @@ Route::group(
         Route::resource('/notifications','Api\NotificationController');
     //===================================Maps==========================================================================
         Route::resource('/maps','Admin\GoogleMapsController');
+    //==================================prescriptions=====================================================================
+        Route::post('/nearestPharmacyPrescription',[PrescriptionController::class,'userPrescriptionnotify'])->name('prescriptionResponse') ;
     });

@@ -68,7 +68,7 @@
                                     <td>
                                         <button type="button" class="btn btn-info btn-sm" data-toggle="modal"
                                                 data-target="#edit{{ $state->id }}"
-                                                title="{{ trans('state_trans.Edit') }}"><i class="fa fa-edit"></i></button>
+                                                title="{{ trans('state_trans.edit') }}"><i class="fa fa-edit"></i></button>
 
                                         <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
                                                 data-target="#delete{{ $state->id }}"
