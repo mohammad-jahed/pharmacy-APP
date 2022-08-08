@@ -5,6 +5,12 @@
  */
 
 require('./bootstrap');
+const channel = Echo.channel('channel-name');
+channel.subscribed(() => {
+    console.log("subscribed!!");
+}).listen('user-notifications', (event) => {
+    console.log(event);
+});
 
 window.Vue = require('vue');
 

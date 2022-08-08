@@ -32,7 +32,7 @@ class UserNotification extends Notification
      */
     public function via(mixed $notifiable): array
     {
-        return ['database'];
+        return ['database','broadcast'];
     }
 
     /**
@@ -57,6 +57,20 @@ class UserNotification extends Notification
      */
     #[ArrayShape(['title' => "mixed", 'subject' => "mixed", 'user_id' => "mixed"])]
     public function toArray(mixed $notifiable): array
+    {
+        return [
+            //
+            'title'=>$this->userData['body'],
+            'subject'=>$this->userData["userText"],
+            'user_id'=>$this->userData["user_id"]
+        ];
+    }
+
+
+
+
+    #[ArrayShape(['title' => "mixed", 'subject' => "mixed", 'user_id' => "mixed"])]
+    public function toBroadCast(mixed $notifiable): array
     {
         return [
             //

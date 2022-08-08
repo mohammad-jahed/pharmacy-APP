@@ -28,8 +28,8 @@ class PrescriptionController extends Controller
     {
         //
         $prescriptions = Prescription::all();
-        $medicines=Medicine::all();
-        return view('pages.Prescriptions.prescriptions_list',compact('prescriptions','medicines'));
+        $medicines = Medicine::all();
+        return view('pages.Prescriptions.prescriptions_list', compact('prescriptions', 'medicines'));
     }
 
     /**
@@ -42,10 +42,9 @@ class PrescriptionController extends Controller
     {
         //
         /**
-         * @var Prescription $prescription;
-         * @var User $admin;
+         * @var Prescription $prescription ;
+         * @var User $admin ;
          */
-
         $data = $request->validated();
         $request->file('imagePath')->store('public/images');
         $file_name = $request->file('imagePath')->hashName();
@@ -53,8 +52,8 @@ class PrescriptionController extends Controller
         $data['user_id'] = auth('api')->user()->getAuthIdentifier();
         $prescription = Prescription::query()->create($data);
         $admin = User::type('Admin')->first();
-        event(new PrescriptionCreateEvent($admin,$prescription));
-        return $this->getJsonResponse($prescription,'Prescription Created Successfully');
+        event(new PrescriptionCreateEvent($admin, $prescription));
+        return $this->getJsonResponse($prescription, 'Prescription Created Successfully');
 
     }
 
@@ -67,7 +66,7 @@ class PrescriptionController extends Controller
     public function show(Prescription $prescription): JsonResponse
     {
         //
-        return $this->getJsonResponse($prescription,'prescription');
+        return $this->getJsonResponse($prescription, 'prescription');
     }
 
     /**
@@ -82,7 +81,7 @@ class PrescriptionController extends Controller
         //
         $data = $request->validated();
         $prescription->update($data);
-        return $this->getJsonResponse($prescription,'Prescription Updated Successfully');
+        return $this->getJsonResponse($prescription, 'Prescription Updated Successfully');
 
     }
 
@@ -96,39 +95,39 @@ class PrescriptionController extends Controller
     {
         //
         $prescription->delete();
-        return $this->getJsonResponse($prescription,'Prescription deleted successfully');
+        return $this->getJsonResponse($prescription, 'Prescription deleted successfully');
     }
 
 
-        public function userPrescriptionnotify(NearestPharmaciesRequest $request): \Illuminate\Http\RedirectResponse
-        {
-            /**
-             * @var array $result;
-             */
-            //$this->authorize('nearestPharmacies', User::class);
-            $data = $request->validated();
-            foreach ($data['medicines'] as $medicineData) {
-                $pharmacies = User::query()->whereHas('medicines', function (Builder $builder) use ($medicineData, $data) {
-                    $builder->where('name_' . app()->getLocale(), 'like', "%$medicineData%")->whereHas('users', function (Builder $builder) use ($data) {
-                        $builder->whereHas('address', function (Builder $builder) use ($data) {
-                            $builder->where('area_id', $data['area_id']);
-                        });
+    public function userPrescriptionnotify(NearestPharmaciesRequest $request): \Illuminate\Http\RedirectResponse
+    {
+        /**
+         * @var array $result ;
+         */
+        //$this->authorize('nearestPharmacies', User::class);
+        $data = $request->validated();
+        foreach ($data['medicines'] as $medicineData) {
+            $pharmacies = User::query()->whereHas('medicines', function (Builder $builder) use ($medicineData, $data) {
+                $builder->where('name_' . app()->getLocale(), 'like', "%$medicineData%")->whereHas('users', function (Builder $builder) use ($data) {
+                    $builder->whereHas('address', function (Builder $builder) use ($data) {
+                        $builder->where('area_id', $data['area_id']);
                     });
-                })->get();
+                });
+            })->get();
 
-                $response = [
-                    'medicine' => $medicineData,
-                    'The Nearest Pharmacies' => $pharmacies
-                ];
-                $result[] = $response;
-            }
-            $user=User::find($request->user_id);
-            event(new UserPrescriptionEvent($user,$result));
-           $prescription= Prescription::find($request->prescription_id);
-            $prescription->delete();
-            return redirect()->back();
-//            return self::getJsonResponse($result, "the nearest pharmacies");
+            $response = [
+                'medicine' => $medicineData,
+                'The Nearest Pharmacies' => $pharmacies
+            ];
+            $result[] = $response;
         }
+        $user = User::find($request->user_id);
+        event(new UserPrescriptionEvent($user, $result));
+        $prescription = Prescription::find($request->prescription_id);
+        $prescription->delete();
+        return redirect()->back();
+//            return self::getJsonResponse($result, "the nearest pharmacies");
+    }
 
 
 }

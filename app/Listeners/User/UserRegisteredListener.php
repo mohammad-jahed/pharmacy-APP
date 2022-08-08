@@ -2,8 +2,8 @@
 
 namespace App\Listeners\User;
 
+use App\Events\User\Registered1;
 use App\Notifications\UserNotification;
-use Illuminate\Auth\Events\Registered;
 use function url;
 
 
@@ -22,10 +22,10 @@ class UserRegisteredListener
     /**
      * Handle the event.
      *
-     * @param Registered $event
+     * @param Registered1 $event
      * @return void
      */
-    public function handle(Registered $event)
+    public function handle(Registered1 $event)
     {
         //
         $userData = [

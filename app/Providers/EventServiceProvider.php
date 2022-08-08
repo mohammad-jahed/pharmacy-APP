@@ -6,6 +6,7 @@ use App\Events\Medicine\ExpirationDateEvent;
 use App\Events\Medicine\QuantityEvent;
 use App\Events\Prescription\PrescriptionCreateEvent;
 use App\Events\Prescription\UserPrescriptionEvent;
+use App\Events\User\Registered1;
 use App\Listeners\Medicine\ExpirationDateListener;
 use App\Listeners\Medicine\QuantityListener;
 use App\Listeners\Prescription\PrescriptionCreateListener;
@@ -26,18 +27,21 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         Registered::class => [
             SendEmailVerificationNotification::class,
-            UserRegisteredListener::class,
+            //UserRegisteredListener::class,
         ],
-        PrescriptionCreateEvent::class =>[
+        Registered1::class => [
+            UserRegisteredListener::class
+        ],
+        PrescriptionCreateEvent::class => [
             PrescriptionCreateListener::class,
         ],
-        ExpirationDateEvent::class =>[
+        ExpirationDateEvent::class => [
             ExpirationDateListener::class,
         ],
-        QuantityEvent::class =>[
+        QuantityEvent::class => [
             QuantityListener::class,
         ],
-        UserPrescriptionEvent::class=>[
+        UserPrescriptionEvent::class => [
             UserPrescriptionListener::class
         ]
     ];

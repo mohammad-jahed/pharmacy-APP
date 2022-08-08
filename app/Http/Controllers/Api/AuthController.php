@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\User\Registered1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Users\AuthRequest;
 use App\Http\Requests\Users\RegisterRequest;
 use App\Models\Address;
 use App\Models\User;
 use App\Models\WorkTime;
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\JsonResponse;
 use Spatie\Permission\Models\Role;
@@ -50,9 +50,11 @@ class AuthController extends Controller
         }
         $data['imagePath'] = $file_name;
         $user = User::query()->create($data);
-
+        /**
+         * @var User $admin;
+         */
         $admin = User::type('Admin')->first();
-        //event(new Registered($user,$admin));
+        event(new Registered1($admin,$user));
         $data['user_id'] = $user->id;
         if(isset($data['state_id'])){
             Address::query()->create($data);

@@ -688,5 +688,10 @@
     @include('layouts.footer-scripts')
 
 </body>
-
+<script src="{{ asset('js/app.js')}}"></script>
+<script>
+    Echo.channel('channel-name').listen(".user_notifications",(e)=>{
+        console.log(e)
+    })
+</script>
 </html>

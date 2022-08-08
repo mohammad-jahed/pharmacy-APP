@@ -15,9 +15,23 @@
 </template>
 
 <script>
-    export default {
-        mounted() {
-            console.log('Component mounted.')
+export default {
+    data() {
+        return {
+            users: null
         }
+    },
+    mounted() {
+        Echo.join('users')
+            .here((users) => {
+                this.users = users
+            })
+            .joining((users) => {
+                this.users.push(user)
+            })
+            .leaving((users) => {
+                this.users.splice(this.users.indexOf(user), 1)
+            });
     }
+}
 </script>

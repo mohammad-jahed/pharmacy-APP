@@ -63,6 +63,12 @@
     </div>
     <!-- row closed -->
 @endsection
+<script src="{{ asset('js/app.js')}}"></script>
+<script>
+    Echo.channel('public_channel').listen(".user_notifications",(e)=>{
+       console.log(e)
+    })
+</script>
 @section('js')
     @toastr_js
     @toastr_render
