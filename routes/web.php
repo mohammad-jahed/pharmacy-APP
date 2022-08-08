@@ -42,7 +42,7 @@ Route::group(
     Route::get('/aaaa', 'HomeController@test')->name('test');
     //================================pharmacy===================================================
 
-    Route::resource('/pharmacy' ,'Admin\pharmacyController');
+    Route::resource('/pharmacy' ,'Admin\PharmacyController');
     Route::get('/state/{state}/cities',[StateController::class,'cities'])->name('state.cities');
     Route::get('/city/{city}/areas',[CityController::class,'areas'])->name('city.areas');
     Route::get('/days',[WorkTimeController::class,'days'])->name('days');
