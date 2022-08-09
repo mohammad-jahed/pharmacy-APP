@@ -24,6 +24,7 @@ use Illuminate\Support\Facades\Date;
  * @property void shelves;
  * @property int quantity;
  * @property Date $expiration_date;
+ * @property array $material_ids;
  */
 class Medicine extends Model
 {

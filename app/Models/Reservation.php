@@ -12,6 +12,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property void users;
  * @property void user;
  * @property void pharmacy;
+ * @property mixed $medicine;
+ * @property mixed $period;
+ * @property int id;
  */
 class Reservation extends Model
 {

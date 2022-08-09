@@ -63,6 +63,7 @@ class ReservationPolicy
     public function create(User $user): Response|bool
     {
         //
+
         return $user->hasRole('User');
     }
 

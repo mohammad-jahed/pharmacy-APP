@@ -7,7 +7,6 @@ use App\Http\Requests\Medicines\AlternativeRequest;
 use App\Http\Requests\Medicines\MedicineStoreRequest;
 use App\Http\Requests\Medicines\MedicineUpdateRequest;
 use App\Models\Company;
-use App\Models\Material;
 use App\Models\Medicine;
 use App\Models\Shelf;
 use App\Models\User;
@@ -169,36 +168,55 @@ class MedicineController extends Controller
      */
     public function alternatives(AlternativeRequest $request): JsonResponse
     {
-        //medicine->materials->medicines
-        //select * form $medicines inner join $materials where
         $this->authorize('alternatives', Medicine::class);
         $data = $request->validated();
         /**
          * @var Medicine $medicine ;
-         * @var array $alternatives;
+         * @var array $alternatives ;
+         * @var array $material_ids ;
          */
         $medicine = Medicine::query()->where('id', $data['medicine_id'])->first();
-        //dd($medicine[0]->material_ids);
         $materials = $medicine->materials;
         foreach ($materials as $material) {
             $material_ids[] = $material->id;
         }
         if ($data['number'] == 1) {
-
             $alternatives = Medicine::query()->whereHas('materials',
                 function (Builder $builder1) use ($material_ids) {
-                    $builder1->where('material_id','=', $material_ids);
+                    $builder1->where('material_id', '=', $material_ids);
                 })->get();
-            dd($alternatives);
-        }
-        else if($data['number'] == 2){
+        } else if ($data['number'] == 2) {
+            /**
+             * @var Medicine[] $alternatives1;
+             */
+
+            $mad = Medicine::query()->where(function (Builder $builder) use ($material_ids) {
+                foreach ($material_ids as $material_id) {
+                    $builder->whereHas('materials', function (Builder $builder) use ($material_id) {
+                        $builder->where('material_id', $material_id);
+                    });
+                }
+            })->get();
+            foreach ($mad as $item) {
+                if (count($item->material_ids) == 2) {
+                    $alternatives1[] = $item;
+                }
+            }
+            return self::getJsonResponse($alternatives1,'alternatives');
+
+        } else {
+            $alternatives = Medicine::query()->where(function (Builder $builder) use ($material_ids) {
+                foreach ($material_ids as $material_id) {
+                    $builder->whereHas('materials', function (Builder $builder) use ($material_ids, $material_id) {
+                        $builder->where('material_id', $material_id);
+                    });
+                }
+
+            })->get();
 
         }
-        else{
 
-        }
-
-        return self::getJsonResponse($alternatives,"alternatives");
+        return self::getJsonResponse($alternatives, "alternatives");
 
     }
 

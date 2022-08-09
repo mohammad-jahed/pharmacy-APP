@@ -8,12 +8,19 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property void reservations;
+ * @property string name;
  */
 class Period extends Model
 {
     use HasFactory;
 
     protected $fillable = ['name_en', 'name_ar'];
+    protected $appends = ['name'];
+
+    public function getNameAttribute()
+    {
+        return $this->{'name_' . app()->getLocale()};
+    }
 
     public function reservations(): HasMany
     {

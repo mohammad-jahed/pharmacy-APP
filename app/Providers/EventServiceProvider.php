@@ -6,11 +6,13 @@ use App\Events\Medicine\ExpirationDateEvent;
 use App\Events\Medicine\QuantityEvent;
 use App\Events\Prescription\PrescriptionCreateEvent;
 use App\Events\Prescription\UserPrescriptionEvent;
+use App\Events\Reservation\ReservationEvent;
 use App\Events\User\Registered1;
 use App\Listeners\Medicine\ExpirationDateListener;
 use App\Listeners\Medicine\QuantityListener;
 use App\Listeners\Prescription\PrescriptionCreateListener;
 use App\Listeners\Prescription\UserPrescriptionListener;
+use App\Listeners\Reservation\Reservationlistner;
 use App\Listeners\User\UserRegisteredListener;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -43,6 +45,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         UserPrescriptionEvent::class => [
             UserPrescriptionListener::class
+        ],
+        ReservationEvent::class => [
+            Reservationlistner::class
         ]
     ];
 

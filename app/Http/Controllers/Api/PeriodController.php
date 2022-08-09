@@ -37,7 +37,7 @@ class PeriodController extends Controller
     public function store(PeriodStoreRequest $request): JsonResponse
     {
         //
-        Gate::forUser(auth('api')->user())->authorize('createPeriod');
+        $this->authorize('create',Period::class);
         $data = $request->validated();
         $period = Period::query()->create($data);
         return $this->getJsonResponse($period,'Period Created Successfully');

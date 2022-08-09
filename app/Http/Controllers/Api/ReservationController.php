@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\Reservation\ReservationEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Reservations\ReservationStoreRequest;
 use App\Http\Requests\Reservations\ReservationUpdateRequest;
 use App\Models\Material;
+use App\Models\Medicine;
+use App\Models\Period;
 use App\Models\Reservation;
+use App\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Gate;
@@ -66,8 +70,18 @@ class ReservationController extends Controller
         //
         $this->authorize('create',Reservation::class);
         $data = $request->validated();
-        $data['user_id'] = auth('api')->user()->getAuthIdentifier();
+        $data['user_id'] = auth()->user()->getAuthIdentifier();
+
+        /**
+         * @var User $pharmacy;
+         * @var Medicine $medicine;
+         * @var Period $period;
+         */
+        $pharmacy = User::type('Pharmacy')->where('id',$data['pharmacy_id'])->first();
+        /** @var Reservation $reservation */
         $reservation = Reservation::query()->create($data);
+        event(new ReservationEvent($pharmacy,$reservation));
+        dd($pharmacy->notifications);
         return $this->getJsonResponse($reservation,'Reservation Created Successfully');
     }
 
