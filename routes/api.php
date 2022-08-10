@@ -50,6 +50,8 @@ Route::group([
     Route::get('/users/reservations', [ReservationController::class, 'userReservations']);
     Route::get('/pharmacies/reservations', [ReservationController::class, 'pharmacyReservations']);
     Route::post('/pharmacies/nearest', [UserController::class, 'theNearestPharmacies']);
+    Route::post('/pharmacies/filter', [PharmacyController::class, 'pharmacyFilter']);
+    Route::post('/users/filter', [UserController::class, 'userFilter']);
 
 
 });

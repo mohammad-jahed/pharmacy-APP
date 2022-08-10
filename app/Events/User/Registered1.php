@@ -39,6 +39,7 @@ class Registered1 implements ShouldBroadcast
     {
         return new Channel('channel-name');
     }
+
     public function broadcastAs(): string
     {
         return "user_notifications";

@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
+use JetBrains\PhpStorm\ArrayShape;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
 use Spatie\Translatable\HasTranslations;
@@ -133,5 +134,21 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasMany(Reservation::class,'user_id');
     }
+    public function broadcastAs(): string
+    {
+        return "user_notifications";
+    }
+    #[ArrayShape(['title' => "string", 'subject' => "mixed", 'user_id' => "mixed"])]
+    public function broadcastWith(): array
+    {
+        return [
+            //
+            'title'=>"You have a new registered user",
+            'subject'=>$this->username,
+            'user_id'=>$this->getAuthIdentifier()
+        ];
+    }
+
+
 
 }

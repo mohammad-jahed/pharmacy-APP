@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Requests\NearestPharmaciesRequest;
+use App\Http\Requests\Users\NearestPharmaciesRequest;
+use App\Http\Requests\Users\PharmacyFilterRequest;
 use App\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Foundation\Application;
@@ -61,6 +62,52 @@ class UserController extends BaseUser
         }
 
         return self::getJsonResponse($result, "the nearest pharmacies");
+    }
+
+    /**
+     * @throws AuthorizationException
+     */
+    public function userFilter(PharmacyFilterRequest $request): JsonResponse
+    {
+        $this->authorize('viewAny',User::class);
+        $data = $request->validated();
+
+        /** @var User $pharmacies */
+        if (isset($data['state_name'])) {
+            $pharmacies = User::type('User')->whereHas('address',
+                function (Builder $builder) use ($data) {
+                    $builder->whereHas('state',
+                        function (Builder $builder) use ($data) {
+                            $builder->where('name_' . app()->getLocale(), $data['state_name']);
+                        }
+                    );
+                }
+            )->get();
+
+        }
+        if (isset($data['city_name'])) {
+            $pharmacies = User::type('User')->whereHas('address',
+                function (Builder $builder) use ($data) {
+                    $builder->whereHas('city',
+                        function (Builder $builder) use ($data) {
+                            $builder->where('name_' . app()->getLocale(), $data['city_name']);
+                        }
+                    );
+                }
+            )->get();
+        }
+        if (isset($data['area_name'])) {
+            $pharmacies = User::type('User')->whereHas('address',
+                function (Builder $builder) use ($data) {
+                    $builder->whereHas('area',
+                        function (Builder $builder) use ($data) {
+                            $builder->where('name_' . app()->getLocale(), $data['area_name']);
+                        }
+                    );
+                }
+            )->get();
+        }
+        return self::getJsonResponse($pharmacies,'users');
     }
 
 
