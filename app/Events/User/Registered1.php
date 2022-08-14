@@ -26,8 +26,9 @@ class Registered1 implements ShouldBroadcast
 
     public function __construct(User $admin , Authenticatable $user)
     {
-        $this->user = $user;
         $this->admin = $admin;
+        $this->user = $user;
+
     }
 
     /**

@@ -33,6 +33,7 @@ class UserPrescriptionNotification extends Notification
         return ['database'];
     }
 
+
     /**
      * Get the mail representation of the notification.
      *
@@ -60,4 +61,6 @@ class UserPrescriptionNotification extends Notification
             'subject'=>$this->msg,
         ];
     }
+
+
 }
