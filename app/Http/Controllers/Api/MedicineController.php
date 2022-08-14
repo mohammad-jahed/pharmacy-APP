@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Medicines\AlternativeRequest;
+use App\Http\Requests\Medicines\MedicineNameRequest;
 use App\Http\Requests\Medicines\MedicineStoreRequest;
 use App\Http\Requests\Medicines\MedicineUpdateRequest;
 use App\Models\Company;
@@ -187,7 +188,7 @@ class MedicineController extends Controller
                 })->get();
         } else if ($data['number'] == 2) {
             /**
-             * @var Medicine[] $alternatives1;
+             * @var Medicine[] $alternatives1 ;
              */
 
             $mad = Medicine::query()->where(function (Builder $builder) use ($material_ids) {
@@ -202,7 +203,7 @@ class MedicineController extends Controller
                     $alternatives1[] = $item;
                 }
             }
-            return self::getJsonResponse($alternatives1,'alternatives');
+            return self::getJsonResponse($alternatives1, 'alternatives');
 
         } else {
             $alternatives = Medicine::query()->where(function (Builder $builder) use ($material_ids) {
@@ -220,6 +221,9 @@ class MedicineController extends Controller
 
     }
 
+    /**
+     * @throws AuthorizationException
+     */
     public
     function expiredMedicines(): JsonResponse
     {
@@ -229,6 +233,8 @@ class MedicineController extends Controller
          * @var User $user ;
          * @var array $response
          */
+        $this->authorize('viewAny', Medicine::class);
+
         $user = auth('api')->user();
         $medicines = $user->medicines;
         foreach ($medicines as $medicine) {
@@ -241,8 +247,10 @@ class MedicineController extends Controller
         return $this->getJsonResponse($response, 'Expired Medicines');
     }
 
-    public
-    function displayedMedicines(): JsonResponse
+    /**
+     * @throws AuthorizationException
+     */
+    public function displayedMedicines(): JsonResponse
     {
         /**
          * @var Medicine[] $medicines ;
@@ -250,6 +258,7 @@ class MedicineController extends Controller
          * @var User $user ;
          * @var array $response
          */
+        $this->authorize('viewAny', Medicine::class);
         $user = auth('api')->user();
         $medicines = $user->medicines;
         foreach ($medicines as $medicine) {
@@ -261,5 +270,21 @@ class MedicineController extends Controller
         return $this->getJsonResponse($response, 'run out medicines');
 
     }
+
+    /**
+     * @throws AuthorizationException
+     */
+    public function getPharmacies(MedicineNameRequest $request): JsonResponse
+    {
+        $this->authorize('viewAny', Medicine::class);
+        $data = $request->validated();
+        $pharmacies = User::type('Pharmacy')->with('medicines')->whereHas('medicines',
+            fn(Builder $builder) => $builder->where('name_' . app()->getLocale(), $data['medicine_name'])
+        )->get();
+
+
+        return self::getJsonResponse($pharmacies, 'Pharmacies With Medicine Information');
+    }
+
 
 }
