@@ -43,6 +43,7 @@ Route::group([
     Route::get('/medicines/{medicine}/pharmacies', [MedicineController::class, 'pharmacies']);
     Route::get('/medicines/{medicine}/shelves', [MedicineController::class, 'shelves']);
     Route::post('/medicines/pharmacies', [MedicineController::class, 'getPharmacies']);
+    Route::post('/medicines/filter', [MedicineController::class, 'medicineFilter']);
     Route::put('/users/{user}',[UserController::class,'update']);
     Route::get('/expired',[MedicineController::class,'expiredMedicines']);
     Route::get('/displayed',[MedicineController::class,'displayedMedicines']);

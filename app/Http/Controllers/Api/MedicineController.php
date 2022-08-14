@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Medicines\AlternativeRequest;
+use App\Http\Requests\Medicines\MedicineFilterRequest;
 use App\Http\Requests\Medicines\MedicineNameRequest;
 use App\Http\Requests\Medicines\MedicineStoreRequest;
 use App\Http\Requests\Medicines\MedicineUpdateRequest;
@@ -268,6 +269,32 @@ class MedicineController extends Controller
             }
         }
         return $this->getJsonResponse($response, 'run out medicines');
+
+    }
+
+    /**
+     * @throws AuthorizationException
+     */
+
+
+    public function medicineFilter(MedicineFilterRequest $request): JsonResponse
+    {
+        $this->authorize('viewAny', Medicine::class);
+        $data = $request->validated();
+        if (isset($data['medicine_name'])) {
+            $medicines = Medicine::query()->where('name_' . app()->getLocale(), $data['medicine_name'])->get();
+        } elseif (isset($data['material_ids'])) {
+            $medicines = Medicine::query()->whereHas('materials',
+                fn(Builder $builder) =>$builder->whereIn('material_id',$data['material_ids'])
+            )->get();
+        } else {
+            $medicines = Medicine::query()->whereHas('company',
+                fn(Builder $builder) =>$builder->where('company_name',$data['company_name'])
+            )->get();
+        }
+
+        return self::getJsonResponse($medicines,'medicines');
+
 
     }
 
