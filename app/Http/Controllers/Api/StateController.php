@@ -26,6 +26,13 @@ class StateController extends Controller
         return view('pages.pharmacy.pharmacy', compact('states'));
     }
 
+
+    public function allStates(): JsonResponse
+    {
+        $states = State::all();
+        return self::getJsonResponse($states,'states');
+    }
+
     /**
      * Store a newly created resource in storage.
      *

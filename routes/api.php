@@ -2,9 +2,11 @@
 
 use App\Http\Controllers\Admin\PharmacyController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\CityController;
 use App\Http\Controllers\Api\MaterialController;
 use App\Http\Controllers\Api\MedicineController;
 use App\Http\Controllers\Api\ReservationController;
+use App\Http\Controllers\Api\StateController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -38,6 +40,9 @@ Route::group([
     Route::apiResource('/materials', 'Api\MaterialController');
     Route::apiResource('/prescriptions', 'Api\PrescriptionController');
     Route::get('/users/medicines', [PharmacyController::class, 'medicines']);
+    Route::get('/states', [StateController::class, 'allStates']);
+    Route::get('/state/{state}/cities',[StateController::class,'cities'])->name('state.cities');
+    Route::get('/city/{city}/areas',[CityController::class,'areas'])->name('city.areas');
     Route::get('/medicines/alternative/{medicine}', [MedicineController::class, 'alternatives']);
     Route::get('/medicines/{medicine}/materials', [MedicineController::class, 'materials']);
     Route::get('/medicines/{medicine}/pharmacies', [MedicineController::class, 'pharmacies']);

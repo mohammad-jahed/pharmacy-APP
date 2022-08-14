@@ -22,6 +22,7 @@ class StateController extends Controller
         return view('pages.States.states',compact('states'));
     }
 
+
     /**
      * Show the form for creating a new resource.
      *
