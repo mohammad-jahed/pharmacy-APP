@@ -42,4 +42,5 @@
 @else
     <script src="{{ URL::asset('assets/js/bootstrap-datatables/ar/jquery.dataTables.min.js') }}"></script>
     <script src="{{ URL::asset('assets/js/bootstrap-datatables/ar/dataTables.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('js/firebase.js')}}"></script>
 @endif
