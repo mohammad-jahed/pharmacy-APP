@@ -33,7 +33,7 @@ PharmacyController extends BaseUser
 
     public function allPharmacies(): JsonResponse
     {
-        $pharmacies = User::type('Pharmacy')->get();
+        $pharmacies = User::type('Pharmacy')->with('address')->get();
         return self::getJsonResponse($pharmacies,'pharmacies');
     }
 
