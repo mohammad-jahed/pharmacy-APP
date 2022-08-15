@@ -39,19 +39,18 @@ class PrescriptionNotification extends Notification
      */
     public function via(mixed $notifiable): array
     {
-        return [FcmChannel::class,'database'];
+        return [FcmChannel::class, 'database'];
     }
 
     public function toFcm(mixed $notifiable): FcmMessage
     {
         return FcmMessage::create()
             ->setData([
-                'user_id'=>'uuuuu'
+                'prescription_id' => $this->prescriptionData['prescription_id']
             ])
             ->setNotification(\NotificationChannels\Fcm\Resources\Notification::create()
-                ->setTitle('ttt')
-                ->setBody('bbbb'))
-            //->setImage('http://example.com/url-to-image-here.png'))
+                ->setTitle($this->prescriptionData['body'])
+                ->setBody($this->prescriptionData['prescriptionText']))
             ->setAndroid(
                 AndroidConfig::create()
                     ->setFcmOptions(AndroidFcmOptions::create()->setAnalyticsLabel('analytics'))
@@ -86,9 +85,9 @@ class PrescriptionNotification extends Notification
     {
         return [
             //
-            'title'=>$this->prescriptionData['body'],
-            'prescription_id'=>$this->prescriptionData['prescription_id'],
-            'subject'=>$this->prescriptionData['prescriptionText'],
+            'title' => $this->prescriptionData['body'],
+            'prescription_id' => $this->prescriptionData['prescription_id'],
+            'subject' => $this->prescriptionData['prescriptionText'],
         ];
     }
 }

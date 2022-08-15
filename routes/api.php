@@ -39,6 +39,7 @@ Route::group([
     Route::apiResource('/reservations', 'Api\ReservationController');
     Route::apiResource('/materials', 'Api\MaterialController');
     Route::apiResource('/prescriptions', 'Api\PrescriptionController');
+    Route::get('/pharmacies',[PharmacyController::class,'allPharmacies']);
     Route::get('/users/medicines', [PharmacyController::class, 'medicines']);
     Route::get('/states', [StateController::class, 'allStates']);
     Route::get('/state/{state}/cities',[StateController::class,'cities'])->name('state.cities');

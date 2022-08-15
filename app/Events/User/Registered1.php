@@ -11,7 +11,7 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use JetBrains\PhpStorm\ArrayShape;
 
-class Registered1 implements ShouldBroadcast
+class Registered1
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -36,24 +36,5 @@ class Registered1 implements ShouldBroadcast
      *
      * @return Channel
      */
-    public function broadcastOn(): Channel
-    {
-        return new Channel('channel-name');
-    }
 
-    public function broadcastAs(): string
-    {
-        return "user_notifications";
-    }
-
-    #[ArrayShape(['title' => "string", 'subject' => "mixed", 'user_id' => "mixed"])]
-    public function broadcastWith(): array
-    {
-        return [
-            //
-            'title'=>"You have a new registered user",
-            'subject'=>$this->user->username,
-            'user_id'=>$this->user->getAuthIdentifier()
-        ];
-    }
 }

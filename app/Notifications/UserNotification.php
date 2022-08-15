@@ -39,7 +39,7 @@ class UserNotification extends Notification
      */
     public function via(mixed $notifiable): array
     {
-        return [FcmChannel::class,'database','broadcast'];
+        return [FcmChannel::class,'database'];
     }
 
     /**
@@ -57,7 +57,7 @@ class UserNotification extends Notification
             ])
             ->setNotification(\NotificationChannels\Fcm\Resources\Notification::create()
                 ->setTitle($this->userData['body'])
-                ->setBody($this->userData["userText"],))
+                ->setBody($this->userData["userText"]))
                 //->setImage('http://example.com/url-to-image-here.png'))
             ->setAndroid(
                 AndroidConfig::create()
@@ -100,14 +100,4 @@ class UserNotification extends Notification
 
 
 
-    #[ArrayShape(['title' => "mixed", 'subject' => "mixed", 'user_id' => "mixed"])]
-    public function toBroadCast(mixed $notifiable): array
-    {
-        return [
-            //
-            'title'=>$this->userData['body'],
-            'subject'=>$this->userData["userText"],
-            'user_id'=>$this->userData["user_id"]
-        ];
-    }
 }

@@ -60,8 +60,6 @@ class User extends Authenticatable implements JWTSubject
     ];
 
 
-
-
     /**
      * The attributes that should be cast to native types.
      *
@@ -127,36 +125,25 @@ class User extends Authenticatable implements JWTSubject
 
     public function pharmacyReservations(): HasMany
     {
-        return $this->hasMany(Reservation::class,'pharmacy_id');
+        return $this->hasMany(Reservation::class, 'pharmacy_id');
     }
 
     public function userReservations(): HasMany
     {
-        return $this->hasMany(Reservation::class,'user_id');
-    }
-    public function broadcastAs(): string
-    {
-        return "user_notifications";
-    }
-    #[ArrayShape(['title' => "string", 'subject' => "mixed", 'user_id' => "mixed"])]
-    public function broadcastWith(): array
-    {
-        return [
-            //
-            'title'=>"You have a new registered user",
-            'subject'=>$this->username,
-            'user_id'=>$this->getAuthIdentifier()
-        ];
+        return $this->hasMany(Reservation::class, 'user_id');
     }
 
-    public function FcmTokens(){
+
+
+    public function FcmTokens(): HasMany
+    {
         return $this->hasMany(FcmToken::class);
     }
+
     public function routeNotificationForFcm($notification = null): array
     {
         return $this->FcmTokens()->pluck('token')->toArray();
     }
-
 
 
 }

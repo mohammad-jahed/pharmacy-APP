@@ -31,6 +31,12 @@ PharmacyController extends BaseUser
             ->with('states', $states);
     }
 
+    public function allPharmacies(): JsonResponse
+    {
+        $pharmacies = User::type('Pharmacy')->get();
+        return self::getJsonResponse($pharmacies,'pharmacies');
+    }
+
 
     public function destroy(User $pharmacy): RedirectResponse
     {
