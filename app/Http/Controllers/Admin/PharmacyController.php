@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Api\BaseUser;
 use App\Http\Requests\Users\PharmacyFilterRequest;
+use App\Models\City;
 use App\Models\State;
 use App\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -34,7 +35,15 @@ PharmacyController extends BaseUser
     public function allPharmacies(): JsonResponse
     {
         $pharmacies = User::type('Pharmacy')->with('address')->get();
-        return self::getJsonResponse($pharmacies,'pharmacies');
+        /**
+         * @var User $pharmacy;
+         */
+
+        foreach ($pharmacies as $pharmacy){
+            $city = City::query()->select('name_'.app()->getLocale())->where('id',$pharmacy->address->city_id)->first();
+            $pharmacy->address->city->name_.app()->getLocale() == $city;
+        }
+        return self::getJsonResponse($pharmacies, 'pharmacies');
     }
 
 
@@ -59,7 +68,7 @@ PharmacyController extends BaseUser
      */
     public function pharmacyFilter(PharmacyFilterRequest $request): JsonResponse
     {
-        $this->authorize('viewAny',User::class);
+        $this->authorize('viewAny', User::class);
         $data = $request->validated();
 
         /** @var User $pharmacies */
@@ -104,12 +113,12 @@ PharmacyController extends BaseUser
                 }
             )->get();
         }
-        if(isset($data['day_off'])){
+        if (isset($data['day_off'])) {
             $pharmacies = User::type('Pharmacy')->whereHas('workTime',
-                fn(Builder $builder)=> $builder->where('day',$data['day_off'])
+                fn(Builder $builder) => $builder->where('day', $data['day_off'])
             )->get();
         }
-        return self::getJsonResponse($pharmacies,'pharmacies');
+        return self::getJsonResponse($pharmacies, 'pharmacies');
     }
 
 

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\PharmacyController;
+use App\Http\Controllers\Api\AreaController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CityController;
 use App\Http\Controllers\Api\MaterialController;
@@ -40,6 +41,11 @@ Route::group([
     Route::apiResource('/materials', 'Api\MaterialController');
     Route::apiResource('/prescriptions', 'Api\PrescriptionController');
     Route::get('/pharmacies',[PharmacyController::class,'allPharmacies']);
+    Route::get('/states/{state}',[\App\Http\Controllers\Admin\StateController::class,'show']);
+    Route::get('/cities/{city}',[\App\Http\Controllers\Admin\CityController::class,'show']);
+    Route::get('/areas/{area}',[\App\Http\Controllers\Admin\AreaController::class,'show']);
+
+
     Route::get('/users/medicines', [PharmacyController::class, 'medicines']);
     Route::get('/states', [StateController::class, 'allStates']);
     Route::get('/state/{state}/cities',[StateController::class,'cities'])->name('state.cities');

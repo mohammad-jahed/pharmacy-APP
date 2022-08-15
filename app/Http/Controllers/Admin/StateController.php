@@ -7,6 +7,7 @@ use App\Http\Requests\States\CityStoreRequest;
 use App\Http\Requests\States\StateUpdateRequest;
 use App\Models\State;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class StateController extends Controller
@@ -52,11 +53,12 @@ class StateController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return JsonResponse
      */
-    public function show($id)
+    public function show(State $state): JsonResponse
     {
         //
+        return self::getJsonResponse($state,'state');
     }
 
     /**
