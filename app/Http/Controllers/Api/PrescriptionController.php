@@ -46,7 +46,7 @@ class PrescriptionController extends Controller
          * @var User $admin ;
          */
         $data = $request->validated();
-        $request->file('imagePath')->store('public/images');
+        $request->file('imagePath')->storePublicly('images');
         $file_name = $request->file('imagePath')->hashName();
         $data['imagePath'] = $file_name;
         $data['user_id'] = auth('api')->user()->getAuthIdentifier();
