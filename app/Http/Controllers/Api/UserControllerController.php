@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 
-class UserController extends BaseUser
+class UserControllerController extends BaseUserController
 {
     /**
      * Display a listing of the resource.
@@ -83,7 +83,6 @@ class UserController extends BaseUser
                     );
                 }
             )->get();
-
         }
         if (isset($data['city_name'])) {
             $pharmacies = User::type('User')->whereHas('address',

@@ -1,14 +1,16 @@
 <?php
 
+use App\Http\Controllers\Admin\AreaController;
 use App\Http\Controllers\Admin\PharmacyController;
-use App\Http\Controllers\Api\AreaController;
+
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\BaseUserController;
 use App\Http\Controllers\Api\CityController;
 use App\Http\Controllers\Api\MaterialController;
 use App\Http\Controllers\Api\MedicineController;
 use App\Http\Controllers\Api\ReservationController;
 use App\Http\Controllers\Api\StateController;
-use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\UserControllerController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -43,8 +45,8 @@ Route::group([
     Route::get('/pharmacies',[PharmacyController::class,'allPharmacies']);
     Route::get('/states/{state}',[\App\Http\Controllers\Admin\StateController::class,'show']);
     Route::get('/cities/{city}',[\App\Http\Controllers\Admin\CityController::class,'show']);
-    Route::get('/areas/{area}',[\App\Http\Controllers\Admin\AreaController::class,'show']);
-
+    Route::get('/areas/{area}',[AreaController::class,'show']);
+    Route::get('/users/{user}',[BaseUserController::class,'show']);
 
     Route::get('/users/medicines', [PharmacyController::class, 'medicines']);
     Route::get('/states', [StateController::class, 'allStates']);
@@ -56,16 +58,16 @@ Route::group([
     Route::get('/medicines/{medicine}/shelves', [MedicineController::class, 'shelves']);
     Route::post('/medicines/pharmacies', [MedicineController::class, 'getPharmacies']);
     Route::post('/medicines/filter', [MedicineController::class, 'medicineFilter']);
-    Route::put('/users/{user}',[UserController::class,'update']);
+    Route::put('/users/{user}',[UserControllerController::class,'update']);
     Route::get('/expired',[MedicineController::class,'expiredMedicines']);
     Route::get('/displayed',[MedicineController::class,'displayedMedicines']);
     Route::post('/medicines/alternatives', [MedicineController::class, 'alternatives']);
     Route::get('/materials/{material}/medicines', [MaterialController::class, 'medicines']);
     Route::get('/users/reservations', [ReservationController::class, 'userReservations']);
     Route::get('/pharmacies/reservations', [ReservationController::class, 'pharmacyReservations']);
-    Route::post('/pharmacies/nearest', [UserController::class, 'theNearestPharmacies']);
+    Route::post('/pharmacies/nearest', [UserControllerController::class, 'theNearestPharmacies']);
     Route::post('/pharmacies/filter', [PharmacyController::class, 'pharmacyFilter']);
-    Route::post('/users/filter', [UserController::class, 'userFilter']);
+    Route::post('/users/filter', [UserControllerController::class, 'userFilter']);
 
 
 });

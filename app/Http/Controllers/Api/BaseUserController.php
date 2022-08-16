@@ -18,7 +18,7 @@ use function redirect;
 use function toastr;
 use function trans;
 
-class BaseUser extends Controller
+class BaseUserController extends Controller
 {
     //
     /**
@@ -87,6 +87,13 @@ class BaseUser extends Controller
 
         return self::getJsonResponse($user,"User Updated Successfully");
     }
+
+    public function show(User $user): JsonResponse
+    {
+        return self::getJsonResponse($user,'user');
+    }
+
+
 
 
 

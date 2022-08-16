@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Api\BaseUser;
+use App\Http\Controllers\Api\BaseUserController;
 use App\Http\Requests\Users\PharmacyFilterRequest;
 use App\Models\City;
 use App\Models\State;
@@ -16,7 +16,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 
 class
-PharmacyController extends BaseUser
+PharmacyController extends BaseUserController
 {
 
     /**
@@ -120,6 +120,8 @@ PharmacyController extends BaseUser
         }
         return self::getJsonResponse($pharmacies, 'pharmacies');
     }
+
+
 
 
 }
