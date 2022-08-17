@@ -41,27 +41,21 @@ class UserController extends BaseUserController
     public function theNearestPharmacies(NearestPharmaciesRequest $request): JsonResponse
     {
         /**
-         * @var array $result;
+         * @var array $result ;
          */
         $this->authorize('nearestPharmacies', User::class);
         $data = $request->validated();
-        foreach ($data['medicines'] as $medicineData) {
-            $pharmacies = User::query()->whereHas('medicines', function (Builder $builder) use ($medicineData, $data) {
-                $builder->where('name_' . app()->getLocale(), 'like', "%$medicineData%")->whereHas('users', function (Builder $builder) use ($data) {
-                    $builder->whereHas('address', function (Builder $builder) use ($data) {
-                        $builder->where('area_id', $data['area_id']);
-                    });
+
+        $pharmacies = User::query()->whereHas('medicines', function (Builder $builder) use ($data) {
+            $builder->where('name_' . app()->getLocale(), 'like', $data['medicines'])->whereHas('users', function (Builder $builder) use ($data) {
+                $builder->whereHas('address', function (Builder $builder) use ($data) {
+                    $builder->where('area_id', $data['area_id']);
                 });
-            })->get();
+            });
+        })->get();
 
-            $response = [
-                'medicine' => $medicineData,
-                'The Nearest Pharmacies' => $pharmacies
-            ];
-            $result[] = $response;
-        }
 
-        return self::getJsonResponse($result, "the nearest pharmacies");
+        return self::getJsonResponse($pharmacies, "the nearest pharmacies");
     }
 
     /**
@@ -69,7 +63,7 @@ class UserController extends BaseUserController
      */
     public function userFilter(PharmacyFilterRequest $request): JsonResponse
     {
-        $this->authorize('viewAny',User::class);
+        $this->authorize('viewAny', User::class);
         $data = $request->validated();
 
         /** @var User $pharmacies */
@@ -106,7 +100,7 @@ class UserController extends BaseUserController
                 }
             )->get();
         }
-        return self::getJsonResponse($pharmacies,'users');
+        return self::getJsonResponse($pharmacies, 'users');
     }
 
 
