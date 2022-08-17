@@ -29,7 +29,7 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')->hourly();
         $schedule->command('expire:medicine')->daily();
-        $schedule->command('quantity:medicine')->everyMinute();
+        $schedule->command('quantity:medicine')->everyTenMinutes();
     }
 
     /**
