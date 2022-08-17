@@ -7,11 +7,15 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Users\PharmacyUpdateRequest;
 use App\Http\Requests\Users\RegisterRequest;
 use App\Models\Address;
+use App\Models\Area;
+use App\Models\City;
+use App\Models\State;
 use App\Models\User;
 use App\Models\WorkTime;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use JetBrains\PhpStorm\NoReturn;
 use Spatie\Permission\Models\Role;
 use function auth;
 use function redirect;
@@ -33,11 +37,11 @@ class BaseUserController extends Controller
      * @return RedirectResponse
      * @throws AuthorizationException
      */
+    #[NoReturn]
     public function store(RegisterRequest $request): RedirectResponse
     {
         $this->authorize('create', User::class);
         $data = $request->validated();
-        dd($data);
         $file_name = null;
         if ($request->hasFile('imagePath')) {
             $request->file('imagePath')->store('public/images');
@@ -93,6 +97,24 @@ class BaseUserController extends Controller
     {
 
         $user = User::query()->where('id',$user->id)->with('address')->with('workTime')->get();
+        return self::getJsonResponse($user,'user');
+    }
+
+
+
+    public function profile(): JsonResponse
+    {
+        $user = auth()->user();
+        $user = User::query()->where('id',$user->id)->with('address')->with('workTime')->first();
+
+        $state = State::query()->where('id',$user->address->state_id)->first();
+        $area = Area::query()->where('id',$user->address->area_id)->first();
+        $city = City::query()->where('id',$user->address->city_id)->first();
+
+        $user->address->state->name = $state->name;
+        $user->address->area->name = $area->name;
+        $user->address->city->name = $city->name;
+
         return self::getJsonResponse($user,'user');
     }
 
