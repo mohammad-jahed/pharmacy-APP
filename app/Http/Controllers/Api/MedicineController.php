@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\Medicine\ExpirationDateEvent;
+use App\Events\Medicine\QuantityEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Medicines\AlternativeRequest;
 use App\Http\Requests\Medicines\MedicineFilterRequest;
@@ -176,50 +178,53 @@ class MedicineController extends Controller
         /**
          * @var Medicine $medicine ;
          * @var array $alternatives ;
+         * @var array $alternatives2 ;
          * @var array $material_ids ;
+         * @var array $finalResult;
          */
-        $medicine = Medicine::query()->where('id', $data['medicine_id'])->first();
+        $medicine = Medicine::query()->where('name_' . app()->getLocale(), $data['medicine_name'])->first();
         $materials = $medicine->materials;
         foreach ($materials as $material) {
             $material_ids[] = $material->id;
         }
-        if ($data['number'] == 1) {
-            $alternatives = Medicine::query()->whereHas('materials',
-                function (Builder $builder1) use ($material_ids) {
-                    $builder1->where('material_id', '=', $material_ids);
-                })->get();
-        } else if ($data['number'] == 2) {
-            /**
-             * @var Medicine[] $alternatives1 ;
-             */
-
-            $mad = Medicine::query()->where(function (Builder $builder) use ($material_ids) {
-                foreach ($material_ids as $material_id) {
-                    $builder->whereHas('materials', function (Builder $builder) use ($material_id) {
-                        $builder->where('material_id', $material_id);
-                    });
-                }
+        $alternatives = Medicine::query()->whereHas('materials',
+            function (Builder $builder1) use ($material_ids) {
+                $builder1->where('material_id', '=', $material_ids);
             })->get();
-            foreach ($mad as $item) {
-                if (count($item->material_ids) == 2) {
-                    $alternatives1[] = $item;
-                }
+        /**
+         * @var Medicine[] $alternatives1 ;
+         */
+
+        $mad = Medicine::query()->where(function (Builder $builder) use ($material_ids) {
+            foreach ($material_ids as $material_id) {
+                $builder->whereHas('materials', function (Builder $builder) use ($material_id) {
+                    $builder->where('material_id', $material_id);
+                });
             }
-            return self::getJsonResponse($alternatives1, 'alternatives');
-
-        } else {
-            $alternatives = Medicine::query()->where(function (Builder $builder) use ($material_ids) {
-                foreach ($material_ids as $material_id) {
-                    $builder->whereHas('materials', function (Builder $builder) use ($material_ids, $material_id) {
-                        $builder->where('material_id', $material_id);
-                    });
-                }
-
-            })->get();
-
+        })->get();
+        foreach ($mad as $item) {
+            if (count($item->material_ids) == 2) {
+                $alternatives1[] = $item;
+            }
         }
 
-        return self::getJsonResponse($alternatives, "alternatives");
+
+        $alternatives2 = Medicine::query()->where(function (Builder $builder) use ($material_ids) {
+            foreach ($material_ids as $material_id) {
+                $builder->whereHas('materials', function (Builder $builder) use ($material_ids, $material_id) {
+                    $builder->where('material_id', $material_id);
+                });
+            }
+
+        })->get();
+
+
+        $finalResult = [
+            'Alternatives with one materials'=> $alternatives,
+            'Alternatives with two materials'=>$alternatives1,
+            'Alternatives with full materials'=>$alternatives2
+        ];
+        return self::getJsonResponse($finalResult, "alternatives");
 
     }
 
@@ -243,6 +248,7 @@ class MedicineController extends Controller
 
             if ($medicine->expiration_date < Date::now()) {
                 $response[] = $medicine;
+                //event(new ExpirationDateEvent($user,$medicine));
             }
         }
 
@@ -262,11 +268,13 @@ class MedicineController extends Controller
          */
         $this->authorize('viewAny', Medicine::class);
         $user = auth('api')->user();
-        $medicines = $user->medicines;
+        $medicines = $user->medicines()->with('materials');
+        //dd($medicines);
         foreach ($medicines as $medicine) {
 
             if ($medicine->quantity <= 5) {
                 $response[] = $medicine;
+                //event(new QuantityEvent($user, $medicine));
             }
         }
         return $this->getJsonResponse($response, 'run out medicines');
@@ -286,16 +294,16 @@ class MedicineController extends Controller
             $medicines = Medicine::query()->with('materials')->where('name_' . app()->getLocale(), $data['medicine_name'])->get();
         } elseif (isset($data['material_ids'])) {
             $medicines = Medicine::query()->with('materials')->whereHas('materials',
-                fn(Builder $builder) =>$builder->whereIn('material_id',$data['material_ids'])
+                fn(Builder $builder) => $builder->whereIn('material_id', $data['material_ids'])
             )->get();
         } else {
 
             $medicines = Medicine::query()->with('materials')->whereHas('company',
-                fn(Builder $builder) =>$builder->where('company_name',$data['company_name'])
+                fn(Builder $builder) => $builder->where('company_name', $data['company_name'])
             )->get();
         }
 
-        return self::getJsonResponse($medicines,'medicines');
+        return self::getJsonResponse($medicines, 'medicines');
 
 
     }

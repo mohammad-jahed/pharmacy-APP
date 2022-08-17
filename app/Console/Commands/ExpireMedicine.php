@@ -34,23 +34,37 @@ class ExpireMedicine extends Command
         parent::__construct();
     }
 
-    /**
-     * Execute the console command.
-     *
-     * @return int
-     */
+
     public function handle()
     {
         /**
          * @var User $user;
-         * @var Medicine[] $medicines;
+         * @var Medicine $medicines;
          * @var Medicine $medicine;
          */
-        $user = auth()->user();
-        $medicines = $user->medicines;
+
+        /**
+         * @var Medicine $medicine;
+         * @var User $user ;
+         * @var Medicine $medicine1;
+         */
+
+        $medicines = Medicine::all();
+
         foreach ($medicines as $medicine) {
-            if ( Date::now() - $medicine->expiration_date <= 30  ) {
-                event(new ExpirationDateEvent($user, $medicine));
+            if (Date::now()->diffInDays($medicine->expiration_date) <= 30) {
+                $users = $medicine->users;
+
+            }
+
+        }
+        /** @var User[] $users */
+        foreach ($users as $user) {
+            $targetMedicines = $user->medicines;
+            foreach ($targetMedicines as $medicine1){
+                if(Date::now()->diffInDays($medicine1->expiration_date) <= 30){
+                    event(new ExpirationDateEvent($user, $medicine1));
+                }
             }
         }
 

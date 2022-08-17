@@ -23,13 +23,12 @@ class AlternativeRequest extends FormRequest
      *
      * @return array
      */
-    #[ArrayShape(['medicine_id' => "array", 'number' => "string[]"])]
+    #[ArrayShape(['medicine_name' => "array", 'number' => "string[]"])]
     public function rules(): array
     {
         return [
             //
-            'medicine_id' => ['required', 'bail', 'min:1', Rule::exists('medicines', 'id')],
-            'number' => ['required', 'bail', 'integer', 'digits_between:1,3']
+            'medicine_name' => ['required', 'bail', 'min:1' , 'max:255'],
         ];
     }
 }
