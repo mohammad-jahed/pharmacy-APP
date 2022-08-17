@@ -29,8 +29,10 @@ class MedicineController extends Controller
     {
         //
         $this->authorize('viewAny', Medicine::class);
-        $medicine = Medicine::all();
-        return $this->getJsonResponse($medicine, 'medicines');
+        $medicines = Medicine::with('materials')->get();
+
+
+        return $this->getJsonResponse($medicines, 'medicines');
     }
 
     /**
@@ -127,7 +129,6 @@ class MedicineController extends Controller
     {
         //
         $this->authorize('delete', $medicine);
-        //Gate::forUser(auth('api')->user())->authorize('deleteMedicine', $medicine);
         $medicine->delete();
         return $this->getJsonResponse($medicine, 'Medicine Deleted Successfully');
     }
@@ -284,10 +285,11 @@ class MedicineController extends Controller
         if (isset($data['medicine_name'])) {
             $medicines = Medicine::query()->where('name_' . app()->getLocale(), $data['medicine_name'])->get();
         } elseif (isset($data['material_ids'])) {
-            $medicines = Medicine::query()->whereHas('materials',
+            $medicines = Medicine::query()->with('materials')->whereHas('materials',
                 fn(Builder $builder) =>$builder->whereIn('material_id',$data['material_ids'])
             )->get();
         } else {
+
             $medicines = Medicine::query()->whereHas('company',
                 fn(Builder $builder) =>$builder->where('company_name',$data['company_name'])
             )->get();
