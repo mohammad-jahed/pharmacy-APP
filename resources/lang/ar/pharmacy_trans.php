@@ -23,10 +23,11 @@ return [
     'day'=> 'يوم العطلة',
     'from'=> 'من',
     'to'=> 'الى',
+    'contact_information'=>'معلومات التواصل',
     'Processes'=>'العمليات',
     'Edit'=>'تعديل',
     'Delete'=>'حذف',
-    'Close' => 'اغلاق',
+    'close' => 'اغلاق',
 
 
 
