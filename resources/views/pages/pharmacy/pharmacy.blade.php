@@ -83,6 +83,7 @@
                                         {{trans('pharmacy_trans.area')}} : {{$pharmacy->address->area->name}}<br>
                                         {{trans('pharmacy_trans.street')}} : {{$pharmacy->address->street}}
                                     </td>
+
                                     <td>{{trans('pharmacy_trans.day')}} : {{$pharmacy->workTime->day}}<br>
                                         {{trans('pharmacy_trans.from')}} : {{$pharmacy->workTime->from}}<br>
                                         {{trans('pharmacy_trans.to')}} : {{$pharmacy->workTime->to}}</td>
@@ -365,6 +366,22 @@
                                         <label for="Name" class="mr-sm-2">{{ trans('pharmacy_trans.to') }}
                                             :</label>
                                         <input id="image" type="time" name="to" class="form-control">
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col">
+                                        <label for="Name" class="mr-sm-2">{{ trans('pharmacy_trans.contact_information') }}
+                                            :</label>
+                                        <input id="image" type="text" name="contact_information[]" class="form-control">
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col">
+                                        <label for="Name" class="mr-sm-2">{{ trans('pharmacy_trans.contact_information') }}
+                                            :</label>
+                                        <input id="image" type="text" name="contact_information[]" class="form-control">
                                     </div>
                                 </div>
 

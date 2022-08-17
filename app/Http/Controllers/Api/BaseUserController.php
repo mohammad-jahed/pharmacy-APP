@@ -37,7 +37,7 @@ class BaseUserController extends Controller
     {
         $this->authorize('create', User::class);
         $data = $request->validated();
-        dd($data);
+        //dd($data);
         $file_name = null;
         if ($request->hasFile('imagePath')) {
             $request->file('imagePath')->store('public/images');

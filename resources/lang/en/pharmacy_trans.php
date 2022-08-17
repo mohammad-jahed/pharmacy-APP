@@ -21,6 +21,7 @@ return [
     'day'=> 'Day off',
     'from'=> 'From',
     'to'=> 'To',
+    'contact_information'=>'Contact information',
     'submit' => 'submit',
     'username'=>'Username',
     'Processes'=>'Processes',
