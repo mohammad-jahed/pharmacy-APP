@@ -37,6 +37,7 @@ class BaseUserController extends Controller
     {
         $this->authorize('create', User::class);
         $data = $request->validated();
+        dd($data);
         $file_name = null;
         if ($request->hasFile('imagePath')) {
             $request->file('imagePath')->store('public/images');
@@ -90,6 +91,8 @@ class BaseUserController extends Controller
 
     public function show(User $user): JsonResponse
     {
+
+        $user = User::query()->where('id',$user->id)->with('address')->with('workTime')->get();
         return self::getJsonResponse($user,'user');
     }
 

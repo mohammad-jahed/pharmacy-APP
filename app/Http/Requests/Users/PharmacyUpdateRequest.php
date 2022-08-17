@@ -39,6 +39,8 @@ class PharmacyUpdateRequest extends FormRequest
             'username' => ['unique:users,username', 'string', 'min:3', 'max:12'],
             'email' => ['email', 'unique:users'],
             'old_password' => ['bail', 'min:8', 'max:75','password'],
+            'contact_information'=>['sometimes','array'],
+            'contact_information.*'=>['bail','number'],
             'new_password' => ['bail', 'min:8', 'max:75', 'required_if:old_password,!=,null']
         ];
     }

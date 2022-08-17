@@ -36,7 +36,9 @@ class RegisterRequest extends FormRequest
             'username' => ['bail','required','unique:users,username', 'string', 'min:3', 'max:12'],
             'email' => ['bail','required', 'email', 'unique:users'],
             'password' => ['bail','required', 'min:8', 'max:75'],
-            'imagePath' => ['bail','image', 'max:10240']
+            'imagePath' => ['bail','image', 'max:10240'],
+            'contact_information'=>['sometimes','array'],
+            'contact_information.*'=>['bail','string']
         ];
     }
 }
