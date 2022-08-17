@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Events\Medicine\QuantityEvent;
 
 use App\Models\Medicine;
+use App\Models\MedicineUser;
 use App\Models\User;
 use Illuminate\Console\Command;
 
@@ -39,29 +40,19 @@ class QuantityMedicine extends Command
     {
 
         /**
-         * @var Medicine $medicine;
+         * @var Medicine $medicine ;
          * @var User $user ;
-         * @var Medicine $medicine1;
+         * @var Medicine $medicine1 ;
+         * @var MedicineUser $medicineUser ;
          */
 
-        $medicines = Medicine::all();
-
-        foreach ($medicines as $medicine) {
-            if ($medicine->quantity <= 5) {
-                $users = $medicine->users;
-
-            }
-
-        }
-        /** @var User[] $users */
-        foreach ($users as $user) {
-            $targetMedicines = $user->medicines;
-            foreach ($targetMedicines as $medicine1){
-                if($medicine1->quantity <= 5){
-                    event(new QuantityEvent($user, $medicine1));
-                }
+        $medicinesUsers = MedicineUser::all();
+        foreach ($medicinesUsers as $medicinesUser) {
+            if ($medicinesUser->quantity <= 5) {
+                $user = $medicinesUser->pharmacy;
+                $medicine = $medicinesUser->medicine;
+                event(new QuantityEvent($user, $medicine));
             }
         }
-
-   }
+    }
 }

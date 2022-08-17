@@ -2,12 +2,18 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property int pharmacy_id;
+ * @property int medicine_id;
+ * @property int quantity;
+ * @property Carbon expiration_date;
+ * @property mixed $medicine
+ * @property mixed $pharmacy
  */
 class MedicineUser extends Model
 {
@@ -15,13 +21,10 @@ class MedicineUser extends Model
 
     protected $fillable = [
         'medicine_id',
-        'pharmacy_id'
+        'pharmacy_id',
+        'quantity',
+        'expiration_date'
     ];
-
-    public function getAttribute($key)
-    {
-        return $key;
-    }
 
     public function medicine(): BelongsTo
     {
@@ -30,6 +33,6 @@ class MedicineUser extends Model
 
     public function pharmacy(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'user_id', 'pharmacy_id');
+        return $this->belongsTo(User::class, 'pharmacy_id', 'id');
     }
 }

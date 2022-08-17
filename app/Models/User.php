@@ -104,7 +104,7 @@ class User extends Authenticatable implements JWTSubject
 
     public function medicines(): BelongsToMany
     {
-        return $this->belongsToMany(Medicine::class, 'medicine_users', 'pharmacy_id', 'medicine_id')->as('medicine_user');
+        return $this->belongsToMany(Medicine::class, 'medicine_users', 'pharmacy_id', 'medicine_id')->withPivot(['quantity', 'expiration_date', 'medicine_id', 'pharmacy_id', 'id']);
     }
 
     public function reservationUsers(): HasMany

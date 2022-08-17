@@ -29,7 +29,7 @@ class QuantityListener
     public function handle(QuantityEvent $event)
     {
         $medicineData = [
-            'body' => "{$event->medicine->name} will be run out after {$event->medicine->quantity} days",
+            'body' => "{$event->medicine->name} will be run out after {$event->medicine->quantity} units",
             'medicineText' => $event->medicine->name,
             'medicineUrl' => url('/'),
             'medicine_id' => $event->medicine->id

@@ -3,7 +3,9 @@
 namespace App\Console\Commands;
 
 use App\Events\Medicine\ExpirationDateEvent;
+use App\Events\Medicine\QuantityEvent;
 use App\Models\Medicine;
+use App\Models\MedicineUser;
 use App\Models\User;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Date;
@@ -37,34 +39,20 @@ class ExpireMedicine extends Command
 
     public function handle()
     {
-        /**
-         * @var User $user;
-         * @var Medicine $medicines;
-         * @var Medicine $medicine;
-         */
 
         /**
-         * @var Medicine $medicine;
+         * @var Medicine $medicine ;
          * @var User $user ;
-         * @var Medicine $medicine1;
+         * @var Medicine $medicine1 ;
+         * @var MedicineUser $medicineUser ;
          */
 
-        $medicines = Medicine::all();
-
-        foreach ($medicines as $medicine) {
-            if (Date::now()->diffInDays($medicine->expiration_date) <= 30) {
-                $users = $medicine->users;
-
-            }
-
-        }
-        /** @var User[] $users */
-        foreach ($users as $user) {
-            $targetMedicines = $user->medicines;
-            foreach ($targetMedicines as $medicine1){
-                if(Date::now()->diffInDays($medicine1->expiration_date) <= 30){
-                    event(new ExpirationDateEvent($user, $medicine1));
-                }
+        $medicinesUsers = MedicineUser::all();
+        foreach ($medicinesUsers as $medicinesUser) {
+            if (Date::now()->diffInDays($medicinesUser->expiration_date) <=30 ) {
+                $user = $medicinesUser->pharmacy;
+                $medicine = $medicinesUser->medicine;
+                event(new ExpirationDateEvent($user, $medicine));
             }
         }
 

@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Date;
 
 /**
@@ -17,7 +18,7 @@ use Illuminate\Support\Facades\Date;
  * @property int alternative_id;
  * @property int id;
  * @property void alternatives;
- * @property void users;
+ * @property Collection users;
  * @property string name;
  * @property void medicineUser;
  * @property void materials;
@@ -96,7 +97,8 @@ class Medicine extends Model
 
     public function users(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'medicine_users', 'medicine_id', 'pharmacy_id')->as('medicine user');
+        return $this->belongsToMany(User::class, 'medicine_users', 'medicine_id', 'pharmacy_id')
+            ->as('medicine user')->withPivot(['quantity', 'expiration_date', 'medicine_id', 'pharmacy_id', 'id']);
     }
 
     public function reservations(): HasMany

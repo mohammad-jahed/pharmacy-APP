@@ -17,6 +17,8 @@ class CreateMedicineUsersTable extends Migration
             $table->id();
             $table->foreignId('medicine_id')->constrained()->cascadeOnDelete();
             $table->foreignId('pharmacy_id')->references('id')->on('users')->cascadeOnDelete();
+            $table->integer('quantity')->default(0);
+            $table->dateTime('expiration_date')->default(now()->addMonth());
             $table->timestamps();
         });
     }

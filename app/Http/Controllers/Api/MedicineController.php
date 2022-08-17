@@ -67,7 +67,7 @@ class MedicineController extends Controller
         }
 
         $medicine->materials()->attach($data['material_ids']);
-        $medicine->users()->attach(auth()->id());
+        $medicine->users()->attach(auth()->id(), ['quantity' => $data['quantity'], 'expiration_date' => $data['expiration_date']]);
         if (isset($data['alternative_ids'])) {
             $medicine->alternatives()->attach($data['alternative_ids']);
         }
@@ -180,7 +180,7 @@ class MedicineController extends Controller
          * @var array $alternatives ;
          * @var array $alternatives2 ;
          * @var array $material_ids ;
-         * @var array $finalResult;
+         * @var array $finalResult ;
          */
         $medicine = Medicine::query()->where('name_' . app()->getLocale(), $data['medicine_name'])->first();
         $materials = $medicine->materials;
@@ -220,9 +220,9 @@ class MedicineController extends Controller
 
 
         $finalResult = [
-            'Alternatives with one materials'=> $alternatives,
-            'Alternatives with two materials'=>$alternatives1,
-            'Alternatives with full materials'=>$alternatives2
+            'Alternatives with one materials' => $alternatives,
+            'Alternatives with two materials' => $alternatives1,
+            'Alternatives with full materials' => $alternatives2
         ];
         return self::getJsonResponse($finalResult, "alternatives");
 
