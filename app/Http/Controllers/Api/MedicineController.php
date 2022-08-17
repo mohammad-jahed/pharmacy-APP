@@ -283,14 +283,14 @@ class MedicineController extends Controller
         $this->authorize('viewAny', Medicine::class);
         $data = $request->validated();
         if (isset($data['medicine_name'])) {
-            $medicines = Medicine::query()->where('name_' . app()->getLocale(), $data['medicine_name'])->get();
+            $medicines = Medicine::query()->with('materials')->where('name_' . app()->getLocale(), $data['medicine_name'])->get();
         } elseif (isset($data['material_ids'])) {
             $medicines = Medicine::query()->with('materials')->whereHas('materials',
                 fn(Builder $builder) =>$builder->whereIn('material_id',$data['material_ids'])
             )->get();
         } else {
 
-            $medicines = Medicine::query()->whereHas('company',
+            $medicines = Medicine::query()->with('materials')->whereHas('company',
                 fn(Builder $builder) =>$builder->where('company_name',$data['company_name'])
             )->get();
         }
