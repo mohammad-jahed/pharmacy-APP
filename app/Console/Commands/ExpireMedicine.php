@@ -46,7 +46,7 @@ class ExpireMedicine extends Command
          * @var Medicine[] $medicines;
          * @var Medicine $medicine;
          */
-        $user = auth('api')->user();
+        $user = auth()->user();
         $medicines = $user->medicines;
         foreach ($medicines as $medicine) {
             if ( Date::now() - $medicine->expiration_date <= 30  ) {

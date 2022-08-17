@@ -40,7 +40,7 @@ class QuantityMedicine extends Command
      */
     public function handle()
     {
-        $user = auth('api')->user();
+        $user = auth()->user();
         $medicines = $user->medicines;
         foreach ($medicines as $medicine) {
             if ($medicine->quantity <= 5) {
