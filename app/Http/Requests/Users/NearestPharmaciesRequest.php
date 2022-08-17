@@ -28,7 +28,8 @@ class NearestPharmaciesRequest extends FormRequest
     {
         return [
             //
-            'medicines' => ['required', 'string','bail','min:1','max:255'],
+            'medicines' => ['required', 'array'],
+            'medicines.*' => [ 'bail',  'max:255' ],
             'area_id'=>['required','bail', 'min:1' ,Rule::exists('areas','id')]
 
         ];
