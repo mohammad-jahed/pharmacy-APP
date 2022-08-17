@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 
-class UserControllerController extends BaseUserController
+class UserController extends BaseUserController
 {
     /**
      * Display a listing of the resource.

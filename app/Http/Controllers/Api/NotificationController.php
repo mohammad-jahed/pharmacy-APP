@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -25,6 +26,14 @@ class NotificationController extends Controller
         return view('pages.Notifications.notifications', [
             'notifications' => auth()->user()->notifications()->paginate(5)
         ]);
+    }
+
+    public function unreadNotifications(): JsonResponse
+    {
+        $user = auth()->user();
+        $notifications = $user->unreadNotifications;
+        return self::getJsonResponse($notifications,'notification');
+
     }
 
     /**
