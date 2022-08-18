@@ -142,7 +142,7 @@ class MedicineController extends Controller
     public function pharmacies(Medicine $medicine): JsonResponse
     {
         $this->authorize('materials', $medicine);
-        $pharmacies = $medicine->users;
+        $pharmacies = $medicine->users()->with('workTime');
         return $this->getJsonResponse($pharmacies, 'pharmacies');
     }
 
