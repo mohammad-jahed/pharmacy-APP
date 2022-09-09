@@ -19,7 +19,7 @@
  preloader -->
 
         <div id="pre-loader">
-            <img src="{{ URL::asset('assets/images/pre-loader/loader-01.svg') }}" alt="">
+            <img src="{{ URL::asset('assets/images/pre-loader/Atom.gif') }}" alt="">
         </div>
 
         <!--=================================
@@ -57,7 +57,6 @@
 
             @include('layouts.footer')
         </div><!-- main content wrapper end-->
-    </div>
     </div>
     </div>
 

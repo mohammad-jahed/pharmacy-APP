@@ -8,7 +8,8 @@
     <meta name="description" content="Webmin - Bootstrap 4 & Angular 5 Admin Dashboard Template" />
     <meta name="author" content="potenzaglobalsolutions.com" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <title>برنامج مورا سوفت لادارة المدارس</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>{{trans('main_trans.Programname')}}</title>
 
     <!-- Favicon -->
     <link rel="shortcut icon" href="images/favicon.ico" />
@@ -30,7 +31,7 @@
  preloader -->
 
         <div id="pre-loader">
-            <img src="images/pre-loader/loader-01.svg" alt="">
+            <img src="images/pre-loader/Atom.gif" alt="">
         </div>
 
         <!--=================================
@@ -40,13 +41,13 @@
  login-->
 
         <section class="height-100vh d-flex align-items-center page-section-ptb login"
-            style="background-image: url(assets/images/login-bg.jpg);">
+            style="background-image: url(assets/images/p7.jpg);">
             <div class="container">
                 <div class="row justify-content-center no-gutters vertical-align">
                     <div class="col-lg-4 col-md-6 login-fancy-bg bg"
                         style="background-image: url(images/login-inner-bg.jpg);">
                         <div class="login-fancy">
-                            <h2 class="text-white mb-20">Hello world!</h2>
+                            <h2 class="text-white mb-20">Care 4 Sure!</h2>
                             <p class="mb-20 text-white">Create tailor-cut websites with the exclusive multi-purpose
                                 responsive template along with powerful features.</p>
                             <ul class="list-unstyled  pos-bot pb-30">
@@ -138,6 +139,7 @@
     <script src="{{ URL::asset('assets/js/lobilist.js') }}"></script>
     <!-- custom -->
     <script src="{{ URL::asset('assets/js/custom.js') }}"></script>
+
 
 </body>
 
